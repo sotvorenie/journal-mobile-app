@@ -1,0 +1,23 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "sass-watch": "sass --watch .",
+    "vite": "vite",
+    "dev": "concurrently \"npm run sass-watch\" \"npm run vite\"",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "vite": "^6.2.0"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "axios": "^1.8.4",
+    "sass": "^1.86.3",
+    "swiper": "^11.2.6"
+  }
+}

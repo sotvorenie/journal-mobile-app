@@ -1,0 +1,28 @@
+@use 'helpers' as *;
+
+:root {
+  --color-light: #f9f8fd;
+  --color-light-alt: #c1c7f6;
+
+  --color-dark: #15143a;
+  --color-dark-alt: #8692f3;
+
+  --color-accent: #6851b5;
+
+  --color-error: #fd1b2e;
+  --color-success: #00cc48;
+
+  --border: #{rem(2)} solid var(--color-dark);
+
+  --radius-small: #{rem(10)};
+  --radius-regular: #{rem(20)};
+  --radius-medium: #{rem(30)};
+  --radius-big: #{rem(40)};
+
+  --font-family-base: 'Nunito', sans-serif;
+
+  --container-width: #{rem(1023)};
+  --container-padding-x: #{rem(16)};
+
+  --transition-duration: 0.2s;
+}

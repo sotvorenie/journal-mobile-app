@@ -1,0 +1,52 @@
+@use '../../helpers' as *;
+
+.authorization {
+  background: var(--color-light-alt);
+  padding: rem(20) rem(10);
+  border-radius: var(--radius-medium);
+  width: min(85vw, rem(400));
+
+  &__title {
+    line-height: 1;
+    font-weight: 700;
+
+    &:not(:last-child) {
+      margin-bottom: rem(20);
+    }
+  }
+
+  &__slide {
+    text-align: center;
+  }
+
+  &__form {
+    &:not(:last-child) {
+      margin-bottom: rem(15);
+    }
+  }
+
+  &__info {
+    text-align: center;
+    white-space: nowrap;
+
+    &-btn {
+      color: var(--color-light);
+      position: relative;
+      background: var(--color-accent);
+      padding: rem(10) rem(40) rem(10) rem(10);
+      border-radius: var(--radius-medium);
+
+      &::after {
+        @include square(#{rem(30)});
+
+        content: '';
+        translate: 0 -50%;
+        top: 50%;
+        right: rem(8);
+        position: absolute;
+        background: url("/src/assets/icons/arrow.svg") center/contain no-repeat;
+        rotate: 90deg;
+      }
+    }
+  }
+}

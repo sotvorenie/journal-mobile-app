@@ -1,0 +1,18 @@
+@use '../helpers' as *;
+
+.message {
+  position: absolute;
+  translate: -50% 0;
+  top: -100%;
+  left: 50%;
+  text-align: center;
+  padding: rem(10);
+  border-radius: var(--radius-medium);
+  backdrop-filter: blur(rem(15));
+  background: rgba(0,204,72,.5);
+  border: rem(2) solid var(--color-success);
+  color: #f9f8fd;
+  opacity: 0;
+  z-index: 10000;
+  text-shadow: 0 0 rem(5) #15143a;
+}

@@ -1,0 +1,70 @@
+@use '../helpers' as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: min(#{rem(600)}, 100%);
+  row-gap: fluid(20, 10);
+
+  &--padding {
+    padding-right: rem(10);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: rem(30);
+    border: rem(2) solid var(--color-dark-alt);
+    border-radius: var(--radius-regular);
+    cursor: pointer;
+    width: 100%;
+    padding: rem(15);
+
+    @include hover {
+      border-color: var(--color-accent);
+    }
+
+    & h5 {
+      white-space: nowrap;
+    }
+
+    &.is-active {
+      border-color: var(--color-accent);
+      cursor: default;
+    }
+
+    &--small {
+      padding: rem(10) rem(15);
+      border-color: var(--color-dark);
+      column-gap: rem(10);
+
+      svg {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  &__btn-bar {
+    display: flex;
+    align-items: center;
+    column-gap: rem(10);
+  }
+
+  &-btn {
+    @include reset_button;
+    @include square(#{rem(40)});
+
+    color: var(--color-dark-alt);
+
+    @include hover {
+      color: var(--color-accent);
+    }
+
+    svg {
+      fill: transparent;
+    }
+  }
+}

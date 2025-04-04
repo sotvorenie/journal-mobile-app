@@ -1,0 +1,20 @@
+@use 'normalize';
+@use 'fonts';
+@use 'variables';
+@use 'utils';
+@use 'globals';
+
+@use 'blocks/form';
+@use 'blocks/button';
+@use 'blocks/loading';
+@use 'blocks/message';
+@use 'blocks/navigation';
+@use 'blocks/settings';
+@use 'blocks/list';
+@use 'blocks/absolute';
+
+@use 'blocks/authorization/authorization';
+
+@use 'blocks/groups/groups';
+@use 'blocks/groups/user';
+@use 'blocks/groups/groups-lessons';

@@ -1,0 +1,14 @@
+@use '../helpers' as *;
+
+.navigation {
+  display: flex;
+  align-items: center;
+  column-gap: rem(10);
+
+  &__settings {
+
+    @include hover {
+      rotate: 90deg;
+    }
+  }
+}

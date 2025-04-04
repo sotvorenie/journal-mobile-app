@@ -1,0 +1,94 @@
+@use '../../helpers' as *;
+
+.groups {
+  height: 100%;
+  width: min(#{rem(600)}, 100%);
+  padding-block: rem(15);
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    column-gap: rem(20);
+    margin-bottom: fluid(40, 20);
+  }
+
+  &__title {
+
+    &-bar {
+      text-align: center;
+      width: min(100%, rem(500));
+      border-radius: var(--radius-regular);
+      white-space: nowrap;
+      background: var(--color-accent);
+      color: var(--color-light);
+      overflow: hidden;
+      padding-block: rem(10);
+    }
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: rem(30);
+    overflow-y: auto;
+  }
+
+  &__null-list {
+    @include flex-center();
+
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100vh;
+
+    &:not(.is-active) {
+      display: none;
+    }
+
+    svg {
+      fill: transparent;
+      width: min(30%, rem(200));
+    }
+  }
+
+  &__create {
+    transform-origin: bottom right;
+    border-radius: 50%;
+    opacity: 0;
+    scale: 0;
+
+    &:not(.is-active) {
+      display: none;
+      backdrop-filter: blur(0);
+    }
+
+    &-btn {
+      @include fluid-text(42, 32);
+      @include flex-center();
+
+      background: var(--color-dark-alt);
+      font-weight: 700;
+      aspect-ratio: 1;
+      position: absolute;
+      bottom: rem(5);
+      right: rem(5);
+      padding: rem(20);
+      border-radius: 50%;
+
+      @include hover {
+        background: var(--color-accent);
+      }
+    }
+  }
+
+  &__redact {
+    border-radius: 50%;
+    scale: 0;
+
+    &:not(.is-active) {
+      display: none;
+      backdrop-filter: blur(0);
+    }
+  }
+}

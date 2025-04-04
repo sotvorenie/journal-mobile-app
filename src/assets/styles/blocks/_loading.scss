@@ -1,0 +1,27 @@
+@use '../helpers' as *;
+
+.loading {
+  @include square(#{rem(60)});
+
+  animation: loading 1s linear 0s infinite;
+  border-radius: 50%;
+
+  &:not(.is-active) {
+    display: none;
+  }
+
+  @keyframes loading {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  &--btn {
+    @include abs-center;
+    @include square(#{rem(35)});
+  }
+
+  &--absolute {
+    @include abs-center;
+  }
+}

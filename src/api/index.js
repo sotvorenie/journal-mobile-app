@@ -1,0 +1,1 @@
+export const url = 'http://journal.host1878857.hostland.pro';

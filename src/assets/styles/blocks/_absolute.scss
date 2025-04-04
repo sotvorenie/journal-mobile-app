@@ -1,0 +1,36 @@
+@use '../helpers' as *;
+
+.absolute {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(rem(5));
+  padding-block: rem(20);
+  z-index: 1000;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &__content {
+    @include abs-center;
+
+    width: min(85%, rem(400));
+    background: var(--color-light-alt);
+    padding: rem(15) fluid(15, 10);
+    border-radius: var(--radius-medium);
+    border: var(--border);
+  }
+
+  &__btn-bar {
+    display: flex;
+    column-gap: rem(10);
+    justify-content: center;
+  }
+
+  &__second {
+    @include abs-center;
+
+    backdrop-filter: blur(rem(10));
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+  }
+}

@@ -1,0 +1,58 @@
+@use '../helpers' as *;
+
+.button {
+  padding: rem(15) rem(20);
+  background: var(--color-accent);
+  border-radius: var(--radius-regular);
+  font-size: rem(18);
+  color: #f9f8fd;
+  border: rem(2) solid #6851b5;
+
+  &--close {
+    @include reset_button;
+    @include square(#{rem(40)});
+
+    padding: rem(10);
+    border-radius: 50%;
+    background: var(--color-accent);
+    position: absolute;
+    rotate: 45deg;
+    top: rem(-15);
+    right: rem(-15);
+
+    &::before, &::after {
+      @include abs-center;
+
+      content: '';
+      background: #f9f8fd;
+      width: 60%;
+      height: rem(3);
+      border-radius: var(--radius-regular);
+    }
+
+    &::after {
+      rotate: 90deg;
+    }
+  }
+
+  &--navigation {
+    @include reset_button;
+    @include square(#{rem(40)});
+
+    color: var(--color-dark);
+
+    @include hover {
+      color: var(--color-accent);
+    }
+  }
+
+  &--redact {
+    background: transparent;
+    color: var(--color-accent);
+    border: rem(2) solid var(--color-accent);
+    padding: rem(10);
+    border-radius: var(--radius-big);
+    width: min(100%, rem(300));
+    margin-inline: auto;
+  }
+}

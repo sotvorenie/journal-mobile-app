@@ -1,0 +1,73 @@
+@use '../helpers' as *;
+
+.settings {
+  transform-origin: rem(15) rem(15);
+  border-radius: 50%;
+  scale: 0;
+
+  &__title {
+    text-align: center;
+    margin-bottom: fluid(20, 15);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    column-gap: fluid(20, 10);
+
+    &:not(:last-child) {
+      margin-bottom: rem(20);
+    }
+  }
+
+  &__change {
+    display: flex;
+    align-items: center;
+    column-gap: fluid(10, 5);
+
+    &-body {
+      background: var(--color-dark-alt);
+      width: fluid(75, 50);
+      height: fluid(45, 30);
+      border-radius: var(--radius-big);
+      position: relative;
+    }
+
+    &-btn {
+      aspect-ratio: 1;
+      height: 100%;
+      background: var(--color);
+      border-radius: 50%;
+      position: absolute;
+      top: 0;
+      background: var(--color-light);
+    }
+
+    svg {
+      width: fluid(30, 25);
+    }
+  }
+
+  &__theme {
+
+    button {
+
+      &.is-dark {
+        left: 0;
+      }
+      &.is-light {
+        right: 0;
+      }
+    }
+  }
+
+  &__animation {
+
+    button {
+
+      &:not(.is-active) {
+        right: 0;
+      }
+    }
+  }
+}
