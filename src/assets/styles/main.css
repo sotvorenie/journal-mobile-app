@@ -725,6 +725,12 @@ body {
   z-index: 2000;
 }
 
+.slice-string {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .authorization {
   background: var(--color-light-alt);
   padding: 1.25rem 0.625rem;
@@ -779,6 +785,9 @@ body {
   align-items: center;
   column-gap: 1.25rem;
   margin-bottom: clamp(1.25rem, 0.847107438rem + 1.652892562vw, 2.5rem);
+}
+.groups__title {
+  padding-inline: 0.625rem;
 }
 .groups__title-bar {
   text-align: center;

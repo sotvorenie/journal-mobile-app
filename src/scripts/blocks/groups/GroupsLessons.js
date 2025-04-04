@@ -9,7 +9,6 @@ import {input} from "../../utils/useInput.js";
 import {redactValidation} from "../../globals/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
-import {sliceString} from "../../utils/useSliceString.js";
 
 export default class GroupsLessons {
     //---DOM-селекторы--//
@@ -77,9 +76,11 @@ export default class GroupsLessons {
         this.redactLoadingElement = this.groupsLessonsElement.find(this.selectors.redactLoading);
         this.redactCloseBtn = this.groupsLessonsElement.find(this.selectors.redactClose);
 
-
         //переменная списка предметов
         this.lessons = [];
+
+        //переменная, хранящая id предмета, который мы редактируем
+        this.redactLessonID = '';
 
         //событие, когда открываем блок редактирования группы
         $(document).on('groupsRedactOpen', async () => {
@@ -166,6 +167,9 @@ export default class GroupsLessons {
         this.redactInputElement.on('input', (event) => {
             input(event, this.redactCounterElement);
         })
+
+        //клик по кнопке "Редактировать предмет"
+        this.redactBtn.on('click', this.clickToRedact.bind(this));
     }
     //==============================================================//
 
@@ -293,7 +297,7 @@ export default class GroupsLessons {
     }
 
     //редактировать предмет
-    redactLesson = async (id) => {
+    redactLesson = async () => {
         try {
             //показываем анимацию загрузки в кнопке "Редактировать предмет"
             setLoading(this.redactBtn, this.redactLoadingElement);
@@ -308,7 +312,7 @@ export default class GroupsLessons {
                 let data = {
                     user_id: User.activeUser.id,
                     group_id: UseGroups.activeGroup.id,
-                    id,
+                    id: this.redactLessonID,
                     name: this.redactInputElement.val()
                 }
 
@@ -322,7 +326,7 @@ export default class GroupsLessons {
                     this.closeRedactBlock();
 
                     //обновляем данные о предметах
-                    await getLessons();
+                    await this.getLessons();
                 } else {
                     alert('Что-то пошло не так..');
                 }
@@ -368,7 +372,7 @@ export default class GroupsLessons {
         let lessonsListItem = this.lessons.map(lesson => {
             return `
                     <li class="groups-lessons__item list__item list__item--small" data-js-groups-lessons-item>
-                        <p class="h4">${sliceString(lesson.name, 9)}</p>
+                        <p class="slice-string h4">${lesson.name}</p>
                         <div class="list__btn-bar">
                             <button class="list-btn"
                                     type="button"
@@ -500,6 +504,9 @@ export default class GroupsLessons {
 
     //открытие блока редактирования предмета
     openRedactBlock (name, index) {
+        //задаем id редактируемого предмета переменной
+        this.redactLessonID = this.lessons[index].id;
+
         //очистка поля ввода
         this.redactInputElement.val(name);
 
@@ -539,11 +546,11 @@ export default class GroupsLessons {
     }
 
     //клик по кнопке "Редактировать предмет"
-    clickToRedact (id) {
+    clickToRedact () {
         let confirmed = confirm('Вы действительно хотите редактировать предмет?');
 
         if (confirmed) {
-            this.redactLesson(id);
+            this.redactLesson();
         }
     }
     //==============================================================//

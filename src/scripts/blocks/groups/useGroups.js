@@ -74,7 +74,7 @@ export default class UseGroups {
         let groupsListNew = UseGroups.groupsList.map(group => {
             return `
                     <li class="groups__item list__item">
-                        <p class="h4">${group.name}</p>
+                        <p class="slice-string h4">${group.name}</p>
                         <div class="list__btn-bar">
                             <button class="list-btn"
                                     type="button"
