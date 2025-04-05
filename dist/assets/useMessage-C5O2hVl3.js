@@ -1,0 +1,1 @@
+import{p as a}from"./useUser-CUXnu6je.js";const t={isActive:"is-active"};function c(s,e){s.toggleClass(t.isActive),e.toggleClass(t.isActive),s.attr("disabled",!s.attr("disabled"))}const i={message:"[data-js-message]"};function l(s=""){let e=$(i.message);e.text(s),e.animate({top:`${a(15)}rem`,opacity:1},300).delay(2500).animate({top:"-100%",opacity:0},300)}export{l as a,c as s};
