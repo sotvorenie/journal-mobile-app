@@ -2,6 +2,7 @@ import {input} from "../../utils/useInput.js";
 import {redactValidation} from "../../globals/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
+import {setConfirm, setAlert} from "../../utils/useInfoMessage.js";
 
 import {createStudentsGroup} from "../../../api/groups.js";
 
@@ -120,13 +121,13 @@ export default class GroupsCreate{
                     //получаем список групп пользователя
                     await this.useGroups.getGroups();
                 } else {
-                    alert('Что-то пошло не так..');
+                    await setAlert('Что-то пошло не так..');
                 }
             } else {
-                alert('Такая группа уже существует!!');
+                await setAlert('Такая группа уже существует!!');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         } finally {
             //показываем анимацию загрузки внутри кнопки "Создать"
             setLoading(this.createBtn, this.loadingElement);
@@ -144,6 +145,9 @@ export default class GroupsCreate{
 
         //значение counter ставим равное 0
         this.counterElement.text(0);
+
+        //делаем кнопку "Создать" disabled
+        this.createBtn.attr('disabled', true);
     }
 
     //открытие блока
@@ -172,8 +176,8 @@ export default class GroupsCreate{
     }
 
     //клик по кнопке "Создать"
-    clickToCreate () {
-        let confirmed = confirm('Вы действительно хотите создать группу?');
+    clickToCreate = async () => {
+        let confirmed = await setConfirm('Вы действительно хотите создать группу');
 
         if (confirmed) {
             this.create();

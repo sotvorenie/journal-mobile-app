@@ -6,6 +6,7 @@ import {redactValidation} from "../../globals/useValidationRedact.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {getCoordinates} from "../../utils/useCoordinates.js";
+import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
 
 import {redactStudentsGroup} from "../../../api/groups.js";
 
@@ -56,12 +57,14 @@ export default class GroupsRedact {
 
             //клик по кнопке открытия блока редактирования группы
             this.openBtns.each((index, btn) => {
-                $(btn).on('click', () => {
+                $(btn).on('click', (event) => {
                     //заполняем блок информацией о редактируемой группе
                     this.setInfo(index);
 
                     //открываем блок редактирования группы
                     this.openBlock(btn);
+
+                    event.stopPropagation();
                 })
             })
         })
@@ -133,13 +136,13 @@ export default class GroupsRedact {
                     //обновляем список групп
                     await this.useGroups.getGroups();
                 } else {
-                    alert('Что-то пошло не так..');
+                    await setAlert('Что-то пошло не так..');
                 }
             } else {
-                alert('Такая группа уже существует!!');
+                await setAlert('Такая группа уже существует!!');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         } finally {
             //скрываем анимацию загрузки внутри кнопки "Редактировать"
             setLoading(this.redactBtn, this.loadingElement);
@@ -199,8 +202,8 @@ export default class GroupsRedact {
     }
 
     //клик по кнопке "Редактировать"
-    clickToRedact () {
-        let confirmed = confirm('Вы действительно хотите редактировать группу?');
+    clickToRedact = async () => {
+        let confirmed = await setConfirm('Вы действительно хотите редактировать группу?');
 
         if (confirmed) {
             this.redact();

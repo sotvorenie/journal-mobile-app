@@ -1,9 +1,13 @@
 import User from "../../globals/store/useUser.js";
 
+import GroupsList from "./GroupsList.js";
+
 import {input} from "../../utils/useInput.js";
 import {redactValidation} from "../../globals/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
+import {setConfirm, setAlert} from "../../utils/useInfoMessage.js";
+
 import FormsValidation from "../../globals/useValidation.js";
 
 import {redactUser, removeUser} from "../../../api/user.js";
@@ -147,7 +151,7 @@ export default class GroupsUser{
             //проверяем, чтобы не существовало пользователя с таким же логином
             let check = await this.user.checkDoubleLogin(this.loginInputElement.val());
 
-            if (check) {
+            if (check || (!check && this.loginInputElement.val() === User.activeUser.login)) {
                 let data = {
                     id: User.activeUser.id,
                     login: this.loginInputElement.val(),
@@ -163,6 +167,9 @@ export default class GroupsUser{
                     //вносим изменения о пользователе в localStorage
                     this.user.setToLocalStorage();
 
+                    //меняем название организации в header
+                    new GroupsList().setUserOrganizationName();
+
                     setMessage('Пользователь изменен!!');
 
                     //делаем кнопку неактивной (но ставим false, потому что в finally она станет true)
@@ -171,13 +178,13 @@ export default class GroupsUser{
                     //закрываем блок редактирования пользователя
                     this.closeBlock();
                 } else {
-                    alert('Что-то пошло не так..');
+                    await setAlert('Что-то пошло не так..');
                 }
             } else {
-                alert('Пользователь с таким логином уже существует!!');
+                await setAlert('Пользователь с таким логином уже существует!!');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         } finally {
             //удаляем анимацию загрузки внутри кнопки "Редактировать"
             setLoading(this.redactBtn, this.loadingElement);
@@ -202,10 +209,10 @@ export default class GroupsUser{
                     this.user.becomeToAuthorization();
                 }, 1000)
             } else {
-                alert('Что-то пошло не так..');
+                await setAlert('Что-то пошло не так..');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         }
     }
     //==============================================================//
@@ -246,11 +253,11 @@ export default class GroupsUser{
     }
 
     //клик по кнопке "Редактировать"
-    clickToRedact () {
+    clickToRedact = async () => {
         let check = new FormsValidation().onSubmit(this.formElement);
 
         if (check) {
-            const confirmed = confirm('Вы действительно хотите редактировать профиль?');
+            const confirmed = await setConfirm('Вы действительно хотите редактировать профиль?');
 
             if (confirmed) {
                 this.redact();
@@ -259,8 +266,8 @@ export default class GroupsUser{
     }
 
     //клик по кнопке "Выйти"
-    clickToExit () {
-        let confirmed = confirm('Вы действительно хотите выйти?');
+    clickToExit = async () => {
+        let confirmed = await setConfirm('Вы действительно хотите выйти?');
 
         if (confirmed) {
             this.user.becomeToAuthorization();
@@ -268,8 +275,8 @@ export default class GroupsUser{
     }
 
     //клик по кнопке "Удалить профиль"
-    clickToDelete () {
-        let confirmed = confirm('Вы действительно хотите удалить профиль?');
+    clickToDelete = async () => {
+        let confirmed = await setConfirm('Вы действительно хотите удалить профиль?');
 
         if (confirmed) {
             this.delete();

@@ -8,12 +8,21 @@
         <link rel="stylesheet" href="src/assets/styles/main.css">
         <link rel="icon" href="/app-icon.png" type="image/png">
 
-        <script src="src/scripts/jquery-3.7.1.min.js"></script>
+        <script src="src/scripts/jquery-3.7.1.min.js" type="module" defer></script>
         <script src="src/scripts/authorization.js" type="module" defer></script>
     </head>
     <body>
 
     <span class="message" data-js-message></span>
+
+    <div class="message-info" data-js-alert>
+        <div class="message-info__content">
+            <p class="message-info__title h5" data-js-alert-text></p>
+            <div class="message-info__btn-bar">
+                <button class="message-info__btn button--redact" type="button" data-js-alert-btn>ОК</button>
+            </div>
+        </div>
+    </div>
 
     <div class="authorization" data-js-authorization>
         <div class="swiper authorization__swiper" data-js-authorization-swiper>

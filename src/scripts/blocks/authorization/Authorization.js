@@ -6,6 +6,7 @@ import 'swiper/css/effect-flip';
 import FormsValidation from "../../globals/useValidation.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
+import {setAlert} from "../../utils/useInfoMessage.js";
 
 import {registrationUser} from "../../../api/user.js";
 
@@ -89,6 +90,14 @@ export default class Authorization extends User{
     loadFunctions() {
         //очищаем все поля ввода
         this.clearInputs();
+
+        //если в localStorage есть логин и пароль - заходим по ним
+        let login = JSON.parse(window.localStorage.getItem('user')).login ?? '';
+        let password = JSON.parse(window.localStorage.getItem('user')).password ?? '';
+
+        if (login.length && password.length) {
+            new User().logIn(login, password);
+        }
     }
     //==============================================================//
 
@@ -170,15 +179,15 @@ export default class Authorization extends User{
                         this.successLog(data);
                     }, 2000);
                 } else {
-                    alert('Что-то пошло не так..');
+                    await setAlert('Что-то пошло не так..')
                 }
             } else {
-                alert('Пользователь с таким логином уже существует!!');
+                await setAlert('Что-то пошло не так..')
                 //убираем анимацию загрузки внутри кнопки "Зарегистрироваться"
                 setLoading(this.regBtn, this.regBtnLoadingElement)
             }
         } catch (err) {
-            alert(`Что-то пошло не так..${err}`);
+            await setAlert('Что-то пошло не так..')
             //убираем анимацию загрузки внутри кнопки "Зарегистрироваться"
             setLoading(this.regBtn, this.regBtnLoadingElement)
         }
@@ -207,7 +216,7 @@ export default class Authorization extends User{
     //очистка всех input
     clearInputs = () => {
         this.inputElements.each((index, input) => {
-            input.value = '';
+            $(input).val('');
         })
     }
     //==============================================================//

@@ -1,0 +1,32 @@
+@use '../helpers' as *;
+
+.message-info {
+  @include flex-center();
+
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 10000;
+  opacity: 0;
+
+  &:not(.is-active) {
+    display: none;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: rem(20);
+    background: var(--color-light-alt);
+    padding: rem(15);
+    border-radius: var(--radius-medium);
+    max-width: 80%;
+    text-align: center;
+  }
+
+  &__btn-bar {
+    display: flex;
+    align-items: center;
+    column-gap: rem(10);
+  }
+}

@@ -8,12 +8,31 @@
     <link rel="stylesheet" href="src/assets/styles/main.css">
     <link rel="icon" href="/app-icon.png" type="image/png">
 
-    <script src="src/scripts/jquery-3.7.1.min.js"></script>
+    <script src="src/scripts/jquery-3.7.1.min.js" type="module" defer></script>
     <script src="src/scripts/groups.js" type="module" defer></script>
 </head>
 <body>
 
     <span class="message" data-js-message></span>
+
+    <div class="message-info" data-js-alert>
+        <div class="message-info__content">
+            <p class="message-info__title h5" data-js-alert-text>Пользователя с таким логином/паролем не существует..</p>
+            <div class="message-info__btn-bar">
+                <button class="message-info__btn button--redact" type="button" data-js-alert-btn>ОК</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="message-info" data-js-confirm>
+        <div class="message-info__content">
+            <p class="message-info__title h5" data-js-confirm-text>Вы действительно хотите удалить пользователя?</p>
+            <div class="message-info__btn-bar">
+                <button class="message-info__btn button--redact" type="button" data-js-confirm-btn-no>НЕТ</button>
+                <button class="message-info__btn button--redact" type="button" data-js-confirm-btn-yes>ДА</button>
+            </div>
+        </div>
+    </div>
 
     <div class="groups" data-js-groups>
 

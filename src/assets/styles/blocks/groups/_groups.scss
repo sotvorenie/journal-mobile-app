@@ -67,10 +67,10 @@
     &-btn {
       @include fluid-text(42, 32);
       @include flex-center();
+      @include square(#{rem(60)});
 
       background: var(--color-dark-alt);
       font-weight: 700;
-      aspect-ratio: 1;
       position: absolute;
       bottom: rem(5);
       right: rem(5);

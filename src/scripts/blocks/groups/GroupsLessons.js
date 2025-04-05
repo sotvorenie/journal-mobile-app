@@ -9,6 +9,7 @@ import {input} from "../../utils/useInput.js";
 import {redactValidation} from "../../globals/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
+import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
 
 export default class GroupsLessons {
     //---DOM-селекторы--//
@@ -197,11 +198,11 @@ export default class GroupsLessons {
                     this.setLoading(true, false, false);
                 }
             } else {
-                alert('Что-то пошло не так..');
+                await setAlert('Что-то пошло не так..');
                 this.setLoading(false, false, true);
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         }
     }
 
@@ -236,13 +237,13 @@ export default class GroupsLessons {
                     //получаем список предметов группы
                     await this.getLessons();
                 } else {
-                    alert('Что-то пошло не так..');
+                    await setAlert('Что-то пошло не так..');
                 }
             } else {
-                alert('Такой предмет уже существует!!');
+                await setAlert('Такой предмет уже существует!!');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         } finally {
             //скрываем анимацию загрузки в кнопке "Добавить предмет"
             setLoading(this.createBtn, this.createLoadingElement);
@@ -259,10 +260,10 @@ export default class GroupsLessons {
             if (response.status === 200) {
                 return !response.data.length;
             } else {
-                alert('Что-то пошло не так..');
+                await setAlert('Что-то пошло не так..');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         }
     }
 
@@ -289,10 +290,10 @@ export default class GroupsLessons {
                 //выводим сообщение
                 setMessage('Предмет удален!!');
             } else {
-                alert('Что-то пошло не так..');
+                await setAlert('Что-то пошло не так..');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         }
     }
 
@@ -328,13 +329,13 @@ export default class GroupsLessons {
                     //обновляем данные о предметах
                     await this.getLessons();
                 } else {
-                    alert('Что-то пошло не так..');
+                    await setAlert('Что-то пошло не так..');
                 }
             } else {
-                alert('Такой предмет уже существует!!');
+                await setAlert('Такой предмет уже существует!!');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         } finally {
             //скрываем анимацию загрузки в кнопке "Редактировать предмет"
             setLoading(this.redactBtn, this.redactLoadingElement);
@@ -446,8 +447,8 @@ export default class GroupsLessons {
     }
 
     //при клике по кнопке "Создать предмет"
-    clickToCreate () {
-        let confirmed = confirm('Вы действительно хотите создать предмет?');
+    clickToCreate = async () => {
+        let confirmed = await setConfirm('Вы действительно хотите создать предмет?');
 
         if (confirmed) {
             this.createLesson();
@@ -494,8 +495,8 @@ export default class GroupsLessons {
     }
 
     //клик по кнопке удаления предмета
-    clickToDelete (id) {
-        let confirmed = confirm('Вы действительно хотите удалить предмет?');
+    clickToDelete = async (id) => {
+        let confirmed = await setConfirm('Вы действительно хотите удалить предмет?');
 
         if (confirmed) {
             this.deleteLesson(id);
@@ -546,8 +547,8 @@ export default class GroupsLessons {
     }
 
     //клик по кнопке "Редактировать предмет"
-    clickToRedact () {
-        let confirmed = confirm('Вы действительно хотите редактировать предмет?');
+    clickToRedact = async  () => {
+        let confirmed = await setConfirm('Вы действительно хотите редактировать предмет?');
 
         if (confirmed) {
             this.redactLesson();

@@ -1,3 +1,6 @@
+import {getCoordinates} from "../utils/useCoordinates.js";
+import {pxToRem} from "../utils/usePxToRem.js";
+
 export default class Settings {
     //==============================================================//
     //---DOM-селекторы--//
@@ -38,6 +41,14 @@ export default class Settings {
     //---функции--//
     //открытие/закрытие блока настроек
     openSettingsBlock () {
+        //получаем координаты кнопки открытия настроек
+        let coordinates = getCoordinates(this.settingsOpenBtn[0]);
+
+        //меняем transform-origin у блока настроек
+        this.settingsElement.css({
+            transformOrigin: `${pxToRem(coordinates.left) + 1.5}rem ${pxToRem(coordinates.top) + 1.5}rem`
+        })
+
         this.settingsElement.animate({
             opacity: 1,
             scale: 1

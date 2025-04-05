@@ -1,15 +1,18 @@
 import User from "../../globals/store/useUser.js";
+import Groups from "../../globals/store/useGroups.js";
 
 import UseGroups from "./useGroups.js";
 
 import {deleteStudentsGroup} from "../../../api/groups.js";
 import {setMessage} from "../../utils/useMessage.js";
+import {setAlert} from "../../utils/useInfoMessage.js";
 
 export default class GroupsList {
 //==============================================================//
     //---DOM-селекторы--//
     selectors = {
         root: '[data-js-groups]',
+        item: '[data-js-groups-item]',
         name: '[data-js-groups-name]',
         delete: '[data-js-groups-delete]',
     }
@@ -33,9 +36,15 @@ export default class GroupsList {
 
         this.nameElement = this.groupsElement.find(this.selectors.name);
 
-        //получаем кнопки "Удалить группу" после того как список групп будет встроен на страницу
+        //получаем элементы после того как список групп будет встроен на страницу
         $(document).on('groupsListRendered', () => {
+            //получаем кнопки для удаления групп
             this.deleteBtns = this.groupsElement.find(this.selectors.delete);
+
+            //получаем элементы списка групп
+            this.groupItems = this.groupsElement.find(this.selectors.item);
+
+            this.bindEvents();
         })
 
         this.loadFunctions();
@@ -51,10 +60,6 @@ export default class GroupsList {
 
         //получаем список групп
         await this.useGroups.getGroups();
-
-        $(document).on('groupsListRendered', () => {
-            this.bindEvents();
-        })
     }
     //==============================================================//
 
@@ -64,13 +69,22 @@ export default class GroupsList {
     bindEvents() {
         //клик по кнопке "Удалить группу"
         this.deleteBtns.each((index, btn) => {
-            $(btn).on('click', () => {
+            $(btn).on('click', (event) => {
                 let confirmed = confirm('Вы действительно хотите удалить группу?');
 
                 if (confirmed) {
                     this.delete(index);
                 }
+
+                event.stopPropagation();
             })
+        })
+
+        //клик по элементу списка групп
+        this.groupItems.each((index, element) => {
+            $(element).on('click', () => {
+                this.clickToGroup(index)
+            });
         })
     }
     //==============================================================//
@@ -106,10 +120,10 @@ export default class GroupsList {
                 //выводим сообщение
                 setMessage('Группа удалена!!');
             } else {
-                alert('Что-то пошло не так..');
+                await setAlert('Что-то пошло не так..');
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         }
     }
     //==============================================================//
@@ -120,6 +134,15 @@ export default class GroupsList {
     //задаем переменной name название организации пользователя
     setUserOrganizationName () {
         this.nameElement.text(User.activeUser.organization);
+    }
+
+    //при клике по элементу списка групп
+    clickToGroup (index) {
+        //задаем информацию о группе по которой кликнули - переменной
+        Groups.activeGroup = UseGroups.groupsList[index];
+
+        //переходим на страницу журнала
+        window.location.href = '../../../../journal.html';
     }
     //==============================================================//
 }

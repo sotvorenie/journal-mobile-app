@@ -11,4 +11,38 @@
       rotate: 90deg;
     }
   }
+
+  &__back {
+    @include fluid-text(28, 20);
+
+    display: flex;
+    column-gap: rem(5);
+    align-items: center;
+    border: var(--border);
+    padding: fluid(15, 5) fluid(25, 10);
+    border-radius: var(--radius-big);
+
+    @include hover {
+      color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+
+    svg {
+      @include square(#{rem(40)});
+
+      rotate: -90deg;
+    }
+  }
+
+  &__reload {
+    svg {
+      @include square(#{rem(35)})
+    }
+
+    @include hover {
+      svg {
+        rotate: 45deg;
+      }
+    }
+  }
 }

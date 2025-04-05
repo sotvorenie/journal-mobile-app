@@ -563,9 +563,48 @@ body {
     rotate: 90deg;
   }
 }
+.navigation__back {
+  font-size: clamp(1.25rem, 1.0888429752rem + 0.6611570248vw, 1.75rem);
+  display: flex;
+  column-gap: 0.3125rem;
+  align-items: center;
+  border: var(--border);
+  padding: clamp(0.3125rem, 0.111053719rem + 0.826446281vw, 0.9375rem) clamp(0.625rem, 0.3228305785rem + 1.2396694215vw, 1.5625rem);
+  border-radius: var(--radius-big);
+}
+@media (any-hover: hover) {
+  .navigation__back:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .navigation__back:active {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+}
+.navigation__back svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  rotate: -90deg;
+}
+.navigation__reload svg {
+  width: 2.1875rem;
+  height: 2.1875rem;
+}
+@media (any-hover: hover) {
+  .navigation__reload:hover svg {
+    rotate: 45deg;
+  }
+}
+@media (any-hover: none) {
+  .navigation__reload:active svg {
+    rotate: 45deg;
+  }
+}
 
 .settings {
-  transform-origin: 0.9375rem 0.9375rem;
   border-radius: 50%;
   scale: 0;
 }
@@ -731,6 +770,35 @@ body {
   overflow: hidden;
 }
 
+.message-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  opacity: 0;
+}
+.message-info:not(.is-active) {
+  display: none;
+}
+.message-info__content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.25rem;
+  background: var(--color-light-alt);
+  padding: 0.9375rem;
+  border-radius: var(--radius-medium);
+  max-width: 80%;
+  text-align: center;
+}
+.message-info__btn-bar {
+  display: flex;
+  align-items: center;
+  column-gap: 0.625rem;
+}
+
 .authorization {
   background: var(--color-light-alt);
   padding: 1.25rem 0.625rem;
@@ -835,9 +903,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 3.75rem;
+  height: 3.75rem;
   background: var(--color-dark-alt);
   font-weight: 700;
-  aspect-ratio: 1;
   position: absolute;
   bottom: 0.3125rem;
   right: 0.3125rem;
@@ -940,6 +1009,14 @@ body {
 .groups-lessons__redact-title {
   margin-bottom: 0.625rem;
   text-align: center;
+}
+
+.journal {
+  height: 100%;
+  width: min(37.5rem, 100%);
+  padding-block: 0.9375rem;
+  display: flex;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=main.css.map */

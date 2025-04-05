@@ -1,0 +1,9 @@
+@use '../../helpers' as *;
+
+.journal {
+  height: 100%;
+  width: min(#{rem(600)}, 100%);
+  padding-block: rem(15);
+  display: flex;
+  flex-direction: column;
+}

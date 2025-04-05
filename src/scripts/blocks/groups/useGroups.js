@@ -1,5 +1,7 @@
 import {getStudentsGroups} from "../../../api/groups.js";
 
+import {setAlert} from "../../utils/useInfoMessage.js";
+
 import User from "../../globals/store/useUser.js";
 
 export default class UseGroups {
@@ -50,11 +52,10 @@ export default class UseGroups {
                     this.setEmptyGroups();
                 }
             } else {
-                alert(`Что-то пошло не так..`);
+                await setAlert('Что-то пошло не так..');
             }
         } catch (err) {
-            console.log(err)
-            alert(`Что-то пошло не так..`);
+            await setAlert('Что-то пошло не так..');
         } finally {
             this.loadingElement.removeClass(this.classes.isActive);
         }
@@ -73,7 +74,7 @@ export default class UseGroups {
         //создаем элементы li
         let groupsListNew = UseGroups.groupsList.map(group => {
             return `
-                    <li class="groups__item list__item">
+                    <li class="groups__item list__item" data-js-groups-item>
                         <p class="slice-string h4">${group.name}</p>
                         <div class="list__btn-bar">
                             <button class="list-btn"

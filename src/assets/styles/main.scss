@@ -13,9 +13,12 @@
 @use 'blocks/list';
 @use 'blocks/absolute';
 @use 'blocks/slice-string';
+@use 'blocks/message-info';
 
 @use 'blocks/authorization/authorization';
 
 @use 'blocks/groups/groups';
 @use 'blocks/groups/user';
 @use 'blocks/groups/groups-lessons';
+
+@use 'blocks/journal/journal';

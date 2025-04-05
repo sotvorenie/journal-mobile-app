@@ -1,5 +1,7 @@
 import {checkDoubleUser, loginUser} from "../../../api/user.js";
 
+import {setAlert} from "../../utils/useInfoMessage.js";
+
 export default class User {
 
     //информация об активном пользователе
@@ -77,12 +79,12 @@ export default class User {
                     await this.successLog(response.data[0], page, goTo);
                     return true;
                 } else {
-                    alert('Пользователя с таким логином/паролем не существует!!')
+                    await setAlert('Пользователя с таким логином/паролем не существует!!');
                     return false;
                 }
             }
         } catch (err) {
-            alert(`Что-то пошло не так..${err}`);
+            await setAlert('Что-то пошло не так..');
             await this.becomeToAuthorization();
         }
     }
@@ -97,11 +99,11 @@ export default class User {
             let check = await this.logIn(User.activeUser.login, User.activeUser.password, page, false);
             //если такой пользователь не найден, то перезагружаем страницу
             if (!check) {
-                alert('Пользователь был удален!! Страница будет перезагружена.');
+                await setAlert('Пользователь был удален!! Страница будет перезагружена.');
                 await this.becomeToAuthorization();
             }
         } catch (err) {
-            alert('Что-то пошло не так..');
+            await setAlert('Что-то пошло не так..');
         }
     }
 }

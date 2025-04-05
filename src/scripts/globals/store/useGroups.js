@@ -2,13 +2,9 @@ import User from "./useUser.js";
 
 import {checkStudentGroup} from "../../../api/groups.js";
 
-export default class Groups extends User{
-    constructor() {
-        super();
-
-        //активная группа
-        this.activeGroup = {};
-    }
+export default class Groups{
+    //активная группа
+    static activeGroup = {};
 
     //проверка существования группы (чтобы если ее удалили, то мы выводили ошибку и перезагружали страницу
     checkGroup = async (id = '', name = '') => {
