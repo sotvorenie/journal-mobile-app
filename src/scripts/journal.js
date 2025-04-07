@@ -6,6 +6,7 @@ import User from "./globals/store/useUser.js";
 import Groups from "./globals/store/useGroups.js";
 
 import Journal from "./blocks/journal/Journal.js";
+import JournalTable from "./blocks/journal/JournalTable.js";
 
 new Theme();
 new Animation();
@@ -18,3 +19,4 @@ new User().logInCheck();
 new Groups().getFromLocStore();
 
 new Journal();
+new JournalTable();

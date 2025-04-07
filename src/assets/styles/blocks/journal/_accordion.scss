@@ -6,6 +6,10 @@
   border: var(--border);
   border-radius: var(--radius-medium);
 
+  &:not(:last-child) {
+    margin-bottom: fluid(20, 10);
+  }
+
   @include hover {
     border-color: var(--color-accent);
   }
@@ -18,13 +22,69 @@
     cursor: pointer;
   }
 
-  &__btn {
+  &__icon {
     @include square(#{rem(30)});
 
     rotate: 90deg;
+    transition-duration: var(--transition-duration);
 
     &.is-active {
       color: var(--color-accent);
+      rotate: -90deg;
+    }
+  }
+
+  &__list {
+    width: 100%;
+    display: flex;
+    column-gap: rem(5);
+    margin-block: rem(5);
+    height: min(15vw, rem(100));
+    transition-duration: var(--transition-duration);
+
+    &:not(.is-active) {
+      height: 0;
+      margin-block: 0;
+
+      & > .accordion__item {
+        transform: scaleY(0);
+        opacity: 0;
+      }
+    }
+  }
+
+  &__item {
+    @include fluid-text(52, 28);
+    @include flex-center();
+
+    width: 20%;
+    aspect-ratio: 1;
+    border: var(--border);
+    cursor: pointer;
+    position: relative;
+
+    @include hover {
+      border-color: var(--color-accent);
+    }
+
+    &-marks {
+      transform-origin: center bottom;
+      position: absolute;
+      background: var(--color-accent);
+      display: flex;
+      column-gap: rem(15);
+      line-height: 1;
+      padding: fluid(20, 10);
+      border-radius: var(--radius-regular);
+      color: var(--color-light);
+      z-index: 1;
+      bottom: 100%;
+      box-shadow: 0 0 rem(10) rem(4) var(--color-dark);
+      transition-duration: var(--transition-duration);
+
+      &:not(.is-active) {
+        scale: 0;
+      }
     }
   }
 }

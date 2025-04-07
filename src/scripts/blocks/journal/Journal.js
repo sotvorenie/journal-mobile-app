@@ -58,9 +58,6 @@ export default class Journal {
         this.loadingElement = this.journalElement.find(this.selectors.loading);
         this.nullListElement = this.journalElement.find(this.selectors.nullList);
 
-        //переменная, хранящая старое состояние classes, чтобы в случаем ошибки можно было откатиться до этого состояния
-        this.oldClasses = {};
-
         this.loadFunctions();
         this.bindEvents();
     }
@@ -167,9 +164,7 @@ export default class Journal {
         await new Students().getStudents();
 
         //получаем ячейки журнала
-        if (Days.activeDay.date_info) {
-            await new Classes().getClasses();
-        }
+        await new Classes().getClasses();
 
         //скрываем анимацию загрузки в журнале
         this.loadingElement.removeClass(this.classes.isActive);
@@ -177,6 +172,9 @@ export default class Journal {
         //если classes нет - показываем null-list
         if (!Classes.activeClasses.length) {
             this.nullListElement.addClass(this.classes.isActive);
+        } else {
+            //создаем событие для отрисовки журнала
+            $(document).trigger('journalLoad');
         }
     }
     //==============================================================//
