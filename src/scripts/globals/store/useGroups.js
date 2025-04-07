@@ -6,6 +6,11 @@ export default class Groups{
     //активная группа
     static activeGroup = {};
 
+    //получение данных об активной группе из localStorage
+    getFromLocStore () {
+        Groups.activeGroup = JSON.parse(window.localStorage.getItem('activeGroup') ?? '{}');
+    }
+
     //проверка существования группы (чтобы если ее удалили, то мы выводили ошибку и перезагружали страницу
     checkGroup = async (id = '', name = '') => {
         try {

@@ -1018,5 +1018,102 @@ body {
   display: flex;
   flex-direction: column;
 }
+.journal__navigation {
+  margin-bottom: 0.625rem;
+}
+.journal__header {
+  background: var(--color-accent);
+  color: var(--color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 0.625rem;
+  border-radius: var(--radius-medium);
+  padding: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
+  margin-bottom: 0.625rem;
+}
+.journal__lessons {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 0.3125rem;
+  margin-bottom: 0.9375rem;
+}
+.journal__lessons-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  background: var(--color-light-alt);
+  padding: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
+  border: var(--border);
+  cursor: pointer;
+  border-radius: var(--radius-regular);
+}
+@media (any-hover: hover) {
+  .journal__lessons-item:hover {
+    background: var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .journal__lessons-item:active {
+    background: var(--color-accent);
+  }
+}
+.journal__lessons-absolute {
+  text-align: center;
+  border-radius: 50%;
+}
+.journal__lessons-absolute:not(.is-active) {
+  display: none;
+}
+.journal__null-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.journal__null-list:not(.is-active) {
+  display: none;
+}
+.journal__null-list svg {
+  fill: transparent;
+  width: clamp(5.625rem, 3.8119834711rem + 7.4380165289vw, 11.25rem);
+}
+.journal__list:not(.is-active) {
+  display: none;
+}
+
+.accordion {
+  padding: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
+  background: var(--color-light-alt);
+  border: var(--border);
+  border-radius: var(--radius-medium);
+}
+@media (any-hover: hover) {
+  .accordion:hover {
+    border-color: var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .accordion:active {
+    border-color: var(--color-accent);
+  }
+}
+.accordion__student {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 0.625rem;
+  cursor: pointer;
+}
+.accordion__btn {
+  width: 1.875rem;
+  height: 1.875rem;
+  rotate: 90deg;
+}
+.accordion__btn.is-active {
+  color: var(--color-accent);
+}
 
 /*# sourceMappingURL=main.css.map */

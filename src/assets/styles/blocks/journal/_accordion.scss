@@ -1,0 +1,30 @@
+@use '../../helpers' as *;
+
+.accordion {
+  padding: fluid(20, 10);
+  background: var(--color-light-alt);
+  border: var(--border);
+  border-radius: var(--radius-medium);
+
+  @include hover {
+    border-color: var(--color-accent);
+  }
+
+  &__student {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: rem(10);
+    cursor: pointer;
+  }
+
+  &__btn {
+    @include square(#{rem(30)});
+
+    rotate: 90deg;
+
+    &.is-active {
+      color: var(--color-accent);
+    }
+  }
+}

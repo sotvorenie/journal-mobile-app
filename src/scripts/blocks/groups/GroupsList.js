@@ -138,8 +138,8 @@ export default class GroupsList {
 
     //при клике по элементу списка групп
     clickToGroup (index) {
-        //задаем информацию о группе по которой кликнули - переменной
-        Groups.activeGroup = UseGroups.groupsList[index];
+        //задаем информацию об активной группе в localStorage
+        window.localStorage.setItem('activeGroup', JSON.stringify(UseGroups.groupsList[index]))
 
         //переходим на страницу журнала
         window.location.href = '../../../../journal.html';

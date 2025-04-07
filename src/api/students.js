@@ -5,6 +5,10 @@ export function getStudentsList (data) {
     return axios.get(`${url}/students/getStudents.php${data}`);
 }
 
+export function checkStudent (data) {
+    return axios.get(`${url}/students/checkStudent.php${data}`);
+}
+
 export function getStudentPasses (data) {
     return axios.get(`${url}/students/getStudentPasses.php${data}`);
 }

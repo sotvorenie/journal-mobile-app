@@ -18,7 +18,7 @@
 
   <div class="message-info" data-js-alert>
     <div class="message-info__content">
-      <p class="message-info__title h5" data-js-alert-text>Пользователя с таким логином/паролем не существует..</p>
+      <p class="message-info__title h5" data-js-alert-text></p>
       <div class="message-info__btn-bar">
         <button class="message-info__btn button--redact" type="button" data-js-alert-btn>ОК</button>
       </div>
@@ -27,7 +27,7 @@
 
   <div class="message-info" data-js-confirm>
     <div class="message-info__content">
-      <p class="message-info__title h5" data-js-confirm-text>Вы действительно хотите удалить пользователя?</p>
+      <p class="message-info__title h5" data-js-confirm-text>?</p>
       <div class="message-info__btn-bar">
         <button class="message-info__btn button--redact" type="button" data-js-confirm-btn-no>НЕТ</button>
         <button class="message-info__btn button--redact" type="button" data-js-confirm-btn-yes>ДА</button>
@@ -36,7 +36,7 @@
   </div>
 
   <div class="journal" data-js-journal>
-    <div class="navigation">
+    <div class="journal__navigation navigation">
       <button class="navigation__back" type="button" data-js-journal-back>
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 5V19M12 5L6 11M12 5L18 11" stroke="#f9f8fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -91,6 +91,62 @@
         </div>
       </div>
     </div>
+
+    <header class="journal__header">
+      <p class="slice-string h4" data-js-journal-group></p>
+      <p class="h4" data-js-journal-date></p>
+    </header>
+
+    <ul class="journal__lessons">
+      <li class="journal__lessons-item h4" data-js-journal-lesson>1</li>
+      <li class="journal__lessons-item h4" data-js-journal-lesson>2</li>
+      <li class="journal__lessons-item h4" data-js-journal-lesson>3</li>
+      <li class="journal__lessons-item h4" data-js-journal-lesson>4</li>
+      <li class="journal__lessons-item h4" data-js-journal-lesson>5</li>
+    </ul>
+
+    <div class="journal__lessons-absolute absolute" data-js-journal-lesson-info>
+      <div class="absolute__content">
+        <button class="absolute__close button--close" data-js-journal-lesson-info-close></button>
+
+        <p class="h4" data-js-journal-lesson-info-text>матан</p>
+      </div>
+    </div>
+
+    <span class="loading loading--absolute is-active" data-js-journal-loading>
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+
+        <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+
+        <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+
+        <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+
+        </g>
+
+      </svg>
+    </span>
+
+    <div class="journal__null-list" data-js-journal-null-list>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 3L21 21M5 5V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H17C18.1046 21 19 20.1046 19 19M19 9L13 3M19 9H14.6C14.0399 9 13.7599 9 13.546 8.89101C13.3578 8.79513 13.2049 8.64215 13.109 8.45399C13 8.24008 13 7.96005 13 7.4V3M19 9V14M13 3H8.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <p class="h4">Журнал пуст..</p>
+    </div>
+
+    <ul class="journal__list" data-js-journal-table-list>
+      <li class="journal__item accordion">
+        <div class="accordion__student">
+          <p class="slice-string h4">Абросимов Виталий</p>
+          <button class="accordion__btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.1795 3.26875C15.7889 2.87823 15.1558 2.87823 14.7652 3.26875L8.12078 9.91322C6.94952 11.0845 6.94916 12.9833 8.11996 14.155L14.6903 20.7304C15.0808 21.121 15.714 21.121 16.1045 20.7304C16.495 20.3399 16.495 19.7067 16.1045 19.3162L9.53246 12.7442C9.14194 12.3536 9.14194 11.7205 9.53246 11.33L16.1795 4.68297C16.57 4.29244 16.57 3.65928 16.1795 3.26875Z" fill="#0F0F0F"/>
+            </svg>
+          </button>
+        </div>
+      </li>
+    </ul>
   </div>
 
 </body>

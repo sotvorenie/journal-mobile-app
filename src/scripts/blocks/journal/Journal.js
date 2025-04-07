@@ -1,4 +1,15 @@
-import {setConfirm} from "../../utils/useInfoMessage.js";
+import {getLessons} from "../../../api/lessons.js";
+
+import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
+import {getCoordinates} from "../../utils/useCoordinates.js";
+import {pxToRem} from "../../utils/usePxToRem.js";
+
+import User from "../../globals/store/useUser.js";
+import Groups from "../../globals/store/useGroups.js";
+import Lessons from "../../globals/store/useLessons.js";
+import Days from "../../globals/store/useDays.js";
+import Classes from "../../globals/store/useClasses.js";
+import Students from "../../globals/store/useStudents.js";
 
 export default class Journal {
 //==============================================================//
@@ -7,6 +18,17 @@ export default class Journal {
         root: '[data-js-journal]',
         back: '[data-js-journal-back]',
         reload: '[data-js-journal-reload]',
+
+        group: '[data-js-journal-group]',
+        date: '[data-js-journal-date]',
+
+        lessons: '[data-js-journal-lesson]',
+        lessonInfo: '[data-js-journal-lesson-info]',
+        lessonInfoClose: '[data-js-journal-lesson-info-close]',
+        lessonInfoText: '[data-js-journal-lesson-info-text]',
+
+        loading: '[data-js-journal-loading]',
+        nullList: '[data-js-journal-null-list]',
     }
     //==============================================================//
 
@@ -27,6 +49,17 @@ export default class Journal {
 
         this.backBtn = this.journalElement.find(this.selectors.back);
         this.reloadBtn = this.journalElement.find(this.selectors.reload);
+        this.groupNameElement = this.journalElement.find(this.selectors.group);
+        this.dateNameElement = this.journalElement.find(this.selectors.date);
+        this.lessonsElements = this.journalElement.find(this.selectors.lessons);
+        this.lessonInfoElement = this.journalElement.find(this.selectors.lessonInfo);
+        this.lessonInfoCloseBtn = this.journalElement.find(this.selectors.lessonInfoClose);
+        this.lessonInfoTextElement = this.journalElement.find(this.selectors.lessonInfoText);
+        this.loadingElement = this.journalElement.find(this.selectors.loading);
+        this.nullListElement = this.journalElement.find(this.selectors.nullList);
+
+        //переменная, хранящая старое состояние classes, чтобы в случаем ошибки можно было откатиться до этого состояния
+        this.oldClasses = {};
 
         this.loadFunctions();
         this.bindEvents();
@@ -36,8 +69,18 @@ export default class Journal {
 
     //==============================================================//
     //---функции, выполняющиеся сразу после загрузки страницы--//
-    loadFunctions = () => {
+    loadFunctions = async () => {
+        //задаем название группы в header
+        this.setGroupName();
 
+        //получаем последний день
+        await this.getLastDay();
+
+        //получаем данные для журнала
+        this.updateData();
+
+        //задаем последний день в header
+        this.setDate();
     }
     //==============================================================//
 
@@ -45,28 +88,164 @@ export default class Journal {
     //==============================================================//
     //---обработчики событий--//
     bindEvents() {
+        //клик по кнопке возврата на прошлую страницу
         this.backBtn.on('click', () => {
             window.location.href = '../../../../groups.html';
         });
 
+        //клик по кнопке перезагрузки страницы
         this.reloadBtn.on('click', async () => {
             let confirmed = await setConfirm('Перезагрузить страницу?');
             if (confirmed) {
                 location.reload();
             }
         })
+
+        //клик по элементу lessons
+        this.lessonsElements.each((index, element) => {
+            $(element).on('click', () => {
+                if (Lessons.activeLessons[index]) {
+                    this.openLessonInfo(index, element);
+                }
+            });
+        })
+
+        //клик по кнопке закрытия блока lessonInfo
+        this.lessonInfoCloseBtn.on('click', this.closeLessonInfo.bind(this));
     }
     //==============================================================//
 
 
     //==============================================================//
     //---обращения к серверу--//
+    //получаем список предметов группы
+    getLessons = async () => {
+        try {
+            let data = `?user_id=${User.activeUser.id}&group_id=${Groups.activeGroup.id}`;
 
+            const response = await getLessons(data);
+
+            if (response.status === 200) {
+                Lessons.lessons = response.data;
+            } else {
+                await setAlert('Что-то пошло не так..');
+            }
+        } catch (err) {
+            await setAlert('Что-то пошло не так..');
+        }
+    }
+
+    //получение последнего дня
+    getLastDay = async () => {
+        let day = await new Days().getDate(0, 1);
+
+        if (day.data.length) {
+            Days.activeDay = day.data[0];
+        } else {
+            Days.activeDay = {};
+        }
+    }
+
+    //функция обновления данных при изменении последней даты
+    updateData = async () => {
+        //очищаем активный classes
+        Classes.activeClasses = [];
+
+        //скрываем блок null-list
+        this.nullListElement.removeClass(this.classes.isActive);
+
+        //показываем анимацию загрузки в журнале
+        this.loadingElement.addClass(this.classes.isActive);
+
+        //получаем список предметов группы
+        await this.getLessons();
+
+        //получаем список предметов выбранного дня
+        this.getTodayLessons();
+
+        //получаем список студентов
+        await new Students().getStudents();
+
+        //получаем ячейки журнала
+        if (Days.activeDay.date_info) {
+            await new Classes().getClasses();
+        }
+
+        //скрываем анимацию загрузки в журнале
+        this.loadingElement.removeClass(this.classes.isActive);
+
+        //если classes нет - показываем null-list
+        if (!Classes.activeClasses.length) {
+            this.nullListElement.addClass(this.classes.isActive);
+        }
+    }
     //==============================================================//
 
 
     //==============================================================//
     //---функции--//
+    //задаем название группы в header
+    setGroupName () {
+        this.groupNameElement.text(Groups.activeGroup.name);
+    }
 
+    //задаем последнюю дату в header
+    setDate () {
+        let date = '';
+
+        if (Days.activeDay.date_info) {
+            date = `${Days.activeDay.day}.${Days.activeDay.month}.${Days.activeDay.year}`;
+        }
+
+        this.dateNameElement.text(date);
+    }
+
+    //получаем список предметов выбранного дня
+    getTodayLessons () {
+        let activeLessons = [
+            Days.activeDay.first_lesson,
+            Days.activeDay.second_lesson,
+            Days.activeDay.third_lesson,
+            Days.activeDay.fourth_lesson,
+            Days.activeDay.fifth_lesson,
+        ]
+
+        activeLessons.forEach(i => {
+            let activeLesson = Lessons.lessons.find(s => s.id === i);
+
+            Lessons.activeLessons.push(activeLesson?.name);
+        })
+    }
+
+    //открытие блока информации о предмете
+    openLessonInfo (index, element) {
+        //задаем название предмета в блок
+        this.lessonInfoTextElement.text(Lessons.activeLessons[index].name);
+
+        this.lessonInfoElement.addClass(this.classes.isActive);
+
+        //получаем координаты элемента списка предметов по которому кликнули
+        let coordinates = getCoordinates(element);
+
+        //меняем transform-origin у блока добавления нового предмета
+        this.lessonInfoElement.css({
+            transformOrigin: `${pxToRem(coordinates.left) + 1.5}rem ${pxToRem(coordinates.top) + 1.5}rem`
+        })
+
+        this.lessonInfoElement.animate({
+            scale: 1
+        }, 150, function () {
+            $(this).css('border-radius', '0');
+        })
+    }
+
+    //закрытие блока информации о предмете
+    closeLessonInfo () {
+        this.lessonInfoElement.animate({
+            scale: 0
+        }, 150, () => {
+            this.lessonInfoElement.removeClass(this.classes.isActive);
+        })
+    }
     //==============================================================//
 }

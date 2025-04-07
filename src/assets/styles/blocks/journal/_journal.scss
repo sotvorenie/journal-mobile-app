@@ -6,4 +6,75 @@
   padding-block: rem(15);
   display: flex;
   flex-direction: column;
+
+  &__navigation {
+    margin-bottom: rem(10);
+  }
+
+  &__header {
+    background: var(--color-accent);
+    color: var(--color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: rem(10);
+    border-radius: var(--radius-medium);
+    padding: fluid(20, 10);
+    margin-bottom: rem(10);
+  }
+
+  &__lessons {
+    display: flex;
+    justify-content: space-between;
+    column-gap: rem(5);
+    margin-bottom: rem(15);
+
+    &-item {
+      @include flex-center();
+
+      flex-grow: 1;
+      background: var(--color-light-alt);
+      padding: fluid(20, 10);
+      border: var(--border);
+      cursor: pointer;
+      border-radius: var(--radius-regular);
+
+      @include hover {
+        background: var(--color-accent);
+      }
+    }
+
+    &-absolute {
+      text-align: center;
+      border-radius: 50%;
+
+      &:not(.is-active) {
+        display: none;
+      }
+    }
+  }
+
+  &__null-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    &:not(.is-active) {
+      display: none;
+    }
+
+    svg {
+      fill: transparent;
+      width: fluid(180, 90);
+    }
+  }
+
+  &__list {
+
+    &:not(.is-active) {
+      display: none;
+    }
+  }
 }
