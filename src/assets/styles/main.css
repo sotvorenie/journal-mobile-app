@@ -1011,14 +1011,15 @@ body {
 }
 
 .journal {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  padding-block: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
+  padding-bottom: clamp(0.625rem, 0.222107438rem + 1.652892562vw, 1.875rem);
   width: 100%;
+  min-height: 100%;
 }
 .journal__navigation {
   margin-bottom: 0.625rem;
+  margin-top: clamp(0.625rem, 0.222107438rem + 1.652892562vw, 1.875rem);
 }
 .journal__header {
   background: var(--color-accent);
@@ -1030,6 +1031,9 @@ body {
   border-radius: var(--radius-medium);
   padding: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
   margin-bottom: 0.625rem;
+}
+.journal__vertical:not(.is-active) {
+  display: none;
 }
 .journal__lessons {
   display: flex;
@@ -1069,11 +1073,14 @@ body {
   display: none;
 }
 .journal__null-list {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
 }
 .journal__null-list:not(.is-active) {
   display: none;
@@ -1183,7 +1190,6 @@ body {
   font-size: clamp(1.125rem, 0.923553719rem + 0.826446281vw, 1.75rem);
   border-collapse: collapse;
   border-spacing: 0;
-  margin-bottom: 1.875rem;
 }
 .table:not(.is-active) {
   display: none;
@@ -1222,13 +1228,14 @@ body {
 }
 .table__main-loading {
   position: relative;
-  height: 50vh;
+  height: 100%;
 }
 .table__main-loading:not(.is-active) {
   display: none;
 }
 .table__main-null {
   margin-inline: auto;
+  height: 100%;
 }
 .table__main-null:not(.is-active) {
   display: none;
@@ -1236,9 +1243,6 @@ body {
 .table__main-null svg {
   width: clamp(3.125rem, 0.5061983471rem + 10.7438016529vw, 11.25rem);
   fill: transparent;
-}
-.table__footer {
-  height: clamp(1.875rem, 1.270661157rem + 2.479338843vw, 3.75rem);
 }
 .table__footer-student {
   max-width: 50vw;

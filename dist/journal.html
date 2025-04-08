@@ -8,10 +8,10 @@
 
   <link rel="icon" href="/assets/app-icon-DYXI3UvK.png" type="image/png">
 
-  <script type="module" crossorigin src="/assets/journal-Da4m3yZn.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/useUser-DzHQLjoF.js">
-  <link rel="modulepreload" crossorigin href="/assets/lessons-D7CBkCNo.js">
-  <link rel="stylesheet" crossorigin href="/assets/useUser-CQyT4SI7.css">
+  <script type="module" crossorigin src="/assets/journal-Dz0ybtY7.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/useUser-BN3LfZRL.js">
+  <link rel="modulepreload" crossorigin href="/assets/lessons-m_j-9JFf.js">
+  <link rel="stylesheet" crossorigin href="/assets/useUser-CFBBbfU6.css">
 </head>
 <body>
 
@@ -98,14 +98,6 @@
       <p class="h4" data-js-journal-date></p>
     </header>
 
-    <ul class="journal__lessons" data-js-journal-lessons-container>
-      <li class="journal__lessons-item h4" data-js-journal-lesson>1</li>
-      <li class="journal__lessons-item h4" data-js-journal-lesson>2</li>
-      <li class="journal__lessons-item h4" data-js-journal-lesson>3</li>
-      <li class="journal__lessons-item h4" data-js-journal-lesson>4</li>
-      <li class="journal__lessons-item h4" data-js-journal-lesson>5</li>
-    </ul>
-
     <div class="journal__lessons-absolute absolute" data-js-journal-lesson-info>
       <div class="absolute__content">
         <button class="absolute__close button--close" data-js-journal-lesson-info-close></button>
@@ -114,7 +106,16 @@
       </div>
     </div>
 
-    <span class="loading loading--absolute" data-js-journal-loading>
+    <div class="journal__vertical" data-js-journal-vertical>
+      <ul class="journal__lessons" data-js-journal-lessons-container>
+        <li class="journal__lessons-item h4" data-js-journal-lesson>1</li>
+        <li class="journal__lessons-item h4" data-js-journal-lesson>2</li>
+        <li class="journal__lessons-item h4" data-js-journal-lesson>3</li>
+        <li class="journal__lessons-item h4" data-js-journal-lesson>4</li>
+        <li class="journal__lessons-item h4" data-js-journal-lesson>5</li>
+      </ul>
+
+      <span class="loading loading--absolute" data-js-journal-loading>
       <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
 
         <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
@@ -128,17 +129,18 @@
       </svg>
     </span>
 
-    <div class="journal__null-list" data-js-journal-null-list>
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 3L21 21M5 5V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H17C18.1046 21 19 20.1046 19 19M19 9L13 3M19 9H14.6C14.0399 9 13.7599 9 13.546 8.89101C13.3578 8.79513 13.2049 8.64215 13.109 8.45399C13 8.24008 13 7.96005 13 7.4V3M19 9V14M13 3H8.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <div class="journal__null-list" data-js-journal-null-list>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 3L21 21M5 5V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H17C18.1046 21 19 20.1046 19 19M19 9L13 3M19 9H14.6C14.0399 9 13.7599 9 13.546 8.89101C13.3578 8.79513 13.2049 8.64215 13.109 8.45399C13 8.24008 13 7.96005 13 7.4V3M19 9V14M13 3H8.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
 
-      <p class="h4">Журнал пуст..</p>
+        <p class="h4">Журнал пуст..</p>
+      </div>
+
+      <ul class="journal__list" data-js-journal-table-list></ul>
     </div>
 
-    <ul class="journal__list" data-js-journal-table-list></ul>
-
-    <table class="journal__table table" data-js-journal-table>
+    <table class="journal__horizontal table" data-js-journal-table>
       <thead class="table__header">
         <tr>
           <th class="table__header-item" rowspan="2">Студенты</th>
@@ -163,8 +165,8 @@
         </tr>
       </thead>
 
-      <tbody class="table__main" data-js-journal-table-main>
-        <tr class="table__main-loading" data-js-journal-table-loading-container>
+      <tbody class="table__main is-active" data-js-journal-table-main>
+        <tr class="table__main-loading is-active" data-js-journal-table-loading-container>
           <th colspan="6">
             <span class="loading loading--absolute is-active" data-js-journal-table-loading>
               <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">

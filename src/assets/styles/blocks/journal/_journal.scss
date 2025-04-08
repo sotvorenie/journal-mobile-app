@@ -1,14 +1,15 @@
 @use '../../helpers' as *;
 
 .journal {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  padding-block: fluid(20, 10);
+  padding-bottom: fluid(30, 10);
   width: 100%;
+  min-height: 100%;
 
   &__navigation {
     margin-bottom: rem(10);
+    margin-top: fluid(30, 10);
   }
 
   &__header {
@@ -21,6 +22,13 @@
     border-radius: var(--radius-medium);
     padding: fluid(20, 10);
     margin-bottom: rem(10);
+  }
+
+  &__vertical {
+
+    &:not(.is-active) {
+      display: none;
+    }
   }
 
   &__lessons {
@@ -59,11 +67,12 @@
   }
 
   &__null-list {
+    @include abs-center;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
 
     &:not(.is-active) {
       display: none;

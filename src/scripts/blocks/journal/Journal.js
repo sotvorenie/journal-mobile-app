@@ -1,8 +1,6 @@
 import {getLessons} from "../../../api/lessons.js";
 
 import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
-import {getCoordinates} from "../../utils/useCoordinates.js";
-import {pxToRem} from "../../utils/usePxToRem.js";
 
 import User from "../../globals/store/useUser.js";
 import Groups from "../../globals/store/useGroups.js";
@@ -21,12 +19,6 @@ export default class Journal {
 
         group: '[data-js-journal-group]',
         date: '[data-js-journal-date]',
-
-        lessons: '[data-js-journal-lesson]',
-        lessonsContainer: '[data-js-journal-lessons-container]',
-        lessonInfo: '[data-js-journal-lesson-info]',
-        lessonInfoClose: '[data-js-journal-lesson-info-close]',
-        lessonInfoText: '[data-js-journal-lesson-info-text]',
 
         loading: '[data-js-journal-loading]',
         nullList: '[data-js-journal-null-list]',
@@ -52,11 +44,6 @@ export default class Journal {
         this.reloadBtn = this.journalElement.find(this.selectors.reload);
         this.groupNameElement = this.journalElement.find(this.selectors.group);
         this.dateNameElement = this.journalElement.find(this.selectors.date);
-        this.lessonsElements = this.journalElement.find(this.selectors.lessons);
-        this.lessonsContainerElement = this.journalElement.find(this.selectors.lessonsContainer);
-        this.lessonInfoElement = this.journalElement.find(this.selectors.lessonInfo);
-        this.lessonInfoCloseBtn = this.journalElement.find(this.selectors.lessonInfoClose);
-        this.lessonInfoTextElement = this.journalElement.find(this.selectors.lessonInfoText);
         this.loadingElement = this.journalElement.find(this.selectors.loading);
         this.nullListElement = this.journalElement.find(this.selectors.nullList);
 
@@ -98,23 +85,6 @@ export default class Journal {
             if (confirmed) {
                 location.reload();
             }
-        })
-
-        //клик по элементу lessons
-        this.lessonsElements.each((index, element) => {
-            $(element).on('click', () => {
-                if (Lessons.activeLessons[index]) {
-                    this.openLessonInfo(index, element);
-                }
-            });
-        })
-
-        //клик по кнопке закрытия блока lessonInfo
-        this.lessonInfoCloseBtn.on('click', this.closeLessonInfo.bind(this));
-
-        //при изменении размера экрана/ориентации
-        $(document).on('resize', () => {
-            this.closeVerticalLessonsBlock();
         })
     }
     //==============================================================//
@@ -181,10 +151,10 @@ export default class Journal {
         //если classes нет - показываем null-list
         if (!Classes.activeClasses.length) {
             this.nullListElement.addClass(this.classes.isActive);
-        } else {
-            //создаем событие для отрисовки журнала
-            $(document).trigger('journalLoad');
         }
+
+        //создаем событие для отрисовки журнала
+        $(document).trigger('journalLoad');
     }
     //==============================================================//
 
@@ -222,46 +192,6 @@ export default class Journal {
 
             Lessons.activeLessons.push(activeLesson?.name);
         })
-    }
-
-    //открытие блока информации о предмете
-    openLessonInfo (index, element) {
-        //задаем название предмета в блок
-        this.lessonInfoTextElement.text(Lessons.activeLessons[index].name);
-
-        this.lessonInfoElement.addClass(this.classes.isActive);
-
-        //получаем координаты элемента списка предметов по которому кликнули
-        let coordinates = getCoordinates(element);
-
-        //меняем transform-origin у блока добавления нового предмета
-        this.lessonInfoElement.css({
-            transformOrigin: `${pxToRem(coordinates.left) + 1.5}rem ${pxToRem(coordinates.top) + 1.5}rem`
-        })
-
-        this.lessonInfoElement.animate({
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-    }
-
-    //закрытие блока информации о предмете
-    closeLessonInfo () {
-        this.lessonInfoElement.animate({
-            scale: 0
-        }, 150, () => {
-            this.lessonInfoElement.removeClass(this.classes.isActive);
-        })
-    }
-
-    //закрытие/открытие блока предметов для вертикального журнала
-    closeVerticalLessonsBlock () {
-        if (window.innerWidth < window.innerHeight) {
-            this.lessonsContainerElement.addClass(this.classes.isActive);
-        } else {
-            this.lessonsContainerElement.removeClass(this.classes.isActive);
-        }
     }
     //==============================================================//
 }

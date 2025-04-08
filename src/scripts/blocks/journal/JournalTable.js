@@ -1,18 +1,26 @@
 import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
+import {getCoordinates} from "../../utils/useCoordinates.js";
+import {pxToRem} from "../../utils/usePxToRem.js";
 
 import {updateClasses} from "../../../api/classes.js";
 
 import Classes from "../../globals/store/useClasses.js";
 import Students from "../../globals/store/useStudents.js";
 import Days from "../../globals/store/useDays.js";
-import Journal from "./Journal.js";
 import Lessons from "../../globals/store/useLessons.js";
 
-export default class JournalTable extends Journal{
+export default class JournalTable{
 //==============================================================//
     //---DOM-селекторы--//
     selectors = {
-        verticalJournal: '[data-js-journal-table-list]',
+        verticalJournal: '[data-js-journal-vertical]',
+        verticalJournalList: '[data-js-journal-table-list]',
+
+        lessons: '[data-js-journal-lesson]',
+        lessonsContainer: '[data-js-journal-lessons-container]',
+        lessonInfo: '[data-js-journal-lesson-info]',
+        lessonInfoClose: '[data-js-journal-lesson-info-close]',
+        lessonInfoText: '[data-js-journal-lesson-info-text]',
 
         accordion: '[data-js-journal-accordion]',
         accordionIcon: '[data-js-journal-accordion-icon]',
@@ -47,18 +55,28 @@ export default class JournalTable extends Journal{
     //==============================================================//
     //---переменные--//
     constructor() {
-        super();
 
         this.verticalJournalElement = $(this.selectors.verticalJournal);
+        this.verticalJournalListElement = $(this.selectors.verticalJournalList);
         this.horizontalJournalElement = $(this.selectors.horizontalJournal);
         this.tableMainElement = this.horizontalJournalElement.find(this.selectors.tableMain);
         this.tableLoadingElement = this.horizontalJournalElement.find(this.selectors.tableLoading);
         this.tableLoadingContainerElement = this.horizontalJournalElement.find(this.selectors.tableLoadingContainer);
         this.tableNullElement = this.horizontalJournalElement.find(this.selectors.tableNull);
         this.tableFooterElement = this.horizontalJournalElement.find(this.selectors.tableFooter);
+        this.lessonsElements = $(this.selectors.lessons);
+        this.lessonsContainerElement = $(this.selectors.lessonsContainer);
+        this.lessonInfoElement = $(this.selectors.lessonInfo);
+        this.lessonInfoCloseBtn = $(this.selectors.lessonInfoClose);
+        this.lessonInfoTextElement = $(this.selectors.lessonInfoText);
+
+        //переменная, хранящая старое состояние classes, чтобы в случаем ошибки можно было откатиться до этого состояния
+        this.oldClasses = {};
 
         this.loadFunctions();
-        this.bindEvents();
+
+        //задаем стиль таблицы в зависимости от ориентации устройства
+        this.changeOrientation();
     }
     //==============================================================//
 
@@ -68,6 +86,16 @@ export default class JournalTable extends Journal{
     loadFunctions = () => {
         //при событии, когда мы получили classes журнала
         $(document).on('journalLoad', async () => {
+            //показываем список предметов вертикального журнала, если журнал не пуст
+            if (Classes.activeClasses.length) {
+                this.lessonsContainerElement.addClass(this.classes.isActive);
+            }
+
+            //скрываем анимацию загрузки, и если нужно - показываем null-block в горизонтальном журнале
+            this.tableLoadingElement.removeClass(this.classes.isActive);
+            this.tableLoadingContainerElement.removeClass(this.classes.isActive);
+            this.setNullBlock();
+
             //создаем вертикальный журнал
             await this.createVerticalJournal();
 
@@ -79,66 +107,17 @@ export default class JournalTable extends Journal{
             this.accordionMarksElements = this.accordionElements.find(this.selectors.accordionMarks);
             this.accordionMarksItemElements = this.accordionElements.find(this.selectors.accordionMarksItem);
 
-            //при клике на элемент-список accordion
-            this.accordionElements.each((index, element) => {
-                $(element).on('click', () => {
-                    this.openCloseAccordion(index);
-                })
-            })
-
-            //при клике на элемент ячейки журнала в вертикальном журнале
-            this.accordionItemElements.each((index, element) => {
-                $(element).on('click', (event) => {
-                    this.openMarksBlock(index);
-
-                    event.stopPropagation();
-                })
-            })
-
-            //при клике на элемент mark
-            this.accordionMarksItemElements.each((index, element) => {
-                $(element).on('click', () => {
-                    this.clickToMark(index, $(element).text());
-                })
-            })
-
+            //создаем горизонтальный журнал
             await this.createHorizontalJournal();
 
+            //получаем элементы горизонтального журнала
             this.tableLessonElements = this.horizontalJournalElement.find(this.selectors.tableLesson);
             this.tableStudentElements = this.horizontalJournalElement.find(this.selectors.tableStudent);
             this.tableMarkElements = this.horizontalJournalElement.find(this.selectors.tableMark);
             this.tableAbsoluteElement = this.horizontalJournalElement.find(this.selectors.tableAbsolute);
             this.tableAbsoluteItemElement = this.horizontalJournalElement.find(this.selectors.tableAbsoluteItem);
 
-            //клик по элементу lesson
-            this.tableLessonElements.each((index, element) => {
-                $(element).on('click', () => {
-                    if (Lessons.activeLessons[index]) {
-                        this.openLessonInfo(index, element);
-                    }
-                })
-            })
-
-            //клик по ячейке горизонтального журнала
-            this.tableMarkElements.each((index, element) => {
-                $(element).on('click', () => {
-                    this.openMarksBlockHorizontal(index)
-                })
-            })
-
-            //при клике на элемент mark горизонтального журнала
-            this.tableAbsoluteItemElement.each((index, element) => {
-                $(element).on('click', () => {
-                    this.clickToMark(index, $(element).text());
-                })
-            })
-
-            //переменная, хранящая старое состояние classes, чтобы в случаем ошибки можно было откатиться до этого состояния
-            this.oldClasses = {};
-
-            //при изменении ориентации устройства
-            this.changeOrientation();
-            window.addEventListener('resize', this.changeOrientation.bind(this));
+            this.bindEvents();
         })
     }
     //==============================================================//
@@ -147,7 +126,66 @@ export default class JournalTable extends Journal{
     //==============================================================//
     //---обработчики событий--//
     bindEvents() {
+        //при изменении ориентации устройства
+        window.addEventListener('resize', this.changeOrientation.bind(this));
 
+        //при клике на элемент-список accordion
+        this.accordionElements.each((index, element) => {
+            $(element).on('click', () => {
+                this.openCloseAccordion(index);
+            })
+        })
+
+        //при клике на элемент ячейки журнала в вертикальном журнале
+        this.accordionItemElements.each((index, element) => {
+            $(element).on('click', (event) => {
+                this.openMarksBlock(index);
+
+                event.stopPropagation();
+            })
+        })
+
+        //при клике на элемент mark в вертикальном журнале
+        this.accordionMarksItemElements.each((index, element) => {
+            $(element).on('click', () => {
+                this.clickToMark(index, $(element).text());
+            })
+        })
+
+        //клик по элементу lesson в вертикальном журнале
+        this.tableLessonElements.each((index, element) => {
+            $(element).on('click', () => {
+                if (Lessons.activeLessons[index]) {
+                    this.openLessonInfo(index, element);
+                }
+            })
+        })
+
+        //клик по ячейке горизонтального журнала
+        this.tableMarkElements.each((index, element) => {
+            $(element).on('click', () => {
+                this.openMarksBlockHorizontal(index)
+            })
+        })
+
+        //при клике на элемент mark горизонтального журнала
+        this.tableAbsoluteItemElement.each((index, element) => {
+            $(element).on('click', () => {
+                this.clickToMark(index, $(element).text());
+            })
+        })
+
+        //клик по элементу lessons горизонтального журнала
+        this.lessonsElements.each((index, element) => {
+            $(element).on('click', () => {
+                if (Lessons.activeLessons[index]) {
+                    this.openLessonInfo(index, element);
+                }
+            });
+        })
+
+        //клик по кнопке закрытия блока lessonInfo
+        this.lessonInfoCloseBtn.on('click', this.closeLessonInfo.bind(this));
     }
     //==============================================================//
 
@@ -174,6 +212,37 @@ export default class JournalTable extends Journal{
 
     //==============================================================//
     //---функции--//
+    //открытие блока информации о предмете
+    openLessonInfo (index, element) {
+        //задаем название предмета в блок
+        this.lessonInfoTextElement.text(Lessons.activeLessons[index].name);
+
+        this.lessonInfoElement.addClass(this.classes.isActive);
+
+        //получаем координаты элемента списка предметов по которому кликнули
+        let coordinates = getCoordinates(element);
+
+        //меняем transform-origin у блока добавления нового предмета
+        this.lessonInfoElement.css({
+            transformOrigin: `${pxToRem(coordinates.left) + 1.5}rem ${pxToRem(coordinates.top) + 1.5}rem`
+        })
+
+        this.lessonInfoElement.animate({
+            scale: 1
+        }, 150, function () {
+            $(this).css('border-radius', '0');
+        })
+    }
+
+    //закрытие блока информации о предмете
+    closeLessonInfo () {
+        this.lessonInfoElement.animate({
+            scale: 0
+        }, 150, () => {
+            this.lessonInfoElement.removeClass(this.classes.isActive);
+        })
+    }
+
     //создание списка журнала в вертикальном положении
     createVerticalJournal = async () => {
         return new Promise((resolve) => {
@@ -237,9 +306,9 @@ export default class JournalTable extends Journal{
             }).join('');
 
             //встраиваем li в ul
-            this.verticalJournalElement.html(accordionItem);
+            this.verticalJournalListElement.html(accordionItem);
 
-            this.verticalJournalElement.addClass(this.classes.isActive);
+            this.verticalJournalListElement.addClass(this.classes.isActive);
 
             resolve();
         })
@@ -368,8 +437,6 @@ export default class JournalTable extends Journal{
             this.verticalJournalElement.removeClass(this.classes.isActive);
             this.horizontalJournalElement.addClass(this.classes.isActive);
         }
-
-        $(document).trigger('resize');
     }
 
     //создание журнала в горизонтальном положении
@@ -451,6 +518,16 @@ export default class JournalTable extends Journal{
         this.tableAbsoluteElement.each((id, elem) => {
             $(elem).removeClass(this.classes.isActive);
         })
+    }
+
+    //скрываем анимацию загрузки, и если нужно - показываем null-block в горизонтальном журнале
+    setNullBlock() {
+        if (!Classes.activeClasses.length) {
+            this.tableNullElement.addClass(this.classes.isActive);
+        } else {
+            this.tableNullElement.removeClass(this.classes.isActive);
+            this.tableMainElement.removeClass(this.classes.isActive);
+        }
     }
     //==============================================================//
 }
