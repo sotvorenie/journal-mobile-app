@@ -219,7 +219,7 @@ svg * {
   --radius-medium: 1.875rem;
   --radius-big: 2.5rem;
   --font-family-base: "Nunito", sans-serif;
-  --container-width: 63.9375rem;
+  --container-width: 75rem;
   --container-padding-x: 1rem;
   --transition-duration: 0.2s;
 }
@@ -256,7 +256,6 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   font-size: 1rem;
-  padding-inline: 1rem;
 }
 body.is-lock {
   overflow-y: hidden;
@@ -657,7 +656,7 @@ body {
 .list {
   display: flex;
   flex-direction: column;
-  width: min(37.5rem, 100%);
+  width: 100%;
   row-gap: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
 }
 .list--padding {
@@ -843,10 +842,10 @@ body {
 
 .groups {
   height: 100%;
-  width: min(37.5rem, 100%);
-  padding-block: 0.9375rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding-block: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
 }
 .groups__header {
   display: flex;
@@ -859,7 +858,7 @@ body {
 }
 .groups__title-bar {
   text-align: center;
-  width: min(100%, 31.25rem);
+  width: 100%;
   border-radius: var(--radius-regular);
   white-space: nowrap;
   background: var(--color-accent);
@@ -1013,10 +1012,10 @@ body {
 
 .journal {
   height: 100%;
-  width: min(37.5rem, 100%);
-  padding-block: 0.9375rem;
   display: flex;
   flex-direction: column;
+  padding-block: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
+  width: 100%;
 }
 .journal__navigation {
   margin-bottom: 0.625rem;
@@ -1037,6 +1036,9 @@ body {
   justify-content: space-between;
   column-gap: 0.3125rem;
   margin-bottom: 0.9375rem;
+}
+.journal__lessons:not(.is-active) {
+  display: none;
 }
 .journal__lessons-item {
   display: flex;
@@ -1157,7 +1159,8 @@ body {
     border-color: var(--color-accent);
   }
 }
-.accordion__item-marks {
+
+.marks {
   transform-origin: center bottom;
   position: absolute;
   background: var(--color-accent);
@@ -1172,8 +1175,99 @@ body {
   box-shadow: 0 0 0.625rem 0.25rem var(--color-dark);
   transition-duration: var(--transition-duration);
 }
-.accordion__item-marks:not(.is-active) {
+.marks:not(.is-active) {
   scale: 0;
+}
+
+.table {
+  font-size: clamp(1.125rem, 0.923553719rem + 0.826446281vw, 1.75rem);
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 1.875rem;
+}
+.table:not(.is-active) {
+  display: none;
+}
+.table th {
+  border: var(--border);
+  padding: clamp(0.3125rem, 0.2117768595rem + 0.4132231405vw, 0.625rem);
+}
+.table__header-lessons {
+  cursor: pointer;
+}
+.table__header-lessons-item {
+  width: 20%;
+  position: relative;
+}
+.table__header-lessons-item.is-active {
+  cursor: pointer;
+}
+@media (any-hover: hover) {
+  .table__header-lessons-item:hover {
+    outline: 0.125rem solid var(--color-accent);
+    box-shadow: 0 0 0.1875rem 0.0625rem var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .table__header-lessons-item:active {
+    outline: 0.125rem solid var(--color-accent);
+    box-shadow: 0 0 0.1875rem 0.0625rem var(--color-accent);
+  }
+}
+.table__main {
+  height: 50vh;
+}
+.table__main:not(.is-active) {
+  display: none;
+}
+.table__main-loading {
+  position: relative;
+  height: 50vh;
+}
+.table__main-loading:not(.is-active) {
+  display: none;
+}
+.table__main-null {
+  margin-inline: auto;
+}
+.table__main-null:not(.is-active) {
+  display: none;
+}
+.table__main-null svg {
+  width: clamp(3.125rem, 0.5061983471rem + 10.7438016529vw, 11.25rem);
+  fill: transparent;
+}
+.table__footer {
+  height: clamp(1.875rem, 1.270661157rem + 2.479338843vw, 3.75rem);
+}
+.table__footer-student {
+  max-width: 50vw;
+  text-align: center;
+}
+.table__footer-lesson {
+  position: relative;
+}
+.table__footer-student, .table__footer-lesson {
+  cursor: pointer;
+}
+@media (any-hover: hover) {
+  .table__footer-student:hover, .table__footer-lesson:hover {
+    outline: 0.125rem solid var(--color-accent);
+    box-shadow: inset 0 0 0.1875rem 0.0625rem var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .table__footer-student:active, .table__footer-lesson:active {
+    outline: 0.125rem solid var(--color-accent);
+    box-shadow: inset 0 0 0.1875rem 0.0625rem var(--color-accent);
+  }
+}
+.table__footer-list {
+  translate: -50% 0;
+  left: 50%;
+}
+.table__footer-item {
+  font-size: clamp(1.875rem, 1.7541322314rem + 0.4958677686vw, 2.25rem);
 }
 
 /*# sourceMappingURL=main.css.map */

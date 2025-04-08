@@ -12,7 +12,6 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   font-size: rem(16);
-  padding-inline: rem(16);
 
   &.is-lock {
     overflow-y: hidden;

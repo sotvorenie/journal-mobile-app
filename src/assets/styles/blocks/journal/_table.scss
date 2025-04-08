@@ -1,0 +1,100 @@
+@use '../../helpers' as *;
+
+.table {
+  @include fluid-text(28, 18);
+
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: rem(30);
+
+  &:not(.is-active) {
+    display: none;
+  }
+
+  th {
+    border: var(--border);
+    padding: fluid(10, 5);
+  }
+
+  &__header {
+
+    &-lessons {
+      cursor: pointer;
+
+      &-item {
+        width: calc(100% / 5);
+        position: relative;
+
+        &.is-active {
+          cursor: pointer;
+        }
+
+        @include hover {
+          outline: rem(2) solid var(--color-accent);
+          box-shadow: 0 0 rem(3) rem(1) var(--color-accent);
+        }
+      }
+    }
+  }
+
+  &__main {
+    height: 50vh;
+
+    &:not(.is-active) {
+      display: none;
+    }
+
+    &-loading {
+      position: relative;
+      height: 50vh;
+
+      &:not(.is-active) {
+        display: none;
+      }
+    }
+
+    &-null {
+      margin-inline: auto;
+
+      &:not(.is-active) {
+        display: none;
+      }
+
+      svg {
+        width: fluid(180, 50);
+        fill: transparent;
+      }
+    }
+  }
+
+  &__footer {
+    height: fluid(60, 30);
+
+    &-student {
+      max-width: 50vw;
+      text-align: center;
+    }
+
+    &-lesson {
+      position: relative;
+    }
+    
+    &-student, &-lesson {
+      cursor: pointer;
+
+      @include hover {
+        outline: rem(2) solid var(--color-accent);
+        box-shadow: inset 0 0 rem(3) rem(1) var(--color-accent);
+      }
+    }
+
+    &-list {
+      translate: -50% 0;
+      left: 50%;
+    }
+
+    &-item {
+      @include fluid-text(36, 30);
+    }
+  }
+}

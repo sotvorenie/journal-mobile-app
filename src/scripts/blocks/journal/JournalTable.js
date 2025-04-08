@@ -5,8 +5,10 @@ import {updateClasses} from "../../../api/classes.js";
 import Classes from "../../globals/store/useClasses.js";
 import Students from "../../globals/store/useStudents.js";
 import Days from "../../globals/store/useDays.js";
+import Journal from "./Journal.js";
+import Lessons from "../../globals/store/useLessons.js";
 
-export default class JournalTable {
+export default class JournalTable extends Journal{
 //==============================================================//
     //---DOM-селекторы--//
     selectors = {
@@ -18,6 +20,18 @@ export default class JournalTable {
         accordionItem: '[data-js-journal-accordion-item]',
         accordionMarks: '[data-js-journal-accordion-marks-list]',
         accordionMarksItem: '[data-js-journal-accordion-marks-item]',
+
+        horizontalJournal: '[data-js-journal-table]',
+        tableLesson: '[data-js-journal-table-lesson]',
+        tableMain: '[data-js-journal-table-main]',
+        tableLoadingContainer: '[data-js-journal-table-loading-container]',
+        tableLoading: '[data-js-journal-table-loading]',
+        tableNull: '[data-js-journal-table-null-list]',
+        tableFooter: '[data-js-journal-table-footer]',
+        tableStudent: '[data-js-journal-table-student]',
+        tableMark: '[data-js-journal-table-mark]',
+        tableAbsolute: '[data-js-journal-table-absolute]',
+        tableAbsoluteItem: '[data-js-journal-table-absolute-item]'
     }
     //==============================================================//
 
@@ -33,8 +47,15 @@ export default class JournalTable {
     //==============================================================//
     //---переменные--//
     constructor() {
+        super();
 
         this.verticalJournalElement = $(this.selectors.verticalJournal);
+        this.horizontalJournalElement = $(this.selectors.horizontalJournal);
+        this.tableMainElement = this.horizontalJournalElement.find(this.selectors.tableMain);
+        this.tableLoadingElement = this.horizontalJournalElement.find(this.selectors.tableLoading);
+        this.tableLoadingContainerElement = this.horizontalJournalElement.find(this.selectors.tableLoadingContainer);
+        this.tableNullElement = this.horizontalJournalElement.find(this.selectors.tableNull);
+        this.tableFooterElement = this.horizontalJournalElement.find(this.selectors.tableFooter);
 
         this.loadFunctions();
         this.bindEvents();
@@ -58,9 +79,6 @@ export default class JournalTable {
             this.accordionMarksElements = this.accordionElements.find(this.selectors.accordionMarks);
             this.accordionMarksItemElements = this.accordionElements.find(this.selectors.accordionMarksItem);
 
-            //переменная, хранящая старое состояние classes, чтобы в случаем ошибки можно было откатиться до этого состояния
-            this.oldClasses = {};
-
             //при клике на элемент-список accordion
             this.accordionElements.each((index, element) => {
                 $(element).on('click', () => {
@@ -83,6 +101,44 @@ export default class JournalTable {
                     this.clickToMark(index, $(element).text());
                 })
             })
+
+            await this.createHorizontalJournal();
+
+            this.tableLessonElements = this.horizontalJournalElement.find(this.selectors.tableLesson);
+            this.tableStudentElements = this.horizontalJournalElement.find(this.selectors.tableStudent);
+            this.tableMarkElements = this.horizontalJournalElement.find(this.selectors.tableMark);
+            this.tableAbsoluteElement = this.horizontalJournalElement.find(this.selectors.tableAbsolute);
+            this.tableAbsoluteItemElement = this.horizontalJournalElement.find(this.selectors.tableAbsoluteItem);
+
+            //клик по элементу lesson
+            this.tableLessonElements.each((index, element) => {
+                $(element).on('click', () => {
+                    if (Lessons.activeLessons[index]) {
+                        this.openLessonInfo(index, element);
+                    }
+                })
+            })
+
+            //клик по ячейке горизонтального журнала
+            this.tableMarkElements.each((index, element) => {
+                $(element).on('click', () => {
+                    this.openMarksBlockHorizontal(index)
+                })
+            })
+
+            //при клике на элемент mark горизонтального журнала
+            this.tableAbsoluteItemElement.each((index, element) => {
+                $(element).on('click', () => {
+                    this.clickToMark(index, $(element).text());
+                })
+            })
+
+            //переменная, хранящая старое состояние classes, чтобы в случаем ошибки можно было откатиться до этого состояния
+            this.oldClasses = {};
+
+            //при изменении ориентации устройства
+            this.changeOrientation();
+            window.addEventListener('resize', this.changeOrientation.bind(this));
         })
     }
     //==============================================================//
@@ -137,7 +193,7 @@ export default class JournalTable {
                     <ul class="accordion__list" data-js-journal-accordion-list>
                         <li class="accordion__item" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].first_lesson}</span>
-                            <ul class="accordion__item-marks" data-js-journal-accordion-marks-list>
+                            <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>о</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
@@ -145,7 +201,7 @@ export default class JournalTable {
                         </li>
                         <li class="accordion__item" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].second_lesson}</span>
-                            <ul class="accordion__item-marks" data-js-journal-accordion-marks-list>
+                            <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>о</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
@@ -153,7 +209,7 @@ export default class JournalTable {
                         </li>
                         <li class="accordion__item" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].third_lesson}</span>
-                            <ul class="accordion__item-marks" data-js-journal-accordion-marks-list>
+                            <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>о</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
@@ -161,7 +217,7 @@ export default class JournalTable {
                         </li>
                         <li class="accordion__item" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].fourth_lesson}</span>
-                            <ul class="accordion__item-marks" data-js-journal-accordion-marks-list>
+                            <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>о</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
@@ -169,7 +225,7 @@ export default class JournalTable {
                         </li>
                         <li class="accordion__item" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].fifth_lesson}</span>
-                            <ul class="accordion__item-marks" data-js-journal-accordion-marks-list>
+                            <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>о</li>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
@@ -201,7 +257,7 @@ export default class JournalTable {
         }
     }
 
-    //открытие блока marks
+    //открытие блока marks в вертикальном журнале
     openMarksBlock (index) {
         //ищем старый открытый marks блок
         let oldMarksBlock = this.accordionElements.find(`${this.selectors.accordionMarks}.${this.classes.isActive}`);
@@ -214,7 +270,7 @@ export default class JournalTable {
         }
     }
 
-    //закрытие всех блоков marks
+    //закрытие всех блоков marks в вертикальном журнале
     closeAllMarksBlock () {
         this.accordionMarksElements.each((id, elem) => {
             $(elem).removeClass(this.classes.isActive);
@@ -263,7 +319,11 @@ export default class JournalTable {
         let checkStudent = await new Students().checkAStudent(item.student_id);
 
         if (checkDay.data.length && !checkStudent) {
+            //меняем значение в ячейке вертикального журнала
             $(this.accordionItemElements[col]).find('span').text(item[lesson]);
+
+            //меняем значение в ячейке горизонтального журнала
+            $(this.tableMarkElements[col]).find('span').text(item[lesson]);
 
             await this.redactClasses(item);
         } else {
@@ -296,6 +356,101 @@ export default class JournalTable {
     //проверка: кликнули ли на тот же самый mark
     checkMark (item, lesson, value) {
         return value === item[lesson];
+    }
+
+    //в зависимости от ориентации устройства - отображаем разные таблицы
+    changeOrientation () {
+        if (window.innerWidth < window.innerHeight) {
+            this.verticalJournalElement.addClass(this.classes.isActive);
+            this.horizontalJournalElement.removeClass(this.classes.isActive);
+
+        } else {
+            this.verticalJournalElement.removeClass(this.classes.isActive);
+            this.horizontalJournalElement.addClass(this.classes.isActive);
+        }
+
+        $(document).trigger('resize');
+    }
+
+    //создание журнала в горизонтальном положении
+    createHorizontalJournal = async () => {
+        return new Promise((resolve) => {
+            //создаем элемент tr
+            let trList = Classes.activeClasses.map((item, index) => {
+                return `
+                    <tr class="table__footer-row">
+                      <th class="table__footer-student slice-string" data-js-journal-table-student>${Students.students[index].second_name} ${Students.students[index].name}</th>
+                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                        <span>${Classes.activeClasses[index].first_lesson}</span>
+                        <ul class="table__footer-list marks" data-js-journal-table-absolute>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>о</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
+                        </ul>
+                      </th>
+                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                        <span>${Classes.activeClasses[index].second_lesson}</span>
+                        <ul class="table__footer-list marks" data-js-journal-table-absolute>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>о</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
+                        </ul>
+                      </th>
+                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                        <span>${Classes.activeClasses[index].third_lesson}</span>
+                        <ul class="table__footer-list marks" data-js-journal-table-absolute>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>о</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
+                        </ul>
+                      </th>
+                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                        <span>${Classes.activeClasses[index].fourth_lesson}</span>
+                        <ul class="table__footer-list marks" data-js-journal-table-absolute>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>о</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
+                        </ul>
+                      </th>
+                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                        <span>${Classes.activeClasses[index].fifth_lesson}</span>
+                        <ul class="table__footer-list marks" data-js-journal-table-absolute>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>о</li>
+                          <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
+                        </ul>
+                      </th>
+                    </tr>
+                `
+            }).join('');
+
+            //встраиваем tr в tfoot
+            this.tableFooterElement.html(trList);
+
+            this.tableFooterElement.addClass(this.classes.isActive);
+
+            resolve();
+        })
+    }
+
+    //открытие блока marks в горизонтальном журнале
+    openMarksBlockHorizontal (index) {
+        //ищем старый открытый marks блок
+        let oldMarksBlock = this.tableFooterElement.find(`${this.selectors.tableAbsolute}.${this.classes.isActive}`);
+
+        this.closeAllMarksBlockHorizontal();
+
+        //если мы кликнули по той же самой ячейке, что и в прошлый раз, то закрываем marks блок
+        if (oldMarksBlock[0] !== this.tableAbsoluteElement[index]) {
+            $(this.tableAbsoluteElement[index]).addClass(this.classes.isActive);
+        }
+    }
+
+    //закрытие всех блоков marks в горизонтальном журнале
+    closeAllMarksBlockHorizontal () {
+        this.tableAbsoluteElement.each((id, elem) => {
+            $(elem).removeClass(this.classes.isActive);
+        })
     }
     //==============================================================//
 }

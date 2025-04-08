@@ -23,6 +23,7 @@ export default class Journal {
         date: '[data-js-journal-date]',
 
         lessons: '[data-js-journal-lesson]',
+        lessonsContainer: '[data-js-journal-lessons-container]',
         lessonInfo: '[data-js-journal-lesson-info]',
         lessonInfoClose: '[data-js-journal-lesson-info-close]',
         lessonInfoText: '[data-js-journal-lesson-info-text]',
@@ -52,6 +53,7 @@ export default class Journal {
         this.groupNameElement = this.journalElement.find(this.selectors.group);
         this.dateNameElement = this.journalElement.find(this.selectors.date);
         this.lessonsElements = this.journalElement.find(this.selectors.lessons);
+        this.lessonsContainerElement = this.journalElement.find(this.selectors.lessonsContainer);
         this.lessonInfoElement = this.journalElement.find(this.selectors.lessonInfo);
         this.lessonInfoCloseBtn = this.journalElement.find(this.selectors.lessonInfoClose);
         this.lessonInfoTextElement = this.journalElement.find(this.selectors.lessonInfoText);
@@ -109,6 +111,11 @@ export default class Journal {
 
         //клик по кнопке закрытия блока lessonInfo
         this.lessonInfoCloseBtn.on('click', this.closeLessonInfo.bind(this));
+
+        //при изменении размера экрана/ориентации
+        $(document).on('resize', () => {
+            this.closeVerticalLessonsBlock();
+        })
     }
     //==============================================================//
 
@@ -151,8 +158,10 @@ export default class Journal {
         //скрываем блок null-list
         this.nullListElement.removeClass(this.classes.isActive);
 
-        //показываем анимацию загрузки в журнале
-        this.loadingElement.addClass(this.classes.isActive);
+        if (window.innerWidth < window.innerHeight) {
+            //показываем анимацию загрузки в журнале
+            this.loadingElement.addClass(this.classes.isActive);
+        }
 
         //получаем список предметов группы
         await this.getLessons();
@@ -244,6 +253,15 @@ export default class Journal {
         }, 150, () => {
             this.lessonInfoElement.removeClass(this.classes.isActive);
         })
+    }
+
+    //закрытие/открытие блока предметов для вертикального журнала
+    closeVerticalLessonsBlock () {
+        if (window.innerWidth < window.innerHeight) {
+            this.lessonsContainerElement.addClass(this.classes.isActive);
+        } else {
+            this.lessonsContainerElement.removeClass(this.classes.isActive);
+        }
     }
     //==============================================================//
 }

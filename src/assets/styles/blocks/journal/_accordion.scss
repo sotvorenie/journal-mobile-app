@@ -66,25 +66,5 @@
     @include hover {
       border-color: var(--color-accent);
     }
-
-    &-marks {
-      transform-origin: center bottom;
-      position: absolute;
-      background: var(--color-accent);
-      display: flex;
-      column-gap: rem(15);
-      line-height: 1;
-      padding: fluid(20, 10);
-      border-radius: var(--radius-regular);
-      color: var(--color-light);
-      z-index: 1;
-      bottom: 100%;
-      box-shadow: 0 0 rem(10) rem(4) var(--color-dark);
-      transition-duration: var(--transition-duration);
-
-      &:not(.is-active) {
-        scale: 0;
-      }
-    }
   }
 }

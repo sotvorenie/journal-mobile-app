@@ -3,7 +3,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  width: min(#{rem(600)}, 100%);
+  width: 100%;
   row-gap: fluid(20, 10);
 
   &--padding {

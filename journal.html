@@ -35,7 +35,7 @@
     </div>
   </div>
 
-  <div class="journal" data-js-journal>
+  <div class="journal container" data-js-journal>
     <div class="journal__navigation navigation">
       <button class="navigation__back" type="button" data-js-journal-back>
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,7 +97,7 @@
       <p class="h4" data-js-journal-date></p>
     </header>
 
-    <ul class="journal__lessons">
+    <ul class="journal__lessons" data-js-journal-lessons-container>
       <li class="journal__lessons-item h4" data-js-journal-lesson>1</li>
       <li class="journal__lessons-item h4" data-js-journal-lesson>2</li>
       <li class="journal__lessons-item h4" data-js-journal-lesson>3</li>
@@ -113,7 +113,7 @@
       </div>
     </div>
 
-    <span class="loading loading--absolute is-active" data-js-journal-loading>
+    <span class="loading loading--absolute" data-js-journal-loading>
       <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
 
         <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
@@ -136,6 +136,64 @@
     </div>
 
     <ul class="journal__list" data-js-journal-table-list></ul>
+
+    <table class="journal__table table" data-js-journal-table>
+      <thead class="table__header">
+        <tr>
+          <th class="table__header-item" rowspan="2">Студенты</th>
+          <th class="table__header-item" colspan="5">Предметы</th>
+        </tr>
+        <tr class="table__header-lessons">
+          <th class="table__header-lessons-item" data-js-journal-table-lesson>
+            <span>1</span>
+          </th>
+          <th class="table__header-lessons-item" data-js-journal-table-lesson>
+            <span>2</span>
+          </th>
+          <th class="table__header-lessons-item" data-js-journal-table-lesson>
+            <span>3</span>
+          </th>
+          <th class="table__header-lessons-item" data-js-journal-table-lesson>
+            <span>4</span>
+          </th>
+          <th class="table__header-lessons-item" data-js-journal-table-lesson>
+            <span>5</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="table__main" data-js-journal-table-main>
+        <tr class="table__main-loading" data-js-journal-table-loading-container>
+          <th colspan="6">
+            <span class="loading loading--absolute is-active" data-js-journal-table-loading>
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+
+              <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+
+              <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+
+              <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+
+              </g>
+
+              </svg>
+            </span>
+          </th>
+        </tr>
+        <tr class="table__main-null" data-js-journal-table-null-list>
+          <th colspan="6">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 3L21 21M5 5V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H17C18.1046 21 19 20.1046 19 19M19 9L13 3M19 9H14.6C14.0399 9 13.7599 9 13.546 8.89101C13.3578 8.79513 13.2049 8.64215 13.109 8.45399C13 8.24008 13 7.96005 13 7.4V3M19 9V14M13 3H8.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p class="h4">Журнал пуст..</p>
+          </th>
+        </tr>
+      </tbody>
+
+      <tfoot class="table__footer" data-js-journal-table-footer></tfoot>
+
+    </table>
+
   </div>
 
 </body>
