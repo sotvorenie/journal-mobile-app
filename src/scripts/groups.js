@@ -10,6 +10,9 @@ import GroupsList from "./blocks/groups/GroupsList.js";
 import GroupsRedact from "./blocks/groups/GroupsRedact.js";
 import GroupsLessons from "./blocks/groups/GroupsLessons.js";
 
+import {setInfo} from "./utils/setInfo.js";
+setInfo();
+
 new Theme();
 new Animation();
 new Settings();

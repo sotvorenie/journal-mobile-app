@@ -1,8 +1,6 @@
 @use 'helpers' as *;
 
 body {
-  @include flex-center();
-
   color: var(--color-dark);
   font-family: var(--font-family-base);
   background-color: var(--color-light);

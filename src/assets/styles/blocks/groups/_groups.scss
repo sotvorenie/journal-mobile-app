@@ -4,7 +4,6 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
   padding-block: fluid(20, 10);
 
   &__header {
@@ -90,6 +89,10 @@
     &:not(.is-active) {
       display: none;
       backdrop-filter: blur(0);
+    }
+
+    &-content {
+      @include landscape-orientation;
     }
   }
 }

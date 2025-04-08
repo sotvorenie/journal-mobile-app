@@ -10,7 +10,7 @@ import Days from "../../globals/store/useDays.js";
 import Lessons from "../../globals/store/useLessons.js";
 
 export default class JournalTable{
-//==============================================================//
+    //==============================================================//
     //---DOM-селекторы--//
     selectors = {
         verticalJournal: '[data-js-journal-vertical]',
@@ -23,7 +23,7 @@ export default class JournalTable{
         lessonInfoText: '[data-js-journal-lesson-info-text]',
 
         accordion: '[data-js-journal-accordion]',
-        accordionIcon: '[data-js-journal-accordion-icon]',
+        accordionBtn: '[data-js-journal-accordion-btn]',
         accordionList: '[data-js-journal-accordion-list]',
         accordionItem: '[data-js-journal-accordion-item]',
         accordionMarks: '[data-js-journal-accordion-marks-list]',
@@ -36,7 +36,6 @@ export default class JournalTable{
         tableLoading: '[data-js-journal-table-loading]',
         tableNull: '[data-js-journal-table-null-list]',
         tableFooter: '[data-js-journal-table-footer]',
-        tableStudent: '[data-js-journal-table-student]',
         tableMark: '[data-js-journal-table-mark]',
         tableAbsolute: '[data-js-journal-table-absolute]',
         tableAbsoluteItem: '[data-js-journal-table-absolute-item]'
@@ -101,7 +100,7 @@ export default class JournalTable{
 
             //получаем элементы accordion
             this.accordionElements = $(this.selectors.accordion);
-            this.accordionIconElements = this.accordionElements.find(this.selectors.accordionIcon);
+            this.accordionBtnElements = this.accordionElements.find(this.selectors.accordionBtn);
             this.accordionListElements = this.accordionElements.find(this.selectors.accordionList);
             this.accordionItemElements = this.accordionElements.find(this.selectors.accordionItem);
             this.accordionMarksElements = this.accordionElements.find(this.selectors.accordionMarks);
@@ -112,7 +111,6 @@ export default class JournalTable{
 
             //получаем элементы горизонтального журнала
             this.tableLessonElements = this.horizontalJournalElement.find(this.selectors.tableLesson);
-            this.tableStudentElements = this.horizontalJournalElement.find(this.selectors.tableStudent);
             this.tableMarkElements = this.horizontalJournalElement.find(this.selectors.tableMark);
             this.tableAbsoluteElement = this.horizontalJournalElement.find(this.selectors.tableAbsolute);
             this.tableAbsoluteItemElement = this.horizontalJournalElement.find(this.selectors.tableAbsoluteItem);
@@ -129,10 +127,12 @@ export default class JournalTable{
         //при изменении ориентации устройства
         window.addEventListener('resize', this.changeOrientation.bind(this));
 
-        //при клике на элемент-список accordion
-        this.accordionElements.each((index, element) => {
-            $(element).on('click', () => {
+        //при клике на accordion-btn
+        this.accordionBtnElements.each((index, element) => {
+            $(element).on('click', (event) => {
                 this.openCloseAccordion(index);
+
+                event.stopPropagation();
             })
         })
 
@@ -252,11 +252,11 @@ export default class JournalTable{
                 <li class="journal__item accordion" data-js-journal-accordion>
                     <div class="accordion__student">
                       <p class="slice-string h4">${Students.students[index].second_name} ${Students.students[index].name}</p>
-                      <span class="accordion__icon" data-js-journal-accordion-icon>
+                      <button class="accordion__btn" data-js-journal-accordion-btn>
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M16.1795 3.26875C15.7889 2.87823 15.1558 2.87823 14.7652 3.26875L8.12078 9.91322C6.94952 11.0845 6.94916 12.9833 8.11996 14.155L14.6903 20.7304C15.0808 21.121 15.714 21.121 16.1045 20.7304C16.495 20.3399 16.495 19.7067 16.1045 19.3162L9.53246 12.7442C9.14194 12.3536 9.14194 11.7205 9.53246 11.33L16.1795 4.68297C16.57 4.29244 16.57 3.65928 16.1795 3.26875Z" fill="#0F0F0F"/>
                         </svg>
-                      </span>
+                      </button>
                     </div>
                     
                     <ul class="accordion__list" data-js-journal-accordion-list>
@@ -318,10 +318,10 @@ export default class JournalTable{
     openCloseAccordion (index) {
         $(this.accordionListElements[index]).toggleClass(this.classes.isActive);
 
-        $(this.accordionIconElements[index]).toggleClass(this.classes.isActive);
+        $(this.accordionBtnElements[index]).toggleClass(this.classes.isActive);
 
         //если закрываем блок, то скрываем блоки marks
-        if (!$(this.accordionIconElements[index]).hasClass(this.classes.isActive)) {
+        if (!$(this.accordionBtnElements[index]).hasClass(this.classes.isActive)) {
             this.closeAllMarksBlock();
         }
     }
@@ -446,7 +446,7 @@ export default class JournalTable{
             let trList = Classes.activeClasses.map((item, index) => {
                 return `
                     <tr class="table__footer-row">
-                      <th class="table__footer-student slice-string" data-js-journal-table-student>${Students.students[index].second_name} ${Students.students[index].name}</th>
+                      <th class="table__footer-student slice-string">${Students.students[index].second_name} ${Students.students[index].name}</th>
                       <th class="table__footer-lesson" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].first_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>

@@ -1,6 +1,8 @@
 @use '../../helpers' as *;
 
 .authorization {
+  @include abs-center;
+
   background: var(--color-light-alt);
   padding: rem(20) rem(10);
   border-radius: var(--radius-medium);

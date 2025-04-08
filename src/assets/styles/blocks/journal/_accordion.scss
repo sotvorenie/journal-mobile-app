@@ -22,7 +22,7 @@
     cursor: pointer;
   }
 
-  &__icon {
+  &__btn {
     @include square(#{rem(30)});
 
     rotate: 90deg;

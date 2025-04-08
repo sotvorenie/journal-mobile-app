@@ -244,9 +244,6 @@ svg * {
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   color: var(--color-dark);
   font-family: var(--font-family-base);
   background-color: var(--color-light);
@@ -588,19 +585,9 @@ body {
   height: 2.5rem;
   rotate: -90deg;
 }
-.navigation__reload svg {
-  width: 2.1875rem;
-  height: 2.1875rem;
-}
-@media (any-hover: hover) {
-  .navigation__reload:hover svg {
-    rotate: 45deg;
-  }
-}
-@media (any-hover: none) {
-  .navigation__reload:active svg {
-    rotate: 45deg;
-  }
+.navigation__students svg g, .navigation__calendar svg g {
+  fill: transparent;
+  stroke-width: 1.6;
 }
 
 .settings {
@@ -799,6 +786,10 @@ body {
 }
 
 .authorization {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
   background: var(--color-light-alt);
   padding: 1.25rem 0.625rem;
   border-radius: var(--radius-medium);
@@ -844,7 +835,6 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
   padding-block: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
 }
 .groups__header {
@@ -930,6 +920,12 @@ body {
   display: none;
   backdrop-filter: blur(0);
 }
+@media screen and (orientation: landscape) {
+  .groups__redact-content {
+    translate: -50% 0;
+    top: 5% !important;
+  }
+}
 
 .user {
   transition-duration: var(--transition-duration);
@@ -942,6 +938,12 @@ body {
   top: -100%;
   width: min(88%, 25rem);
 }
+@media screen and (orientation: landscape) {
+  .user__content {
+    translate: -50% 0;
+    top: 5% !important;
+  }
+}
 
 .groups-lessons__view {
   display: flex;
@@ -949,7 +951,7 @@ body {
   align-items: center;
   flex-direction: column;
   align-items: stretch;
-  max-height: 60vh;
+  max-height: 31.25rem;
   position: relative;
   min-height: 30vh;
 }
@@ -1013,13 +1015,10 @@ body {
 .journal {
   display: flex;
   flex-direction: column;
-  padding-bottom: clamp(0.625rem, 0.222107438rem + 1.652892562vw, 1.875rem);
-  width: 100%;
-  min-height: 100%;
+  padding-block: clamp(0.625rem, 0.222107438rem + 1.652892562vw, 1.875rem);
 }
 .journal__navigation {
   margin-bottom: 0.625rem;
-  margin-top: clamp(0.625rem, 0.222107438rem + 1.652892562vw, 1.875rem);
 }
 .journal__header {
   background: var(--color-accent);
@@ -1092,6 +1091,37 @@ body {
 .journal__list:not(.is-active) {
   display: none;
 }
+.journal__students:not(.is-active) {
+  display: none;
+}
+.journal__students-list {
+  margin-bottom: clamp(0.9375rem, 0.736053719rem + 0.826446281vw, 1.5625rem);
+}
+.journal__students-btn {
+  width: 100%;
+}
+.journal__students-item {
+  position: relative;
+  overflow: hidden;
+}
+.journal__students-btn-bar {
+  position: absolute;
+  right: -0.125rem;
+  background: var(--color-dark-alt);
+  padding: 0.625rem;
+  border-radius: var(--radius-regular);
+  transition-duration: var(--transition-duration);
+}
+.journal__students-btn-bar:not(.is-active) {
+  right: -100%;
+}
+.journal__students-btn-bar svg {
+  color: var(--color-light);
+  filter: drop-shadow(0 0 0.1875rem var(--color-dark));
+}
+.journal__students-create:not(.is-active) {
+  display: none;
+}
 
 .accordion {
   padding: clamp(0.625rem, 0.423553719rem + 0.826446281vw, 1.25rem);
@@ -1119,13 +1149,13 @@ body {
   column-gap: 0.625rem;
   cursor: pointer;
 }
-.accordion__icon {
+.accordion__btn {
   width: 1.875rem;
   height: 1.875rem;
   rotate: 90deg;
   transition-duration: var(--transition-duration);
 }
-.accordion__icon.is-active {
+.accordion__btn.is-active {
   color: var(--color-accent);
   rotate: -90deg;
 }

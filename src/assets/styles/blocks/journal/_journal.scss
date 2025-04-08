@@ -3,13 +3,10 @@
 .journal {
   display: flex;
   flex-direction: column;
-  padding-bottom: fluid(30, 10);
-  width: 100%;
-  min-height: 100%;
+  padding-block: fluid(30, 10);
 
   &__navigation {
     margin-bottom: rem(10);
-    margin-top: fluid(30, 10);
   }
 
   &__header {
@@ -88,6 +85,51 @@
 
     &:not(.is-active) {
       display: none;
+    }
+  }
+
+  &__students {
+
+    &:not(.is-active) {
+      display: none;
+    }
+
+    &-list {
+      margin-bottom: fluid(25, 15);
+    }
+
+    &-btn {
+      width: 100%;
+    }
+
+    &-item {
+      position: relative;
+      overflow: hidden;
+    }
+
+    &-btn-bar {
+      position: absolute;
+      right: rem(-2);
+      background: var(--color-dark-alt);
+      padding: rem(10);
+      border-radius: var(--radius-regular);
+      transition-duration: var(--transition-duration);
+
+      &:not(.is-active) {
+        right: -100%;
+      }
+
+      svg {
+        color: var(--color-light);
+        filter: drop-shadow(0 0 rem(3) var(--color-dark));
+      }
+    }
+
+    &-create {
+
+      &:not(.is-active) {
+        display: none;
+      }
     }
   }
 }

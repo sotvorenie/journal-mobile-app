@@ -15,7 +15,6 @@ export default class Journal {
     selectors = {
         root: '[data-js-journal]',
         back: '[data-js-journal-back]',
-        reload: '[data-js-journal-reload]',
 
         group: '[data-js-journal-group]',
         date: '[data-js-journal-date]',
@@ -41,7 +40,6 @@ export default class Journal {
         this.journalElement = $(this.selectors.root);
 
         this.backBtn = this.journalElement.find(this.selectors.back);
-        this.reloadBtn = this.journalElement.find(this.selectors.reload);
         this.groupNameElement = this.journalElement.find(this.selectors.group);
         this.dateNameElement = this.journalElement.find(this.selectors.date);
         this.loadingElement = this.journalElement.find(this.selectors.loading);
@@ -78,14 +76,6 @@ export default class Journal {
         this.backBtn.on('click', () => {
             window.location.href = '../../../../groups.html';
         });
-
-        //клик по кнопке перезагрузки страницы
-        this.reloadBtn.on('click', async () => {
-            let confirmed = await setConfirm('Перезагрузить страницу?');
-            if (confirmed) {
-                location.reload();
-            }
-        })
     }
     //==============================================================//
 

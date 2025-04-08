@@ -34,14 +34,12 @@
     }
   }
 
-  &__reload {
-    svg {
-      @include square(#{rem(35)})
-    }
+  &__students, &__calendar {
 
-    @include hover {
-      svg {
-        rotate: 45deg;
+    svg {
+      g {
+        fill: transparent;
+        stroke-width: 1.6;
       }
     }
   }

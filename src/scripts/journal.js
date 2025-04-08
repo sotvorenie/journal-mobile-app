@@ -7,6 +7,10 @@ import Groups from "./globals/store/useGroups.js";
 
 import Journal from "./blocks/journal/Journal.js";
 import JournalTable from "./blocks/journal/JournalTable.js";
+import JournalStudents from "./blocks/journal/JournalStudents.js";
+
+import {setInfo} from "./utils/setInfo.js";
+setInfo();
 
 new Theme();
 new Animation();
@@ -20,3 +24,4 @@ new Groups().getFromLocStore();
 
 new Journal();
 new JournalTable();
+new JournalStudents();

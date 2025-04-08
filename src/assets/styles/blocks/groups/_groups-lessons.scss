@@ -1,12 +1,13 @@
 @use '../../helpers' as *;
 
 .groups-lessons {
+
   &__view {
     @include flex-center();
 
     flex-direction: column;
     align-items: stretch;
-    max-height: 60vh;
+    max-height: rem(500);
     position: relative;
     min-height: 30vh;
   }

@@ -58,3 +58,10 @@
   clip: rect(0 0 0 0) !important;
   overflow: hidden !important;
 }
+
+@mixin landscape-orientation {
+  @media screen and (orientation: landscape){
+    translate: -50% 0;
+    top: 5% !important;
+  }
+}
