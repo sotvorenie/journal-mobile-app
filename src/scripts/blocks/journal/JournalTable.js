@@ -92,7 +92,7 @@ export default class JournalTable{
         })
 
         //при событии удаления студента
-        $(document).on('deleteStudent', async () => {
+        $(document).on('updateStudent', async () => {
             await this.reloadTables();
 
             this.bindEvents();

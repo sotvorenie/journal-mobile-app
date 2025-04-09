@@ -5,7 +5,7 @@ import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
 
-import {createNewStudent, removeStudent} from "../../../api/students.js";
+import {createNewStudent, removeStudent, updateStudent} from "../../../api/students.js";
 
 import Students from "../../globals/store/useStudents.js";
 import User from "../../globals/store/useUser.js";
@@ -101,34 +101,7 @@ export default class JournalStudents {
     //---функции, выполняющиеся сразу после загрузки страницы--//
     loadFunctions = () => {
         //создаем список студентов, когда обновилась информация
-        $(document).on('journalLoad', () => {
-            this.createStudentsList();
-
-            //получаем элементы списка студентов
-            this.studentsItemElements = this.studentsElement.find(this.selectors.item);
-            //получаем элементы btn-bar
-            this.btnBarElements = this.studentsElement.find(this.selectors.btnBar);
-            //получаем кнопки для удаления студентов
-            this.deleteBtns = this.studentsElement.find(this.selectors.delete);
-            //получаем кнопки открытия блока редактирования
-            this.redactOpenBtns = this.studentsElement.find(this.selectors.redactOpen);
-
-            //при клике по элементу списка студентов
-            this.studentsItemElements.each((index, element) => {
-                $(element).on('click', () => {
-                    this.openBtnBar(index);
-                })
-            })
-
-            //при клике по кнопке "Удалить студента"
-            this.deleteBtns.each((index, btn) => {
-                $(btn).on('click', (event) => {
-                    this.clickToDelete(Students.students[index].id);
-
-                    event.stopPropagation();
-                })
-            })
-        })
+        $(document).on('journalLoad', this.getListElements.bind(this));
 
         //очищаем информацию в блоке добавления студента
         this.clearCreateBlock();
@@ -142,6 +115,9 @@ export default class JournalStudents {
         //клик по кнопке закрытия блока
         this.closeBtn.on('click', () => {
             closeBlock(this.studentsElement);
+
+            //закрываем все btn-bars
+            this.closeAllBtnBars();
         });
 
         //клик по кнопке открытия блока
@@ -180,6 +156,35 @@ export default class JournalStudents {
 
         //клик по кнопке "Создать студента"
         this.createBtn.on('click', this.clickToCreate.bind(this));
+
+        //клик по кнопке закрытия блока редактирования студента
+        this.redactCloseBtn.on('click', () => {
+            closeBlock(this.redactElement);
+        })
+
+        //ввод в input блока редактирования студента name
+        this.redactNameElement.on('input', (event) => {
+            input(event, this.redactNameCounterElement);
+
+            redactValidation(event, [Students.activeStudent.name, Students.activeStudent.second_name, Students.activeStudent.surname]);
+        })
+
+        //ввод в input блока редактирования студента second_name
+        this.redactSecondNameElement.on('input', (event) => {
+            input(event, this.redactSecondNameCounterElement);
+
+            redactValidation(event, [Students.activeStudent.name, Students.activeStudent.second_name, Students.activeStudent.surname]);
+        })
+
+        //ввод в input блока редактирования студента surname
+        this.redactSurnameElement.on('input', (event) => {
+            input(event, this.redactSurnameCounterElement);
+
+            redactValidation(event, [Students.activeStudent.name, Students.activeStudent.second_name, Students.activeStudent.surname]);
+        })
+
+        //клик по кнопке "Редактировать"
+        this.redactBtn.on('click', this.clickToRedact.bind(this));
     }
     //==============================================================//
 
@@ -215,7 +220,8 @@ export default class JournalStudents {
                 if (response.status === 200) {
                     await this.students.getStudents();
 
-                    this.createStudentsList();
+                    //перерисовываем список студентов и получаем элементы списка студентов
+                    this.getListElements();
 
                     this.closeCreateBlock();
 
@@ -251,19 +257,17 @@ export default class JournalStudents {
                 //удаляем студента из списка групп
                 Students.students = Students.students.filter(student => student.id !== id);
 
-                //перерисовываем список студентов
-                this.createStudentsList();
+                //перерисовываем список студентов и получаем элементы списка студентов
+                this.getListElements();
 
                 //проверяем: есть ли удаленный студент в activeClasses
                 let checkStudentInClasses = Classes.activeClasses.some(item => item.student_id === id)
                 if (checkStudentInClasses) {
-                    console.log('был студент')
-
                     //редактируем активный classes, чтобы удалить из него удаленного студента
                     Classes.activeClasses = Classes.activeClasses.filter(classes => classes.student_id !== id);
 
                     //создаем событие для перерисовки журналов
-                    $(document).trigger('deleteStudent');
+                    $(document).trigger('updateStudent');
                 }
 
                 setMessage('Студент удален!!');
@@ -274,11 +278,119 @@ export default class JournalStudents {
             await setAlert('Что-то пошло не так..');
         }
     }
+
+    //редактировать студента
+    redactStudent = async () => {
+        try {
+            //показываем анимацию загрузки внутри кнопки "Редактировать"
+            setLoading(this.redactBtn, this.redactLoadingElement);
+
+            //корректируем данные в полях ввода
+            let [name, secondName, surname] = this.correctData(this.redactNameElement.val(), this.redactSecondNameElement.val(), this.redactSurnameElement.val());
+
+            //проверка на дублирование ФИО
+            let check = this.checkDoubleFIO(name, secondName, surname);
+
+            //проверка, что такого же студента нет на сервере
+            let check2 = await this.students.checkAStudent('', name, secondName, surname);
+
+            if (check && check2) {
+                let data = {
+                    user_id: User.activeUser.id,
+                    group_id: Groups.activeGroup.id,
+                    id: Students.activeStudent.id,
+                    name,
+                    second_name: secondName,
+                    surname
+                }
+
+                const response = await updateStudent(data);
+
+                if (response.status === 200) {
+                    //заменяем данные о студенте
+                    Students.students = Students.students.map(student => {
+                        if (student.id === Students.activeStudent.id) {
+                            return {
+                                ...student,
+                                name,
+                                second_name: secondName,
+                                surname
+                            }
+                        }
+
+                        return student;
+                    })
+
+                    //перерисовываем список студентов и получаем элементы списка студентов
+                    this.getListElements();
+
+                    closeBlock(this.redactElement);
+
+                    //проверяем: есть ли редактируемый студент в activeClasses
+                    let checkStudentInClasses = Classes.activeClasses.some(item => item.student_id === Students.activeStudent.id)
+                    if (checkStudentInClasses) {
+                        //создаем событие для перерисовки журналов
+                        $(document).trigger('updateStudent');
+                    }
+
+                    setMessage('Студент редактирован!!');
+                } else {
+                    await setAlert('Что-то пошло не так..');
+                }
+            } else {
+                await setAlert('Такой студент уже существует!!');
+            }
+        } catch (err) {
+            await setAlert('Что-то пошло не так..');
+        } finally {
+            //скрываем анимацию загрузки внутри кнопки "Редактировать"
+            setLoading(this.redactBtn, this.redactLoadingElement);
+        }
+    }
     //==============================================================//
 
 
     //==============================================================//
     //---функции--//
+    //получение элементов из созданного списка студентов
+    getListElements () {
+        this.createStudentsList();
+
+        //получаем элементы списка студентов
+        this.studentsItemElements = this.studentsElement.find(this.selectors.item);
+        //получаем элементы btn-bar
+        this.btnBarElements = this.studentsElement.find(this.selectors.btnBar);
+        //получаем кнопки для удаления студентов
+        this.deleteBtns = this.studentsElement.find(this.selectors.delete);
+        //получаем кнопки открытия блока редактирования
+        this.redactOpenBtns = this.studentsElement.find(this.selectors.redactOpen);
+
+        //при клике по элементу списка студентов
+        this.studentsItemElements.each((index, element) => {
+            $(element).on('click', () => {
+                this.openBtnBar(index);
+            })
+        })
+
+        //при клике по кнопке "Удалить студента"
+        this.deleteBtns.each((index, btn) => {
+            $(btn).on('click', (event) => {
+                this.clickToDelete(Students.students[index].id);
+
+                event.stopPropagation();
+            })
+        })
+
+        //при клике по кнопке открытия блока редактирования студента
+        this.redactOpenBtns.each((index, btn) => {
+            $(btn).on('click', (event) => {
+                this.openRedactBlock(index, btn);
+
+                event.stopPropagation();
+            })
+        })
+    }
+
     //создание списка студентов
     createStudentsList () {
         //создаем элемент li
@@ -386,6 +498,39 @@ export default class JournalStudents {
 
         if (confirmed) {
             this.deleteStudent(id);
+        }
+    }
+
+    //открытие блока редактирования студента
+    openRedactBlock (index, btn) {
+        Students.activeStudent = Students.students[index];
+
+        //заполняем поля ввода информацией о редактируемом студенте
+        this.redactNameElement.val(Students.activeStudent.name);
+        this.redactSecondNameElement.val(Students.activeStudent.second_name);
+        this.redactSurnameElement.val(Students.activeStudent.surname);
+
+        //заполняем counter-ы информацией
+        this.redactNameCounterElement.text(Students.activeStudent.name.length);
+        this.redactSecondNameCounterElement.text(Students.activeStudent.second_name.length);
+        this.redactSurnameCounterElement.text(Students.activeStudent.surname.length);
+
+        openBlock(this.redactElement, btn);
+    }
+
+    //закрытие всех btn-bars
+    closeAllBtnBars () {
+        this.btnBarElements.each((index, element) => {
+            $(element).removeClass(this.classes.isActive)
+        })
+    }
+
+    //клик по кнопке "Редактировать студента"
+    clickToRedact = async () => {
+        let confirmed = await setConfirm('Вы действительно хотите редактировать студента?');
+
+        if (confirmed) {
+            this.redactStudent();
         }
     }
     //==============================================================//
