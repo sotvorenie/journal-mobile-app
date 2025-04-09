@@ -1,12 +1,11 @@
 import UseGroups from "./useGroups.js";
 
-import {pxToRem} from "../../utils/usePxToRem.js";
 import {input} from "../../utils/useInput.js";
-import {redactValidation} from "../../globals/useValidationRedact.js";
+import {redactValidation} from "../../utils/useValidationRedact.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {setLoading} from "../../utils/useSetLoading.js";
-import {getCoordinates} from "../../utils/useCoordinates.js";
 import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
+import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
 
 import {redactStudentsGroup} from "../../../api/groups.js";
 
@@ -62,7 +61,10 @@ export default class GroupsRedact {
                     this.setInfo(index);
 
                     //открываем блок редактирования группы
-                    this.openBlock(btn);
+                    openBlock(this.redactElement, btn);
+
+                    //создаем событие, когда открываем блок редактирования группы
+                    $(document).trigger('groupsRedactOpen');
 
                     event.stopPropagation();
                 })
@@ -166,36 +168,9 @@ export default class GroupsRedact {
         this.counterElement.text(name.length);
     }
 
-    //открытие блока редактирования группы
-    //btn - элемент кнопки открытия блока редактирования группы, для анимации открытия
-    openBlock (btn) {
-        this.redactElement.addClass(this.classes.isActive);
-
-        //получаем координаты кнопки
-        this.coordinates = getCoordinates(btn);
-
-        //меняем transform-origin у блока редактирования группы в зависимости от координат кнопки
-        this.redactElement.css({
-            transformOrigin: `${pxToRem(this.coordinates.left) + 1.5}rem ${pxToRem(this.coordinates.top) + 1.5}rem`
-        })
-
-        this.redactElement.animate({
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-
-        //создаем событие, когда открываем блок редактирования группы
-        $(document).trigger('groupsRedactOpen');
-    }
-
     //закрытие блока
-    closeBlock () {
-        this.redactElement.animate({
-            scale: 0
-        }, 150, () => {
-            this.redactElement.removeClass(this.classes.isActive);
-        });
+    closeBlock = async () => {
+        await closeBlock(this.redactElement);
 
         //делаем кнопку "Редактировать" disabled
         this.redactBtn.attr('disabled', true);

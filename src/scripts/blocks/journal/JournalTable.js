@@ -1,6 +1,7 @@
-import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
+import {setAlert} from "../../utils/useInfoMessage.js";
 import {getCoordinates} from "../../utils/useCoordinates.js";
 import {pxToRem} from "../../utils/usePxToRem.js";
+import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
 
 import {updateClasses} from "../../../api/classes.js";
 
@@ -85,35 +86,14 @@ export default class JournalTable{
     loadFunctions = () => {
         //при событии, когда мы получили classes журнала
         $(document).on('journalLoad', async () => {
-            //показываем список предметов вертикального журнала, если журнал не пуст
-            if (Classes.activeClasses.length) {
-                this.lessonsContainerElement.addClass(this.classes.isActive);
-            }
+            await this.reloadTables();
 
-            //скрываем анимацию загрузки, и если нужно - показываем null-block в горизонтальном журнале
-            this.tableLoadingElement.removeClass(this.classes.isActive);
-            this.tableLoadingContainerElement.removeClass(this.classes.isActive);
-            this.setNullBlock();
+            this.bindEvents();
+        })
 
-            //создаем вертикальный журнал
-            await this.createVerticalJournal();
-
-            //получаем элементы accordion
-            this.accordionElements = $(this.selectors.accordion);
-            this.accordionBtnElements = this.accordionElements.find(this.selectors.accordionBtn);
-            this.accordionListElements = this.accordionElements.find(this.selectors.accordionList);
-            this.accordionItemElements = this.accordionElements.find(this.selectors.accordionItem);
-            this.accordionMarksElements = this.accordionElements.find(this.selectors.accordionMarks);
-            this.accordionMarksItemElements = this.accordionElements.find(this.selectors.accordionMarksItem);
-
-            //создаем горизонтальный журнал
-            await this.createHorizontalJournal();
-
-            //получаем элементы горизонтального журнала
-            this.tableLessonElements = this.horizontalJournalElement.find(this.selectors.tableLesson);
-            this.tableMarkElements = this.horizontalJournalElement.find(this.selectors.tableMark);
-            this.tableAbsoluteElement = this.horizontalJournalElement.find(this.selectors.tableAbsolute);
-            this.tableAbsoluteItemElement = this.horizontalJournalElement.find(this.selectors.tableAbsoluteItem);
+        //при событии удаления студента
+        $(document).on('deleteStudent', async () => {
+            await this.reloadTables();
 
             this.bindEvents();
         })
@@ -125,7 +105,12 @@ export default class JournalTable{
     //---обработчики событий--//
     bindEvents() {
         //при изменении ориентации устройства
-        window.addEventListener('resize', this.changeOrientation.bind(this));
+        window.addEventListener('resize', () => {
+            this.changeOrientation();
+
+            //чтобы если у нас открыт блок информации о предмете - он закрывался
+            closeBlock(this.lessonInfoElement);
+        });
 
         //при клике на accordion-btn
         this.accordionBtnElements.each((index, element) => {
@@ -185,7 +170,9 @@ export default class JournalTable{
         })
 
         //клик по кнопке закрытия блока lessonInfo
-        this.lessonInfoCloseBtn.on('click', this.closeLessonInfo.bind(this));
+        this.lessonInfoCloseBtn.on('click', () => {
+            closeBlock(this.lessonInfoElement);
+        });
     }
     //==============================================================//
 
@@ -212,35 +199,45 @@ export default class JournalTable{
 
     //==============================================================//
     //---функции--//
+    //обновление данных журналов
+    reloadTables = async () => {
+        //показываем список предметов вертикального журнала, если журнал не пуст
+        if (Classes.activeClasses.length) {
+            this.lessonsContainerElement.addClass(this.classes.isActive);
+        }
+
+        //скрываем анимацию загрузки, и если нужно - показываем null-block в горизонтальном журнале
+        this.tableLoadingElement.removeClass(this.classes.isActive);
+        this.tableLoadingContainerElement.removeClass(this.classes.isActive);
+        this.setNullBlock();
+
+        //создаем вертикальный журнал
+        await this.createVerticalJournal();
+
+        //получаем элементы accordion
+        this.accordionElements = $(this.selectors.accordion);
+        this.accordionBtnElements = this.accordionElements.find(this.selectors.accordionBtn);
+        this.accordionListElements = this.accordionElements.find(this.selectors.accordionList);
+        this.accordionItemElements = this.accordionElements.find(this.selectors.accordionItem);
+        this.accordionMarksElements = this.accordionElements.find(this.selectors.accordionMarks);
+        this.accordionMarksItemElements = this.accordionElements.find(this.selectors.accordionMarksItem);
+
+        //создаем горизонтальный журнал
+        await this.createHorizontalJournal();
+
+        //получаем элементы горизонтального журнала
+        this.tableLessonElements = this.horizontalJournalElement.find(this.selectors.tableLesson);
+        this.tableMarkElements = this.horizontalJournalElement.find(this.selectors.tableMark);
+        this.tableAbsoluteElement = this.horizontalJournalElement.find(this.selectors.tableAbsolute);
+        this.tableAbsoluteItemElement = this.horizontalJournalElement.find(this.selectors.tableAbsoluteItem);
+    }
+
     //открытие блока информации о предмете
     openLessonInfo (index, element) {
         //задаем название предмета в блок
         this.lessonInfoTextElement.text(Lessons.activeLessons[index].name);
 
-        this.lessonInfoElement.addClass(this.classes.isActive);
-
-        //получаем координаты элемента списка предметов по которому кликнули
-        let coordinates = getCoordinates(element);
-
-        //меняем transform-origin у блока добавления нового предмета
-        this.lessonInfoElement.css({
-            transformOrigin: `${pxToRem(coordinates.left) + 1.5}rem ${pxToRem(coordinates.top) + 1.5}rem`
-        })
-
-        this.lessonInfoElement.animate({
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-    }
-
-    //закрытие блока информации о предмете
-    closeLessonInfo () {
-        this.lessonInfoElement.animate({
-            scale: 0
-        }, 150, () => {
-            this.lessonInfoElement.removeClass(this.classes.isActive);
-        })
+        openBlock(this.lessonInfoElement, element);
     }
 
     //создание списка журнала в вертикальном положении
@@ -248,10 +245,12 @@ export default class JournalTable{
         return new Promise((resolve) => {
             //создаем элементы li
             let accordionItem = Classes.activeClasses.map((item, index) => {
+                let student = Students.students.find(i => i.id === item.student_id);
+
                 return `
                 <li class="journal__item accordion" data-js-journal-accordion>
                     <div class="accordion__student">
-                      <p class="slice-string h4">${Students.students[index].second_name} ${Students.students[index].name}</p>
+                      <p class="slice-string h4">${student.second_name} ${student.name}</p>
                       <button class="accordion__btn" data-js-journal-accordion-btn>
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M16.1795 3.26875C15.7889 2.87823 15.1558 2.87823 14.7652 3.26875L8.12078 9.91322C6.94952 11.0845 6.94916 12.9833 8.11996 14.155L14.6903 20.7304C15.0808 21.121 15.714 21.121 16.1045 20.7304C16.495 20.3399 16.495 19.7067 16.1045 19.3162L9.53246 12.7442C9.14194 12.3536 9.14194 11.7205 9.53246 11.33L16.1795 4.68297C16.57 4.29244 16.57 3.65928 16.1795 3.26875Z" fill="#0F0F0F"/>
@@ -444,9 +443,11 @@ export default class JournalTable{
         return new Promise((resolve) => {
             //создаем элемент tr
             let trList = Classes.activeClasses.map((item, index) => {
+                let student = Students.students.find(i => i.id === item.student_id);
+
                 return `
                     <tr class="table__footer-row">
-                      <th class="table__footer-student slice-string">${Students.students[index].second_name} ${Students.students[index].name}</th>
+                      <th class="table__footer-student slice-string">${student.second_name} ${student.name}</th>
                       <th class="table__footer-lesson" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].first_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>

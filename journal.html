@@ -198,10 +198,6 @@
 
     </table>
 
-    <button class="journal__open-students" type="button">
-
-    </button>
-
     <div class="journal__students absolute" data-js-students>
       <div class="journal__students-content absolute__content">
         <button class="absolute__close button--close" data-js-students-close></button>
@@ -212,11 +208,13 @@
 
         <div class="journal__students-create absolute__second" data-js-students-create>
           <div class="absolute__content">
-            <form class="group-create__form form" novalidate data-js-form>
+            <form class="journal__students-create-form form" novalidate data-js-form>
               <div class="form__item">
                 <input class="input"
                        maxlength="20"
                        placeholder="Имя"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
                        data-js-students-create-name
                 >
                 <div class="form__counter">
@@ -230,6 +228,8 @@
                 <input class="input"
                        maxlength="20"
                        placeholder="Фамилия"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
                        data-js-students-create-second-name
                 >
                 <div class="form__counter">
@@ -243,6 +243,8 @@
                 <input class="input"
                        maxlength="20"
                        placeholder="Отчество"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
                        data-js-students-create-surname
                 >
                 <div class="form__counter">
@@ -265,6 +267,72 @@
                         </span>
                 </button>
                 <button class="button form-btn" type="button" data-js-students-create-close>Отмена</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="journal__students-redact absolute__second" data-js-students-redact>
+          <div class="absolute__content">
+            <form class="journal__students-redact-form form" novalidate data-js-form>
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Имя"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-redact-name
+                >
+                <div class="form__counter">
+                  <span data-js-students-redact-name-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Фамилия"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-redact-second-name
+                >
+                <div class="form__counter">
+                  <span data-js-students-redact-second-name-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Отчество"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-redact-surname
+                >
+                <div class="form__counter">
+                  <span data-js-students-redact-surname-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__btn-bar">
+                <button class="button form-btn is-active" type="button" data-js-students-redact-btn data-js-redact-btn disabled>
+                  <span>Создать</span>
+                  <span class="loading loading--btn" data-js-students-redact-loading>
+                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                </g>
+                            </svg>
+                        </span>
+                </button>
+                <button class="button form-btn" type="button" data-js-students-redact-close>Отмена</button>
               </div>
             </form>
           </div>

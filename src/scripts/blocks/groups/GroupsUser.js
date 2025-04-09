@@ -3,7 +3,7 @@ import User from "../../globals/store/useUser.js";
 import GroupsList from "./GroupsList.js";
 
 import {input} from "../../utils/useInput.js";
-import {redactValidation} from "../../globals/useValidationRedact.js";
+import {redactValidation} from "../../utils/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {setConfirm, setAlert} from "../../utils/useInfoMessage.js";

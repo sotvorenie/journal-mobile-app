@@ -38,7 +38,7 @@ export default class Students {
             const response = await checkStudent(data);
 
             if (response.status === 200) {
-                return !response.data.length;
+                return response.data.length === 0;
             } else {
                 await setAlert('Что-то пошло не так..');
             }

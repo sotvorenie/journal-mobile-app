@@ -3,13 +3,12 @@ import UseGroups from "./useGroups.js";
 
 import {getLessons, checkLesson, createNewLesson, removeLesson, redactLessons} from "../../../api/lessons.js";
 
-import {getCoordinates} from "../../utils/useCoordinates.js";
-import {pxToRem} from "../../utils/usePxToRem.js";
 import {input} from "../../utils/useInput.js";
-import {redactValidation} from "../../globals/useValidationRedact.js";
+import {redactValidation} from "../../utils/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
+import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
 
 export default class GroupsLessons {
     //---DOM-селекторы--//
@@ -146,7 +145,9 @@ export default class GroupsLessons {
         this.createOpenBtn.on('click', this.openCreateBlock.bind(this));
 
         //нажатие на кнопку "Отмена" в блоке добавления нового предмета
-        this.createCloseBtn.on('click', this.closeCreateBlock.bind(this));
+        this.createCloseBtn.on('click', () => {
+            closeBlock(this.createElement);
+        });
 
         //ввод в input в блоке создания нового предмета
         this.createInputElement.on('input', (event) => {
@@ -159,10 +160,14 @@ export default class GroupsLessons {
         this.createBtn.on('click', this.clickToCreate.bind(this));
 
         //клик по кнопке закрытия блока информации о предмете
-        this.infoCloseBtn.on('click', this.closeInfoBlock.bind(this));
+        this.infoCloseBtn.on('click', () => {
+            closeBlock(this.infoElement);
+        });
 
         //клик по кнопке закрытия блока редактирования предмета
-        this.redactCloseBtn.on('click', this.closeRedactBlock.bind(this));
+        this.redactCloseBtn.on('click', () => {
+             closeBlock(this.redactElement);
+        });
 
         //при вводе в input редактирования предмета
         this.redactInputElement.on('input', (event) => {
@@ -420,30 +425,7 @@ export default class GroupsLessons {
         //задаем counter = 0
         this.createCounterElement.text(0);
 
-        this.createElement.addClass(this.classes.isActive);
-
-        //получаем координаты кнопки "Добавить предмет"
-        let createCoordinates = getCoordinates(this.createOpenBtn[0]);
-
-        //меняем transform-origin у блока добавления нового предмета
-        this.createElement.css({
-            transformOrigin: `${pxToRem(createCoordinates.left) + 8}rem ${pxToRem(createCoordinates.top) + 1.5}rem`
-        })
-
-        this.createElement.animate({
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-    }
-
-    //закрытие блока добавления нового предмета
-    closeCreateBlock () {
-        this.createElement.animate({
-            scale: 0
-        }, 150, () => {
-            this.createElement.removeClass(this.classes.isActive);
-        })
+        openBlock(this.createElement, this.createOpenBtn[0]);
     }
 
     //при клике по кнопке "Создать предмет"
@@ -465,33 +447,10 @@ export default class GroupsLessons {
 
     //открытие блока информации о предмете
     openInfoBlock (element, name) {
-        this.infoElement.addClass(this.classes.isActive);
-
         //заполняем информацию о предмете
         this.infoTextElement.text(name)
 
-        //получаем координаты элемента списка предметов по которому кликнули
-        let elementCoordinates = getCoordinates(element);
-
-        //меняем transform-origin у блока добавления нового предмета
-        this.infoElement.css({
-            transformOrigin: `${pxToRem(elementCoordinates.left) + 8}rem ${pxToRem(elementCoordinates.top) + 1.5}rem`
-        })
-
-        this.infoElement.animate({
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-    }
-
-    //закрытие блока информации о предмете
-    closeInfoBlock () {
-        this.infoElement.animate({
-            scale: 0
-        }, 150, () => {
-            this.infoElement.removeClass(this.classes.isActive);
-        })
+        openBlock(this.infoElement, element);
     }
 
     //клик по кнопке удаления предмета
@@ -514,36 +473,7 @@ export default class GroupsLessons {
         //задаем counter = длине названия предмета
         this.redactCounterElement.text(this.redactInputElement.val().length);
 
-        this.redactElement.addClass(this.classes.isActive);
-
-        //получаем координаты кнопки "Добавить предмет"
-        let redactCoordinates = getCoordinates(this.redactOpenBtns[index]);
-
-        //меняем transform-origin у блока добавления нового предмета
-        this.redactElement.css({
-            transformOrigin: `${pxToRem(redactCoordinates.left) + 1.5}rem ${pxToRem(redactCoordinates.top) + 1.5}rem`
-        })
-
-        this.redactElement.animate({
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-
-        //изменяем значение названия предмета для redactValidation
-        this.redactInputElement.on('input', (event) => {
-            redactValidation(event, [name]);
-        })
-
-    }
-
-    //закрытие блока редактирования предмета
-    closeRedactBlock () {
-        this.redactElement.animate({
-            scale: 0
-        }, 150, () => {
-            this.redactElement.removeClass(this.classes.isActive);
-        })
+        openBlock(this.redactElement, this.redactOpenBtns[index])
     }
 
     //клик по кнопке "Редактировать предмет"

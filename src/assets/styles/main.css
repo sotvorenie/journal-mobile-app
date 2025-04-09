@@ -878,7 +878,6 @@ body {
   width: min(30%, 12.5rem);
 }
 .groups__create {
-  transform-origin: bottom right;
   border-radius: 50%;
   opacity: 0;
   scale: 0;
@@ -1120,6 +1119,9 @@ body {
   filter: drop-shadow(0 0 0.1875rem var(--color-dark));
 }
 .journal__students-create:not(.is-active) {
+  display: none;
+}
+.journal__students-redact:not(.is-active) {
   display: none;
 }
 

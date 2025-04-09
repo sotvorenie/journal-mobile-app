@@ -1,8 +1,9 @@
 import {input} from "../../utils/useInput.js";
-import {redactValidation} from "../../globals/useValidationRedact.js";
+import {redactValidation} from "../../utils/useValidationRedact.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {setConfirm, setAlert} from "../../utils/useInfoMessage.js";
+import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
 
 import {createStudentsGroup} from "../../../api/groups.js";
 
@@ -68,7 +69,9 @@ export default class GroupsCreate{
     //---обработчики событий--//
     bindEvents() {
         //клик по кнопке открытия блока
-        this.openBtn.on('click', this.openBlock.bind(this));
+        this.openBtn.on('click', () => {
+            openBlock(this.createGroupElement, this.openBtn[0])
+        });
 
         //клик по кнопке закрытия блока
         this.closeBtn.on('click', this.closeBlock.bind(this));
@@ -150,29 +153,11 @@ export default class GroupsCreate{
         this.createBtn.attr('disabled', true);
     }
 
-    //открытие блока
-    openBlock () {
-        this.createGroupElement.addClass(this.classes.isActive);
-
-        this.createGroupElement.animate({
-            opacity: 1,
-            scale: 1
-        }, 150, function () {
-            $(this).css('border-radius', '0');
-        })
-    }
-
     //закрытие блока
-    closeBlock () {
-        this.createGroupElement.animate({
-            opacity: 0,
-            scale: 0
-        }, 150, () => {
-            this.createGroupElement.removeClass(this.classes.isActive);
+    closeBlock = async () => {
+        await closeBlock(this.createGroupElement);
 
-            //очищаем информацию из блока
-            this.clearInfo();
-        })
+        this.clearInfo();
     }
 
     //клик по кнопке "Создать"
