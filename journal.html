@@ -64,9 +64,9 @@
       <div class="absolute__content settings__content">
         <button class="absolute__close button--close" data-js-settings-close></button>
 
-        <p class="settings__title h3">Настройки</p>
+        <p class="settings__title h4">Настройки</p>
         <div class="settings__item">
-          <p class="settings__item-name h3">Тема:</p>
+          <p class="settings__item-name h4">Тема:</p>
           <div class="settings__change settings__theme" data-js-theme>
             <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.5739 1.11056L13.7826 2.69316C13.7632 2.73186 13.7319 2.76325 13.6932 2.7826L12.1106 3.5739C11.9631 3.64761 11.9631 3.85797 12.1106 3.93167L13.6932 4.72297C13.7319 4.74233 13.7632 4.77371 13.7826 4.81241L14.5739 6.39502C14.6476 6.54243 14.858 6.54243 14.9317 6.39502L15.723 4.81241C15.7423 4.77371 15.7737 4.74232 15.8124 4.72297L17.395 3.93167C17.5424 3.85797 17.5424 3.64761 17.395 3.5739L15.8124 2.7826C15.7737 2.76325 15.7423 2.73186 15.723 2.69316L14.9317 1.11056C14.858 0.963147 14.6476 0.963148 14.5739 1.11056Z" fill="#0F0F0F"/>
@@ -82,7 +82,7 @@
           </div>
         </div>
         <div class="settings__item">
-          <p class="settings__item-name h3">Анимации:</p>
+          <p class="settings__item-name h4">Анимации:</p>
           <div class="settings__change settings__animation" data-js-animation>
             <p>ON</p>
             <div class="settings__change-body" data-js-animation-body>
@@ -117,7 +117,7 @@
       </ul>
 
       <span class="loading loading--absolute" data-js-journal-loading>
-      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
 
         <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
 
@@ -128,7 +128,7 @@
         </g>
 
       </svg>
-    </span>
+      </span>
 
       <div class="journal__null-list" data-js-journal-null-list>
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -336,6 +336,62 @@
               </div>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journal__person person absolute" data-js-person>
+      <div class="absolute__content">
+        <button class="absolute__close button--close" data-js-person-close></button>
+
+        <p class="person__name h4" data-js-person-name></p>
+
+        <div class="person__content">
+          <header class="person__line">
+            <p class="h5">Кол-во пропусков:</p>
+
+            <button class="person__btn" type="button" data-js-person-date-open>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="20" height="18" x="2" y="4" rx="4"/><path d="M8 2v4m8-4v4M2 10h20"/></g></svg>
+            </button>
+
+            <ul class="person__date" data-js-person-date>
+              <li class="person__date-item h5" data-js-person-date-btn>За неделю</li>
+              <li class="person__date-item h5" data-js-person-date-btn>За месяц</li>
+              <li class="person__date-item h5" data-js-person-date-btn>За семестр</li>
+              <li class="person__date-item h5" data-js-person-date-btn>За год</li>
+            </ul>
+          </header>
+
+          <main class="person__main">
+            <span class="person__loading loading loading--absolute" data-js-person-loading>
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+
+              <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+
+              <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+
+              <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+
+              </g>
+
+              </svg>
+            </span>
+
+            <ul class="person__list">
+              <li class="person__item">
+                <p class="h4">Кол-во "н":</p>
+                <p class="person__number h3" data-js-person-info></p>
+              </li>
+              <li class="person__item">
+                <p class="h4">Кол-во "о":</p>
+                <p class="person__number h3" data-js-person-info></p>
+              </li>
+              <li class="person__item">
+                <p class="h4">Кол-во "б":</p>
+                <p class="person__number h3" data-js-person-info></p>
+              </li>
+            </ul>
+          </main>
         </div>
       </div>
     </div>

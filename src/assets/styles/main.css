@@ -219,7 +219,7 @@ svg * {
   --radius-medium: 1.875rem;
   --radius-big: 2.5rem;
   --font-family-base: "Nunito", sans-serif;
-  --container-width: 75rem;
+  --container-width: 62.5rem;
   --container-padding-x: 1rem;
   --transition-duration: 0.2s;
 }
@@ -1304,6 +1304,90 @@ body {
 }
 .table__footer-item {
   font-size: clamp(1.875rem, 1.7541322314rem + 0.4958677686vw, 2.25rem);
+}
+
+.person:not(.is-active) {
+  display: none;
+}
+.person__name {
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.3125rem;
+  text-align: center;
+  border-bottom: var(--border);
+}
+.person__line {
+  display: flex;
+  column-gap: 1.875rem;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+  padding-bottom: 0.625rem;
+  border-bottom: var(--border);
+  position: relative;
+}
+.person__date {
+  position: absolute;
+  background: var(--color-dark-alt);
+  padding: 1.25rem;
+  translate: -50% -50%;
+  border-radius: var(--radius-regular);
+  color: var(--color-light);
+  box-shadow: 0 0 0.625rem 0.1875rem var(--color-dark);
+  transition-duration: var(--transition-duration);
+  z-index: 1;
+}
+.person__date:not(.is-active) {
+  scale: 0;
+}
+.person__date-item {
+  white-space: nowrap;
+  cursor: pointer;
+  text-align: center;
+}
+.person__date-item:not(:last-child) {
+  margin-bottom: 0.625rem;
+}
+@media (any-hover: hover) {
+  .person__date-item:hover {
+    color: var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .person__date-item:active {
+    color: var(--color-accent);
+  }
+}
+.person__btn {
+  aspect-ratio: 1;
+  width: clamp(2.1875rem, 1.784607438rem + 1.652892562vw, 3.4375rem);
+}
+@media (any-hover: hover) {
+  .person__btn:hover {
+    color: var(--color-accent);
+  }
+}
+@media (any-hover: none) {
+  .person__btn:active {
+    color: var(--color-accent);
+  }
+}
+.person__btn svg g {
+  fill: transparent;
+}
+.person__main {
+  position: relative;
+}
+.person__loading {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.person__item {
+  display: flex;
+  align-items: center;
+  column-gap: 1.25rem;
+}
+.person__number {
+  color: var(--color-error);
 }
 
 /*# sourceMappingURL=main.css.map */
