@@ -12,7 +12,7 @@ function setInfo() {
 
     console.info(text + ' >> ' + hours + ':' + new Date().getMinutes());
     console.info('Проект создан в качестве дипломной работы студентом СКФ БГТУ им В.Г. Шухова');
-    console.info('Использовались технологии: HTML, SCSS, JavaScript, jQuery, Axios, Swiper.js, PHP, mySQL, Vite');
+    console.info('Использовались технологии: HTML, SCSS, jQuery, Axios, Swiper.js, PHP, mySQL, Vite');
 }
 
 export {setInfo};

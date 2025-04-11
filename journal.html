@@ -55,7 +55,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="transparent" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m16.719 19.752l-.64-5.124A3 3 0 0 0 13.101 12h-2.204a3 3 0 0 0-2.976 2.628l-.641 5.124A2 2 0 0 0 9.266 22h5.468a2 2 0 0 0 1.985-2.248"/><circle cx="12" cy="5" r="3"/><circle cx="4" cy="9" r="2"/><circle cx="20" cy="9" r="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M4 14h-.306a2 2 0 0 0-1.973 1.671l-.333 2A2 2 0 0 0 3.361 20H7m13-6h.306a2 2 0 0 1 1.973 1.671l.333 2A2 2 0 0 1 20.639 20H17"/></g></svg>
       </button>
 
-      <button class="navigation__calendar button--navigation" type="button">
+      <button class="navigation__calendar button--navigation" type="button" data-js-date-open>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="20" height="18" x="2" y="4" rx="4"/><path d="M8 2v4m8-4v4M2 10h20"/></g></svg>
       </button>
     </div>
@@ -393,6 +393,65 @@
             </ul>
           </main>
         </div>
+      </div>
+    </div>
+
+    <div class="journal__date date absolute" data-js-date>
+      <div class="date__content absolute__content">
+        <button class="absolute__close button--close" data-js-date-close></button>
+
+        <header class="date__header">
+          <form class="date__header-form" novalidate>
+            <input class="date__header-input" maxlength="2" placeholder="ДД" data-js-date-search-input>
+            <input class="date__header-input" maxlength="2" placeholder="ММ" data-js-date-search-input>
+            <input class="date__header-input" maxlength="4" placeholder="ГГГГ" data-js-date-search-input>
+
+            <button class="date__header-btn" type="submit" data-js-date-search>
+              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                   viewBox="0 0 612.08 612.08" style="enable-background:new 0 0 612.08 612.08;"
+                   xml:space="preserve">
+              <g>
+                  <path d="M237.927,0C106.555,0,0.035,106.52,0.035,237.893c0,131.373,106.52,237.893,237.893,237.893
+                      c50.518,0,97.368-15.757,135.879-42.597l0.028-0.028l176.432,176.433c3.274,3.274,8.48,3.358,11.839,0l47.551-47.551
+                      c3.274-3.274,3.106-8.703-0.028-11.838L433.223,373.8c26.84-38.539,42.597-85.39,42.597-135.907C475.82,106.52,369.3,0,237.927,0z
+                       M237.927,419.811c-100.475,0-181.918-81.443-181.918-181.918S137.453,55.975,237.927,55.975s181.918,81.443,181.918,181.918
+                      S338.402,419.811,237.927,419.811z"/>
+              </g>
+              </svg>
+            </button>
+          </form>
+        </header>
+
+        <main class="date__main">
+
+          <div class="date__no-data is-active" data-js-date-no-data>
+            <span class="date__loading loading loading--absolute" data-js-date-loading>
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+
+            <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+
+            <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+
+            <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+
+            </g>
+
+            </svg>
+          </span>
+
+            <div class="date__null-list" data-js-date-null-list>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3L21 21M5 5V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H17C18.1046 21 19 20.1046 19 19M19 9L13 3M19 9H14.6C14.0399 9 13.7599 9 13.546 8.89101C13.3578 8.79513 13.2049 8.64215 13.109 8.45399C13 8.24008 13 7.96005 13 7.4V3M19 9V14M13 3H8.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <p class="h5">Список дней пуст..</p>
+            </div>
+          </div>
+
+          <ul class="date__list list list--padding" data-js-date-list></ul>
+
+          <button class="date__create-open-btn button" data-js-date-create-open>Добавить день</button>
+        </main>
       </div>
     </div>
 
