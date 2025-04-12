@@ -65,6 +65,15 @@ export default class Journal {
 
         //задаем последний день в header
         this.setDate();
+
+        //при обновлении активной даты
+        $(document).on('updateDate', () => {
+            //получаем данные журнала
+            this.updateData();
+
+            //задаем активный день в header
+            this.setDate();
+        })
     }
     //==============================================================//
 
@@ -169,6 +178,9 @@ export default class Journal {
 
     //получаем список предметов выбранного дня
     getTodayLessons () {
+        //для начала очищаем массив активных предметов (на случай если в массиве уже были предыдущие предметы)
+        Lessons.activeLessons = [];
+
         let activeLessons = [
             Days.activeDay.first_lesson,
             Days.activeDay.second_lesson,

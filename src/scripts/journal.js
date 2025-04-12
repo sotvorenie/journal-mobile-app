@@ -9,6 +9,7 @@ import JournalTable from "./blocks/journal/JournalTable.js";
 import JournalStudents from "./blocks/journal/JournalStudents.js";
 import JournalStudentInfo from "./blocks/journal/JournalStudentInfo.js";
 import JournalDate from "./blocks/journal/JournalDate.js";
+import JournalDateCreate from "./blocks/journal/JournalDateCreate.js";
 
 import {setInfo} from "./utils/setInfo.js";
 setInfo();
@@ -18,7 +19,7 @@ new Animation();
 new Settings();
 
 //проверяем, что такой пользователь все еще существует
-new User().logInCheck();
+await new User().logInCheck();
 //получаем активную группу из localStorage
 new Groups().getFromLocStore();
 
@@ -27,3 +28,4 @@ new JournalTable();
 new JournalStudents();
 new JournalStudentInfo();
 new JournalDate();
+new JournalDateCreate();

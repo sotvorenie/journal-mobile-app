@@ -522,7 +522,7 @@ export default class JournalStudents {
 
     //закрытие всех btn-bars
     closeAllBtnBars () {
-        this.btnBarElements.each((index, element) => {
+        this.btnBarElements?.each((index, element) => {
             $(element).removeClass(this.classes.isActive)
         })
     }

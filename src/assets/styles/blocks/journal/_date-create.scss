@@ -1,0 +1,43 @@
+@use '../../helpers' as *;
+
+.date-create {
+
+  &:not(.is-active) {
+    display: none;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    row-gap: rem(5);
+    margin-bottom: rem(10);
+  }
+
+  &__counter {
+    display: flex;
+    column-gap: rem(8);
+  }
+
+  &__form {
+    margin-bottom: rem(15);
+  }
+
+  &__btn-bar {
+    @include flex-center();
+
+    column-gap: rem(15);
+  }
+
+  &__item {
+    padding: rem(10);
+
+    &.is-active {
+      border-color: var(--color-success);
+      color: var(--color-light);
+      text-shadow: 0 0 rem(5) var(--color-dark);
+      backdrop-filter: brightness(.8);
+    }
+  }
+}

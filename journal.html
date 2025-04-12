@@ -451,6 +451,92 @@
           <ul class="date__list list list--padding" data-js-date-list></ul>
 
           <button class="date__create-open-btn button" data-js-date-create-open>Добавить день</button>
+
+          <div class="date__create date-create absolute__second" data-js-date-create>
+            <div class="absolute__content">
+              <button class="absolute__close button--close" data-js-date-create-close></button>
+
+              <header class="date-create__header">
+                <p class="h4">Новая дата:</p>
+                <div class="date-create__counter">
+                  <p class="date-create__counter-info h5" data-js-date-create-counter>3</p>
+                  <p class="h5">/ 6</p>
+                </div>
+                <p class="date-create__header-name h4" data-js-date-create-name>Формирование даты</p>
+              </header>
+
+              <div class="swiper date-create__swiper" data-js-date-create-swiper>
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <form class="date-create__form form" novalidate data-js-form>
+                      <div class="form__item">
+                        <input class="input"
+                               maxlength="2"
+                               placeholder="День"
+                               required
+                               data-js-date-create-day
+                        >
+                        <div class="form__counter">
+                          <span data-js-date-create-day-counter></span>
+                          <span>/</span>
+                          <span>2</span>
+                        </div>
+                      </div>
+                      <div class="form__item">
+                        <input class="input"
+                               maxlength="2"
+                               placeholder="Месяц"
+                               required
+                               data-js-date-create-month
+                        >
+                        <div class="form__counter">
+                          <span data-js-date-create-month-counter></span>
+                          <span>/</span>
+                          <span>2</span>
+                        </div>
+                      </div>
+                      <div class="form__item">
+                        <input class="input"
+                               maxlength="2"
+                               placeholder="Год"
+                               required
+                               data-js-date-create-year
+                        >
+                        <div class="form__counter">
+                          <span data-js-date-create-year-counter></span>
+                          <span>/</span>
+                          <span>4</span>
+                        </div>
+                      </div>
+                      <button class="date-create__form-today button" type="button" data-js-date-create-today>Сегодняшняя дата</button>
+                    </form>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <ul class="date-create__list list">
+                      <li class="date-create__item list__item h5 is-active">ничего</li>
+                      <li class="date-create__item list__item h5">матан</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="date-create__btn-bar">
+                <button class="date-create__btn button" type="button" disabled data-js-date-create-prev>Назад</button>
+                <button class="date-create__btn button is-active" type="button" data-js-date-create-next>
+                  <span data-js-date-create-next-text>Далее</span>
+                  <span class="loading loading--btn" data-js-date-create-loading>
+                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                      <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                          <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                          <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                      </g>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
         </main>
       </div>
     </div>

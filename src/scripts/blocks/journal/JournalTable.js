@@ -1,6 +1,4 @@
 import {setAlert} from "../../utils/useInfoMessage.js";
-import {getCoordinates} from "../../utils/useCoordinates.js";
-import {pxToRem} from "../../utils/usePxToRem.js";
 import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
 
 import {updateClasses} from "../../../api/classes.js";
@@ -84,15 +82,8 @@ export default class JournalTable{
     //==============================================================//
     //---функции, выполняющиеся сразу после загрузки страницы--//
     loadFunctions = () => {
-        //при событии, когда мы получили classes журнала
-        $(document).on('journalLoad', async () => {
-            await this.reloadTables();
-
-            this.bindEvents();
-        })
-
-        //при событии удаления студента
-        $(document).on('updateStudent', async () => {
+        //события: когда мы получили classes журнала, при удалении студента, при удалении classes, при обновлении активной даты
+        $(document).on('journalLoad updateStudent removeClasses updateDate', async () => {
             await this.reloadTables();
 
             this.bindEvents();
@@ -104,6 +95,15 @@ export default class JournalTable{
     //==============================================================//
     //---обработчики событий--//
     bindEvents() {
+        // Удаляем старые обработчики перед назначением новых
+        this.accordionItemElements.off('click');
+        this.accordionMarksItemElements.off('click');
+        this.lessonsElements.off('click');
+        this.tableMarkElements.off('click');
+        this.tableLessonElements.off('click');
+        this.tableAbsoluteItemElement.off('click');
+        this.lessonInfoCloseBtn.off('click');
+
         //при изменении ориентации устройства
         window.addEventListener('resize', () => {
             this.changeOrientation();
@@ -137,13 +137,13 @@ export default class JournalTable{
             })
         })
 
-        //клик по элементу lesson в вертикальном журнале
-        this.tableLessonElements.each((index, element) => {
+        //клик по элементу lessons вертикального журнала
+        this.lessonsElements.each((index, element) => {
             $(element).on('click', () => {
                 if (Lessons.activeLessons[index]) {
                     this.openLessonInfo(index, element);
                 }
-            })
+            });
         })
 
         //клик по ячейке горизонтального журнала
@@ -153,20 +153,20 @@ export default class JournalTable{
             })
         })
 
+        //клик по элементу lesson горизонтального журнала
+        this.tableLessonElements.each((index, element) => {
+            $(element).on('click', () => {
+                if (Lessons.activeLessons[index]) {
+                    this.openLessonInfo(index, element);
+                }
+            })
+        })
+
         //при клике на элемент mark горизонтального журнала
         this.tableAbsoluteItemElement.each((index, element) => {
             $(element).on('click', () => {
                 this.clickToMark(index, $(element).text());
             })
-        })
-
-        //клик по элементу lessons горизонтального журнала
-        this.lessonsElements.each((index, element) => {
-            $(element).on('click', () => {
-                if (Lessons.activeLessons[index]) {
-                    this.openLessonInfo(index, element);
-                }
-            });
         })
 
         //клик по кнопке закрытия блока lessonInfo
@@ -238,7 +238,7 @@ export default class JournalTable{
     //открытие блока информации о предмете
     openLessonInfo (index, element) {
         //задаем название предмета в блок
-        this.lessonInfoTextElement.text(Lessons.activeLessons[index].name);
+        this.lessonInfoTextElement.text(Lessons.activeLessons[index]);
 
         openBlock(this.lessonInfoElement, element);
     }
@@ -349,7 +349,7 @@ export default class JournalTable{
     }
 
     //клик по элементу mark
-    clickToMark (index, value) {
+    clickToMark = async (index, value) => {
         //ищем какому по счету студенту принадлежит клик
         let id = Math.floor(index/15);
 
@@ -358,11 +358,11 @@ export default class JournalTable{
 
         //ищем какой ячейке в нужной строке принадлежит блок marks
         let realCol = col;
-        if (col > 5) {
+        if (col > 4) {
             realCol = col - (id * 5);
         }
 
-        this.setMark(value, col, realCol, Classes.activeClasses[id]);
+        await this.setMark(value, col, realCol, Classes.activeClasses[id]);
     }
 
     //проставление mark в ячейку, где value - значение проставленного mark, item - объект classes, col - индекс ячейки по порядку с самого начала, realCol - индекс ячейки в нужной строке
