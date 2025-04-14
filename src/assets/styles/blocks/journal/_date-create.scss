@@ -6,6 +6,10 @@
     display: none;
   }
 
+  &__content {
+    @include landscape-orientation;
+  }
+
   &__header {
     display: flex;
     flex-direction: column;
@@ -30,6 +34,12 @@
     column-gap: rem(15);
   }
 
+  &__list {
+    max-height: 45vh;
+    overflow-y: auto;
+    padding-bottom: rem(15);
+  }
+
   &__item {
     padding: rem(10);
 
@@ -37,7 +47,7 @@
       border-color: var(--color-success);
       color: var(--color-light);
       text-shadow: 0 0 rem(5) var(--color-dark);
-      backdrop-filter: brightness(.8);
+      background: var(--color-dark-alt);
     }
   }
 }

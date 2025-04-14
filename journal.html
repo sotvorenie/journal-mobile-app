@@ -453,7 +453,7 @@
           <button class="date__create-open-btn button" data-js-date-create-open>Добавить день</button>
 
           <div class="date__create date-create absolute__second" data-js-date-create>
-            <div class="absolute__content">
+            <div class="date-create__content absolute__content">
               <button class="absolute__close button--close" data-js-date-create-close></button>
 
               <header class="date-create__header">
@@ -497,7 +497,7 @@
                       </div>
                       <div class="form__item">
                         <input class="input"
-                               maxlength="2"
+                               maxlength="4"
                                placeholder="Год"
                                required
                                data-js-date-create-year
@@ -513,17 +513,30 @@
                   </div>
 
                   <div class="swiper-slide">
-                    <ul class="date-create__list list">
-                      <li class="date-create__item list__item h5 is-active">ничего</li>
-                      <li class="date-create__item list__item h5">матан</li>
-                    </ul>
+                    <ul class="date-create__list list list--padding" data-js-date-create-lessons></ul>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <ul class="date-create__list list list--padding" data-js-date-create-lessons></ul>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <ul class="date-create__list list list--padding" data-js-date-create-lessons></ul>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <ul class="date-create__list list list--padding" data-js-date-create-lessons></ul>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <ul class="date-create__list list list--padding" data-js-date-create-lessons></ul>
                   </div>
                 </div>
               </div>
 
               <div class="date-create__btn-bar">
                 <button class="date-create__btn button" type="button" disabled data-js-date-create-prev>Назад</button>
-                <button class="date-create__btn button is-active" type="button" data-js-date-create-next>
+                <button class="date-create__btn form-btn button is-active" type="button" data-js-date-create-next>
                   <span data-js-date-create-next-text>Далее</span>
                   <span class="loading loading--btn" data-js-date-create-loading>
                     <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">

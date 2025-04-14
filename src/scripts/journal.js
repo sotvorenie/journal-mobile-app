@@ -18,10 +18,10 @@ new Theme();
 new Animation();
 new Settings();
 
-//проверяем, что такой пользователь все еще существует
-await new User().logInCheck();
 //получаем активную группу из localStorage
 new Groups().getFromLocStore();
+//проверяем, что такой пользователь все еще существует
+new User().logInCheck();
 
 new Journal();
 new JournalTable();

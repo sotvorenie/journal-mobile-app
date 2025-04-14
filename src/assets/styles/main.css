@@ -1512,6 +1512,12 @@ body {
 .date-create:not(.is-active) {
   display: none;
 }
+@media screen and (orientation: landscape) {
+  .date-create__content {
+    translate: -50% 0;
+    top: 5% !important;
+  }
+}
 .date-create__header {
   display: flex;
   flex-direction: column;
@@ -1533,6 +1539,11 @@ body {
   align-items: center;
   column-gap: 0.9375rem;
 }
+.date-create__list {
+  max-height: 45vh;
+  overflow-y: auto;
+  padding-bottom: 0.9375rem;
+}
 .date-create__item {
   padding: 0.625rem;
 }
@@ -1540,7 +1551,7 @@ body {
   border-color: var(--color-success);
   color: var(--color-light);
   text-shadow: 0 0 0.3125rem var(--color-dark);
-  backdrop-filter: brightness(0.8);
+  background: var(--color-dark-alt);
 }
 
 /*# sourceMappingURL=main.css.map */

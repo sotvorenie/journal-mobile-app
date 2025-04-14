@@ -6,7 +6,6 @@ import {setMessage} from "../../utils/useMessage.js";
 import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
 import {setLoading} from "../../utils/useSetLoading.js";
 import {input} from "../../utils/useInput.js";
-import {redactValidation} from "../../utils/useValidationRedact.js";
 
 import User from "../../globals/store/useUser.js";
 import Groups from "../../globals/store/useGroups.js";
@@ -36,7 +35,17 @@ export default class JournalDateCreate {
         todayBtn: '[data-js-date-create-today]',
         prevBtn: '[data-js-date-create-prev]',
         nextBtn: '[data-js-date-create-next]',
+        nextText: '[data-js-date-create-next-text]',
         loading: '[data-js-date-create-loading]',
+        lessonsList: '[data-js-date-create-lessons]'
+    }
+
+    lessonSelectors = {
+        first: 'data-js-date-create-lessons-first-item',
+        second: 'data-js-date-create-lessons-second-item',
+        third: 'data-js-date-create-lessons-third-item',
+        fourth: 'data-js-date-create-lessons-fourth-item',
+        fifth: 'data-js-date-create-lessons-fifth-item',
     }
     //==============================================================//
 
@@ -68,13 +77,28 @@ export default class JournalDateCreate {
         this.todayBtn = this.createElement.find(this.selectors.todayBtn);
         this.prevBtn = this.createElement.find(this.selectors.prevBtn);
         this.nextBtn = this.createElement.find(this.selectors.nextBtn);
+        this.nextTextElement = this.createElement.find(this.selectors.nextText);
         this.loadingElement = this.createElement.find(this.selectors.loading);
+        this.lessonsListElements = this.createElement.find(this.selectors.lessonsList);
 
         //инициализация слайдера
         this.swiperElement = new Swiper(this.selectors.swiper, {
             effect: 'flip',
             allowTouchMove: false,
         });
+
+        //скорректированные день, месяц и год
+        this.day = '';
+        this.month = '';
+        this.year = '';
+
+        //массив выбранных предметов
+        this.lessons = [];
+
+        //переменная, отвечающая за "отрисованы ли списки предметов или нет", чтобы не добавлять списки повторно
+        this.lessonsCreateCounter = false;
+        //переменная, отвечающая за "были мы на втором слайде или нет", чтобы не делать проверку даты повторно
+        this.dateCreateCounter = false;
 
         this.loadFunctions();
         this.bindEvents();
@@ -95,18 +119,60 @@ export default class JournalDateCreate {
     //---обработчики событий--//
     bindEvents() {
         //клик по кнопке открытия блока
-        this.openBtn.on('click', () => {
-            this.createElement.addClass(this.classes.isActive);
+        this.openBtn.on('click', async () => {
+            if (Students.students.length) {
+                this.createElement.addClass(this.classes.isActive);
 
-            openBlock(this.createElement, this.openBtn[0]);
+                openBlock(this.createElement, this.openBtn[0]);
+            } else {
+                await setAlert('Добавьте сначала хотя бы одного студента!!');
+            }
         })
 
         //клик по кнопке закрытия блока
         this.closeBtn.on('click', async () => {
             await  closeBlock(this.createElement);
 
-            this.createElement.addClass(this.classes.isActive);
+            //очищаем данные и поля ввода
+            this.clearInfo();
+
+            this.lessonsCreateCounter = false;
+            this.dateCreateCounter = false;
         })
+
+        //при вводе в input дня
+        this.dayInputElement.on('input', (event) => {
+            input(event, this.dayCounterElement);
+
+            this.dateCreateCounter = false;
+        })
+
+        //при вводе в input месяца
+        this.monthInputElement.on('input', (event) => {
+            input(event, this.monthCounterElement);
+
+            this.dateCreateCounter = false;
+        })
+
+        //при вводе в input года
+        this.yearInputElement.on('input', (event) => {
+            input(event, this.yearCounterElement);
+
+            this.dateCreateCounter = false;
+        })
+
+        //при клике на кнопку "Далее"
+        this.nextBtn.on('click', () => {
+            this.clickToNext();
+        })
+
+        //при клике на кнопку "Назад"
+        this.prevBtn.on('click', () => {
+            this.clickToPrevSlide();
+        })
+
+        //при клике на кнопку "Сегодняшняя дата"
+        this.todayBtn.on('click', this.clickToToday.bind(this));
     }
     //==============================================================//
 
@@ -114,7 +180,7 @@ export default class JournalDateCreate {
     //==============================================================//
     //---обращения к серверу--//
     //создаем день
-    createDay = async (lessons, date) => {
+    createDay = async (lessons) => {
         try {
             //показываем анимацию загрузки
             setLoading(this.nextBtn, this.loadingElement);
@@ -197,7 +263,7 @@ export default class JournalDateCreate {
 
     //==============================================================//
     //---функции--//
-    //очищаем поля ввода и ставим counter = 1, а также ставим counter-ы в полях ввода = 0
+    //очищаем данные и листаем к первому слайду
     clearInfo () {
         this.counterElement.text(1);
 
@@ -213,38 +279,102 @@ export default class JournalDateCreate {
 
         //листаем на первый слайд
         this.swiperElement.slideTo(0);
+
+        //очищаем списки предметов
+        this.lessonsListElements.each((index, element) => {
+            $(element).empty();
+        })
     }
 
     //клик по кнопке "Далее"
-    clickToNext () {
+    clickToNext = async () => {
         if (this.swiperElement.activeIndex === 0) {
-            this.clickToNextFirst();
+            await this.clickToNextFirst();
+        } else if (this.swiperElement.activeIndex < 4) {
+            //если это просто слайды с выбором предмета, то просто листаем слайды вперед
+            this.swiperElement.slideNext();
+        } else if (this.swiperElement.activeIndex === 4) {
+            //меняем текст в кнопке "Далее"
+            this.nextTextElement.text('Готово');
+
+            this.swiperElement.slideNext();
+        } else {
+            //нажатие на кнопку "Готово"
+            let confirmed = await setConfirm('ВЫ действительно хотите добавить дату?');
+
+            if (confirmed) {
+                this.clickToReady();
+            }
         }
+
+        this.counterElement.text(this.swiperElement.activeIndex + 1);
     }
 
     //клик по кнопке "Далее" на первом слайде
     clickToNextFirst = async () => {
-        let check = this.correctDate();
+        try {
+            //показываем анимацию загрузки
+            setLoading(this.nextBtn, this.loadingElement);
 
-        //если дата корректна, то переходим на следующий слайд, а если нет - делаем кнопку некликабельной
-        if (check[0]) {
-            //проверяем, чтобы такой даты уже не существовало
-            let doubleCheck = await this.days.getDate(0, 1, [check[1].day, check[1].month, check[1].year]);
+            //проверяем, чтобы все поля вода были заполнены
+            let check = this.checkInputLength();
 
-            if (!doubleCheck.data.length) {
-                this.swiperElement.slideTo(1)
+            if (check) {
+                let check2 = this.correctDate();
+
+                //если дата корректна, то переходим на следующий слайд, а если нет - выводим ошибку
+                if (check2) {
+                    //проверяем, чтобы такой даты уже не существовало (проверку делаем, если на втором слайде мы не были и дату не меняли)
+                    let doubleCheck;
+                    if (!this.dateCreateCounter) {
+                        doubleCheck = await this.days.getDate(0, 1, [this.day, this.month, this.year]);
+                    }
+
+                    if (!doubleCheck?.data?.length || this.dateCreateCounter) {
+                        //создаем списки предметов, если он еще не создан
+                        if (!this.lessonsCreateCounter) {
+                            this.createLessonsLists();
+
+                            //вносим данные о том, что списки предметов отрисованы, чтобы повторно их не создавать
+                            this.lessonsCreateCounter = true;
+                        }
+
+                        //вносим данные о том, что на втором слайде мы были, чтобы второй раз не делать проверку на дату, если мы захотим вернуться на первый слайд
+                        this.dateCreateCounter = true;
+
+                        //листаем на второй слайд
+                        this.swiperElement.slideTo(1);
+
+                        //делаем кнопку "Назад" активной
+                        this.prevBtn.attr('disabled', false);
+                    } else {
+                        await setAlert('Такая дата уже существует!!');
+                    }
+                } else {
+                    await setAlert('Введенная дата некорректна!!');
+                }
             } else {
-                await setAlert('Такая дата уже существует!!');
+                await setAlert('Заполните все поля ввода!!');
             }
-        } else {
-            this.nextBtn.attr('disabled', true);
+        } catch (err) {
+            await setAlert(err);
+        } finally {
+            //скрываем анимацию загрузки
+            setLoading(this.nextBtn, this.loadingElement);
         }
+    }
+
+    //проверяем, что все поля ввода заполнены
+    checkInputLength () {
+        return this.dayInputElement.val().length > 0
+                    && this.monthInputElement.val().length > 0
+                    && this.yearInputElement.val().length > 0;
     }
 
     //корректирование даты
     correctDate () {
         //удаляем из введенных данных всё кроме цифр
-        let [day, month, year] =
+        [this.day, this.month, this.year] =
             this.days.deleteUnnecessary(
                 [this.dayInputElement.val(),
                     this.monthInputElement.val(),
@@ -252,14 +382,82 @@ export default class JournalDateCreate {
             );
 
         //преобразуем дату к нужному виду
-        let correctDate = this.days.correctDate(day, month, year);
-        day = correctDate[0];
-        month = correctDate[1];
-        year = correctDate[2];
+        let correctDate = this.days.correctDate([this.day, this.month, this.year]);
+        this.day = correctDate[0];
+        this.month = correctDate[1];
+        this.year = correctDate[2];
 
         //проверяем на правильность введенных данных
         //если данные корректны - возвращаем true, а также корректную информацию о дне
-        return [this.days.checkCorrectDate(day, month, year), {day, month, year}];
+        return this.days.checkCorrectDate(this.day, this.month, this.year);
+    }
+
+    //клик по кнопке "Готово" проверяем на существование даты и создаем массив данных для сервера
+    clickToReady () {
+        //получаем массив ID предметов
+        let lessonsID = this.getIDSubjects();
+
+        //отправляем данные на сервер
+        this.createDay(lessonsID);
+    }
+
+    //получаем массив ID предметов по названиям предметов
+    getIDSubjects () {
+        let lessonID = [];
+
+        this.lessons.forEach(subject => {
+            if (subject === 'ничего') {
+                lessonID.push(null);
+            } else {
+                Lessons.lessons.forEach(lesson => {
+                    if (lesson.name === subject) {
+                        lessonID.push(lesson.id);
+                    }
+                })
+            }
+        })
+
+        return lessonID;
+    }
+
+    //при клике на кнопку "Назад"
+    clickToPrevSlide () {
+        if (this.swiperElement.activeIndex === 1) {
+            this.prevBtn.attr('disabled', true);
+        }
+
+        if (this.swiperElement.activeIndex === 5) {
+            this.nextTextElement.text('Далее');
+        }
+
+        this.swiperElement.slidePrev();
+
+        this.counterElement.text(this.swiperElement.activeIndex + 1);
+    }
+
+    //при клике на кнопку "Сегодняшняя дата", чтобы добавить данные о сегодняшней дате
+    clickToToday () {
+        let date = new Date();
+
+        this.dayInputElement.val(date.getDate());
+        this.monthInputElement.val(date.getMonth() + 1);
+        this.yearInputElement.val(date.getFullYear());
+    }
+
+    //отрисовка ul-списков для слайдов выбора предметов
+    createLessonsLists () {
+        for (let i = 0; i < 5; i++) {
+            //создаем элементы li
+            let liElements = [`<li class="date-create__item list__item h5 is-active" ${this.lessonSelectors[i]}>ничего</li>`]
+            Lessons.lessons.forEach(lesson => {
+                liElements.push(`
+                    <li class="date-create__item list__item h5" ${this.lessonSelectors[i]}>${lesson.name}</li>
+                `)
+            })
+
+            //встраиваем li в ul после первого элемента li с надписью "ничего"
+            $(this.lessonsListElements[i]).html(liElements.join(''));
+        }
     }
     //==============================================================//
 }
