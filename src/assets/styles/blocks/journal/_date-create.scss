@@ -34,20 +34,53 @@
     column-gap: rem(15);
   }
 
-  &__list {
-    max-height: 45vh;
-    overflow-y: auto;
-    padding-bottom: rem(15);
+  &__lessons {
+    position: relative;
+
+    &:not(:last-child) {
+      margin-bottom: rem(15);
+    }
+
+    &::after {
+      @include square(#{rem(20)});
+
+      content: '';
+      position: absolute;
+      translate: 0 -50%;
+      top: 50%;
+      right: rem(10);
+      background: url("/src/assets/icons/accordion-arrow.svg") no-repeat;
+      rotate: -90deg;
+    }
   }
 
-  &__item {
+  &__select {
+    width: 100%;
+    background: var(--color-accent);
+    border: none;
     padding: rem(10);
+    color: var(--color-light);
+    text-shadow: 0 0 rem(5) var(--color-dark);
+    border-radius: var(--radius-regular);
+    max-height: 50vh;
+    font-weight: 600;
 
-    &.is-active {
-      border-color: var(--color-success);
-      color: var(--color-light);
-      text-shadow: 0 0 rem(5) var(--color-dark);
-      background: var(--color-dark-alt);
+    //скрываем стрелку по умолчанию
+    -webkit-appearance: none; /* Для Chrome и Safari */
+    -moz-appearance: none;    /* Для Firefox */
+    appearance: none;         /* Для всех современных браузеров */
+
+    &::-ms-expand {
+      display: none;
+    }
+  }
+
+  &__option {
+
+    &:checked {
+      background: var(--color-light-alt);
+      color: var(--color-dark);
+      text-shadow: none;
     }
   }
 }

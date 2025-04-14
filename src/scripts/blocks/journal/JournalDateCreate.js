@@ -37,15 +37,7 @@ export default class JournalDateCreate {
         nextBtn: '[data-js-date-create-next]',
         nextText: '[data-js-date-create-next-text]',
         loading: '[data-js-date-create-loading]',
-        lessonsList: '[data-js-date-create-lessons]'
-    }
-
-    lessonSelectors = {
-        first: 'data-js-date-create-lessons-first-item',
-        second: 'data-js-date-create-lessons-second-item',
-        third: 'data-js-date-create-lessons-third-item',
-        fourth: 'data-js-date-create-lessons-fourth-item',
-        fifth: 'data-js-date-create-lessons-fifth-item',
+        select: '[data-js-date-create-select]',
     }
     //==============================================================//
 
@@ -79,7 +71,7 @@ export default class JournalDateCreate {
         this.nextBtn = this.createElement.find(this.selectors.nextBtn);
         this.nextTextElement = this.createElement.find(this.selectors.nextText);
         this.loadingElement = this.createElement.find(this.selectors.loading);
-        this.lessonsListElements = this.createElement.find(this.selectors.lessonsList);
+        this.selectElements = this.createElement.find(this.selectors.select);
 
         //инициализация слайдера
         this.swiperElement = new Swiper(this.selectors.swiper, {
@@ -91,9 +83,6 @@ export default class JournalDateCreate {
         this.day = '';
         this.month = '';
         this.year = '';
-
-        //массив выбранных предметов
-        this.lessons = [];
 
         //переменная, отвечающая за "отрисованы ли списки предметов или нет", чтобы не добавлять списки повторно
         this.lessonsCreateCounter = false;
@@ -121,8 +110,6 @@ export default class JournalDateCreate {
         //клик по кнопке открытия блока
         this.openBtn.on('click', async () => {
             if (Students.students.length) {
-                this.createElement.addClass(this.classes.isActive);
-
                 openBlock(this.createElement, this.openBtn[0]);
             } else {
                 await setAlert('Добавьте сначала хотя бы одного студента!!');
@@ -131,7 +118,7 @@ export default class JournalDateCreate {
 
         //клик по кнопке закрытия блока
         this.closeBtn.on('click', async () => {
-            await  closeBlock(this.createElement);
+            await closeBlock(this.createElement);
 
             //очищаем данные и поля ввода
             this.clearInfo();
@@ -188,10 +175,10 @@ export default class JournalDateCreate {
             let data = {
                 user_id: User.activeUser.id,
                 group_id: Groups.activeGroup.id,
-                date_info: `${date[0]}${date[1]}${date[2]}`,
-                day: date[0],
-                month: date[1],
-                year: date[2],
+                date_info: `${this.day}${this.month}${this.year}`,
+                day: this.day,
+                month: this.month,
+                year: this.year,
                 first_lesson: lessons[0],
                 second_lesson: lessons[1],
                 third_lesson: lessons[2],
@@ -237,9 +224,6 @@ export default class JournalDateCreate {
                 //добавляем день в список дней
                 Days.daysList.unshift(day);
 
-                //выбираем созданный день как активный
-                Days.activeDay = day;
-
                 //создаем событие, чтобы выбрать созданный день как активный
                 $(document).trigger('createDay');
 
@@ -248,6 +232,8 @@ export default class JournalDateCreate {
 
                 //закрываем блок
                 closeBlock(this.createElement);
+
+                this.clearInfo();
             } else {
                 await setAlert('Что-то пошло не так..');
             }
@@ -280,27 +266,21 @@ export default class JournalDateCreate {
         //листаем на первый слайд
         this.swiperElement.slideTo(0);
 
-        //очищаем списки предметов
-        this.lessonsListElements.each((index, element) => {
-            $(element).empty();
-        })
+        //меняем надписи
+        this.nameElement.text('Формирование даты');
+        this.nextTextElement.text('Далее');
     }
 
     //клик по кнопке "Далее"
     clickToNext = async () => {
         if (this.swiperElement.activeIndex === 0) {
             await this.clickToNextFirst();
-        } else if (this.swiperElement.activeIndex < 4) {
-            //если это просто слайды с выбором предмета, то просто листаем слайды вперед
-            this.swiperElement.slideNext();
-        } else if (this.swiperElement.activeIndex === 4) {
+        } else {
             //меняем текст в кнопке "Далее"
             this.nextTextElement.text('Готово');
 
-            this.swiperElement.slideNext();
-        } else {
             //нажатие на кнопку "Готово"
-            let confirmed = await setConfirm('ВЫ действительно хотите добавить дату?');
+            let confirmed = await setConfirm('Вы действительно хотите добавить дату?');
 
             if (confirmed) {
                 this.clickToReady();
@@ -333,7 +313,8 @@ export default class JournalDateCreate {
                     if (!doubleCheck?.data?.length || this.dateCreateCounter) {
                         //создаем списки предметов, если он еще не создан
                         if (!this.lessonsCreateCounter) {
-                            this.createLessonsLists();
+                            //создаем списки предметов
+                            this.createSelects();
 
                             //вносим данные о том, что списки предметов отрисованы, чтобы повторно их не создавать
                             this.lessonsCreateCounter = true;
@@ -341,6 +322,10 @@ export default class JournalDateCreate {
 
                         //вносим данные о том, что на втором слайде мы были, чтобы второй раз не делать проверку на дату, если мы захотим вернуться на первый слайд
                         this.dateCreateCounter = true;
+
+                        this.nameElement.text('Выбор предметов');
+
+                        this.nextTextElement.text('Готово');
 
                         //листаем на второй слайд
                         this.swiperElement.slideTo(1);
@@ -394,28 +379,24 @@ export default class JournalDateCreate {
 
     //клик по кнопке "Готово" проверяем на существование даты и создаем массив данных для сервера
     clickToReady () {
-        //получаем массив ID предметов
-        let lessonsID = this.getIDSubjects();
-
         //отправляем данные на сервер
-        this.createDay(lessonsID);
+        this.createDay(this.getIDSubjects());
     }
 
     //получаем массив ID предметов по названиям предметов
     getIDSubjects () {
         let lessonID = [];
 
-        this.lessons.forEach(subject => {
-            if (subject === 'ничего') {
+        for (let i = 0; i < 5; i++) {
+            let index = this.selectElements[i].selectedIndex;
+
+            if (index === 0) {
                 lessonID.push(null);
-            } else {
-                Lessons.lessons.forEach(lesson => {
-                    if (lesson.name === subject) {
-                        lessonID.push(lesson.id);
-                    }
-                })
+                continue;
             }
-        })
+
+            lessonID.push(Lessons.lessons[index - 1].id);
+        }
 
         return lessonID;
     }
@@ -424,15 +405,13 @@ export default class JournalDateCreate {
     clickToPrevSlide () {
         if (this.swiperElement.activeIndex === 1) {
             this.prevBtn.attr('disabled', true);
-        }
-
-        if (this.swiperElement.activeIndex === 5) {
             this.nextTextElement.text('Далее');
         }
 
         this.swiperElement.slidePrev();
 
         this.counterElement.text(this.swiperElement.activeIndex + 1);
+        this.nameElement.text('Формирование даты');
     }
 
     //при клике на кнопку "Сегодняшняя дата", чтобы добавить данные о сегодняшней дате
@@ -444,19 +423,20 @@ export default class JournalDateCreate {
         this.yearInputElement.val(date.getFullYear());
     }
 
-    //отрисовка ul-списков для слайдов выбора предметов
-    createLessonsLists () {
-        for (let i = 0; i < 5; i++) {
-            //создаем элементы li
-            let liElements = [`<li class="date-create__item list__item h5 is-active" ${this.lessonSelectors[i]}>ничего</li>`]
+    //создание списков предметов
+    createSelects () {
+        for (let i  = 0; i < 5; i++) {
+            //создаем элементы option
+            let optionList = [`<option class="date-create__option" value="ничего" selected data-js-date-create-option>ничего</option>`];
+
             Lessons.lessons.forEach(lesson => {
-                liElements.push(`
-                    <li class="date-create__item list__item h5" ${this.lessonSelectors[i]}>${lesson.name}</li>
-                `)
+                optionList.push(`
+                <option class="date-create__option" value="${lesson.name}" data-js-date-create-option>${lesson.name}</option>
+            `)
             })
 
-            //встраиваем li в ul после первого элемента li с надписью "ничего"
-            $(this.lessonsListElements[i]).html(liElements.join(''));
+            //встраиваем option в select
+            $(this.selectElements[i]).html(optionList.join(''));
         }
     }
     //==============================================================//

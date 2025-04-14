@@ -121,8 +121,8 @@ export default class JournalDate {
             //создаем список дней
             this.createDaysList(Days.daysList);
 
-            //выбираем только что созданный день как актиный
-            this.clickToDay(Days.activeDay, 0);
+            //выбираем только что созданный день как активный
+            this.clickToDay(Days.daysList[0], 0);
         })
     }
     //==============================================================//
@@ -325,7 +325,7 @@ export default class JournalDate {
         }).join('');
 
         //встраиваем элементы списка в ul
-        this.listElement.append(dayItems);
+        this.listElement.html(dayItems);
 
         //создаем событие, когда встроили список дней на страницу
         $(document).trigger('createDaysList');
@@ -379,7 +379,7 @@ export default class JournalDate {
 
         if (check.data.length) {
             //клик сработает, если этот день еще не выбран
-            if (Days.activeDay.date_info !== day.date_info) {
+            if (Days.activeDay?.date_info !== day.date_info) {
                 //задаем активный день
                 Days.activeDay = day;
 
@@ -412,22 +412,21 @@ export default class JournalDate {
         //удаляем элемент удаленного дня из списка дней
         $(this.itemElements[index]).remove();
 
-        //если удаленный день был активным днем, то делаем активным днем следующий день в списке дней
-        if (Days.activeDay.date_info === dateInfo) {
-            Days.activeDay = Days?.daysList[0];
-
-            //меняем classes
-            await new Classes().getClasses();
-        }
-
         //если мы удалили последний день - очищаем classes
         if (Days.daysList.length === 0) {
-            console.log(Days.daysList)
             Classes.activeClasses = [];
-        }
 
-        //создаем событие для перерисовки таблиц журнала
-        $(document).trigger('removeClasses');
+            //создаем событие для перерисовки журнала (чтобы сделать его пустым)
+            $(document).trigger('removeClasses');
+        } else {
+            //если удаленный день был активным днем, то делаем активным днем следующий день в списке дней
+            if (Days.activeDay.date_info === dateInfo) {
+                Days.activeDay = {};
+
+                //выбираем первый элемент списка дней как активный день
+                this.clickToDay(Days.daysList[0], 0);
+            }
+        }
     }
 
     //при клике по кнопке удаления дня
