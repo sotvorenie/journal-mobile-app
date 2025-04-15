@@ -25,6 +25,8 @@
 @use 'blocks/journal/accordion';
 @use 'blocks/journal/marks';
 @use 'blocks/journal/table';
+@use 'blocks/journal/students';
 @use 'blocks/journal/person';
 @use 'blocks/journal/date';
 @use 'blocks/journal/date-create';
+@use 'blocks/journal/date-redact';

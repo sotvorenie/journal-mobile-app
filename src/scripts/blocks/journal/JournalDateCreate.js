@@ -217,6 +217,7 @@ export default class JournalDateCreate {
                     fifth_lesson: ''
                 })
             })
+            console.log(data, Students.students)
 
             const response = await createNewClasses(data);
 
@@ -427,11 +428,11 @@ export default class JournalDateCreate {
     createSelects () {
         for (let i  = 0; i < 5; i++) {
             //создаем элементы option
-            let optionList = [`<option class="date-create__option" value="ничего" selected data-js-date-create-option>ничего</option>`];
+            let optionList = [`<option class="option" selected data-js-date-create-option>ничего</option>`];
 
             Lessons.lessons.forEach(lesson => {
                 optionList.push(`
-                <option class="date-create__option" value="${lesson.name}" data-js-date-create-option>${lesson.name}</option>
+                <option class="option" data-js-date-create-option>${lesson.name}</option>
             `)
             })
 

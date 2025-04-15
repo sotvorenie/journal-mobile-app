@@ -124,6 +124,18 @@ export default class JournalDate {
             //выбираем только что созданный день как активный
             this.clickToDay(Days.daysList[0], 0);
         })
+
+        //событие, когда мы редактируем день
+        $(document).on('redactDay', (event, index) => {
+            //создаем список дней
+            this.createDaysList(Days.daysList);
+
+            //если index > 0 - выбираем день
+            if (index > 0) {
+                //выбираем только что созданный день как активный
+                this.clickToDay(Days.daysList[index], index);
+            }
+        })
     }
     //==============================================================//
 

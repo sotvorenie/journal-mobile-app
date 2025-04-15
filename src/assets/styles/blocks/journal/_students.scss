@@ -1,0 +1,52 @@
+@use '../../helpers' as *;
+
+.journal-students {
+  &:not(.is-active) {
+    display: none;
+  }
+
+  &__list {
+    margin-bottom: fluid(25, 15);
+  }
+
+  &__btn {
+    width: 100%;
+  }
+
+  &__item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__btn-bar {
+    position: absolute;
+    right: rem(-2);
+    background: var(--color-dark-alt);
+    padding: rem(10);
+    border-radius: var(--radius-regular);
+    transition-duration: var(--transition-duration);
+
+    &:not(.is-active) {
+      right: -100%;
+    }
+
+    svg {
+      color: var(--color-light);
+      filter: drop-shadow(0 0 rem(3) var(--color-dark));
+    }
+  }
+
+  &__create {
+
+    &:not(.is-active) {
+      display: none;
+    }
+  }
+
+  &__redact {
+
+    &:not(.is-active) {
+      display: none;
+    }
+  }
+}

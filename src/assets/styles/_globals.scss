@@ -131,3 +131,54 @@ body {
   color: var(--color-error);
   font-size: rem(16);
 }
+
+.select {
+  width: 100%;
+  background: var(--color-accent);
+  border: none;
+  padding: rem(10);
+  color: var(--color-light);
+  text-shadow: 0 0 rem(5) var(--color-dark);
+  border-radius: var(--radius-regular);
+  font-weight: 600;
+
+  //скрываем стрелку по умолчанию
+  -webkit-appearance: none; /* Для Chrome и Safari */
+  -moz-appearance: none;    /* Для Firefox */
+  appearance: none;         /* Для всех современных браузеров */
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  &__container {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-regular);
+
+    &:not(:last-child) {
+      margin-bottom: rem(15);
+    }
+
+    &::after {
+      @include square(#{rem(20)});
+
+      content: '';
+      position: absolute;
+      translate: 0 -50%;
+      top: 50%;
+      right: rem(10);
+      background: url("/src/assets/icons/accordion-arrow.svg") no-repeat;
+      rotate: -90deg;
+    }
+  }
+}
+
+.option {
+
+  &:checked {
+    background: var(--color-light-alt);
+    color: var(--color-dark);
+    text-shadow: none;
+  }
+}

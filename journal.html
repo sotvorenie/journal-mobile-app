@@ -198,17 +198,17 @@
 
     </table>
 
-    <div class="journal__students absolute" data-js-students>
-      <div class="journal__students-content absolute__content">
+    <div class="journal__students journal-students absolute" data-js-students>
+      <div class="absolute__content">
         <button class="absolute__close button--close" data-js-students-close></button>
 
-        <ul class="journal__students-list list" data-js-students-list></ul>
+        <ul class="journal-students__list list" data-js-students-list></ul>
 
-        <button class="journal__students-btn button" type="button" data-js-students-create-btn-open>Добавить студента</button>
+        <button class="journal-students__btn button" type="button" data-js-students-create-btn-open>Добавить студента</button>
 
-        <div class="journal__students-create absolute__second" data-js-students-create>
+        <div class="journal-students__create absolute__second" data-js-students-create>
           <div class="absolute__content">
-            <form class="journal__students-create-form form" novalidate data-js-form>
+            <form class="form" novalidate data-js-form>
               <div class="form__item">
                 <input class="input"
                        maxlength="20"
@@ -272,9 +272,9 @@
           </div>
         </div>
 
-        <div class="journal__students-redact absolute__second" data-js-students-redact>
+        <div class="journal-students__redact absolute__second" data-js-students-redact>
           <div class="absolute__content">
-            <form class="journal__students-redact-form form" novalidate data-js-form>
+            <form class="form" novalidate data-js-form>
               <div class="form__item">
                 <input class="input"
                        maxlength="20"
@@ -513,20 +513,20 @@
                   </div>
 
                   <div class="swiper-slide">
-                    <div class="date-create__lessons">
-                      <select class="date-create__select" data-js-date-create-select></select>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
                     </div>
-                    <div class="date-create__lessons">
-                      <select class="date-create__select" data-js-date-create-select></select>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
                     </div>
-                    <div class="date-create__lessons">
-                      <select class="date-create__select" data-js-date-create-select></select>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
                     </div>
-                    <div class="date-create__lessons">
-                      <select class="date-create__select" data-js-date-create-select></select>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
                     </div>
-                    <div class="date-create__lessons">
-                      <select class="date-create__select" data-js-date-create-select></select>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
                     </div>
                   </div>
                 </div>
@@ -546,6 +546,72 @@
                   </span>
                 </button>
               </div>
+            </div>
+          </div>
+
+          <div class="date__redact date-redact absolute__second" data-js-date-redact>
+            <div class="date-redact__content absolute__content">
+              <header class="date-redact__header">
+                <p class="h4">Редактирование даты</p>
+                <form class="date-redact__form">
+                  <input class="date-redact__input"
+                         maxlength="2"
+                         placeholder="ДД"
+                         data-js-date-redact-input
+                  >
+                  <div class="date-redact__dot"></div>
+                  <input class="date-redact__input"
+                         maxlength="2"
+                         placeholder="ММ"
+                         data-js-date-redact-input
+                  >
+                  <div class="date-redact__dot"></div>
+                  <input class="date-redact__input"
+                         maxlength="4"
+                         placeholder="ГГГГ"
+                         data-js-date-redact-input
+                  >
+                </form>
+              </header>
+              <main class="date-redact__main">
+                <div class="date-redact__main-content">
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+
+                  <div class="date-redact__btn-bar">
+                    <button class="button" type="button" data-js-date-redact-close disabled>Отмена</button>
+                    <button class="form-btn button is-active" type="button" data-js-date-redact-btn disabled>
+                      <span>Изменить</span>
+                      <span class="loading loading--btn" data-js-date-redact-btn-loading>
+                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                      <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                          <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                          <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                      </g>
+                    </svg>
+                  </span>
+                    </button>
+                  </div>
+                </div>
+              </main>
             </div>
           </div>
         </main>

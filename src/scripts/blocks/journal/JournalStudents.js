@@ -398,9 +398,9 @@ export default class JournalStudents {
         //создаем элемент li
         let li = Students.students.map(student => {
             return `
-                <li class="journal__students-item list__item" data-js-students-item>
+                <li class="journal-students__item list__item" data-js-students-item>
                 <p class="slice-string h4">${student.second_name} ${student.name}</p>
-                <div class="journal__students-btn-bar list__btn-bar" data-js-students-btn-bar>
+                <div class="journal-students__btn-bar list__btn-bar" data-js-students-btn-bar>
                   <button class="list-btn"
                           type="button"
                           aria-label="Редактировать студента"

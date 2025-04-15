@@ -10,6 +10,7 @@ import JournalStudents from "./blocks/journal/JournalStudents.js";
 import JournalStudentInfo from "./blocks/journal/JournalStudentInfo.js";
 import JournalDate from "./blocks/journal/JournalDate.js";
 import JournalDateCreate from "./blocks/journal/JournalDateCreate.js";
+import JournalDateRedact from "./blocks/journal/JournalDateRedact.js";
 
 import {setInfo} from "./utils/setInfo.js";
 setInfo();
@@ -29,3 +30,4 @@ new JournalStudents();
 new JournalStudentInfo();
 new JournalDate();
 new JournalDateCreate();
+new JournalDateRedact();
