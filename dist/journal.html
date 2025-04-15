@@ -8,10 +8,12 @@
 
   <link rel="icon" href="/assets/app-icon-DYXI3UvK.png" type="image/png">
 
-  <script type="module" crossorigin src="/assets/journal-Dz0ybtY7.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/useUser-BN3LfZRL.js">
-  <link rel="modulepreload" crossorigin href="/assets/lessons-m_j-9JFf.js">
-  <link rel="stylesheet" crossorigin href="/assets/useUser-CFBBbfU6.css">
+  <script type="module" crossorigin src="/assets/journal-CUU6KZaU.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/setInfo-D2ZB1oPv.js">
+  <link rel="modulepreload" crossorigin href="/assets/lessons-AanttsMv.js">
+  <link rel="modulepreload" crossorigin href="/assets/swiper-BTdLKA9U.js">
+  <link rel="stylesheet" crossorigin href="/assets/setInfo-DSMRy3EC.css">
+  <link rel="stylesheet" crossorigin href="/assets/swiper-CrSNQXAw.css">
 </head>
 <body>
 
@@ -52,10 +54,12 @@
         </svg>
       </button>
 
-      <button class="navigation__reload button--navigation" type="button" data-js-journal-reload>
-        <svg fill="#000000" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 0c-2.2 0-4 1.8-4 4s1.8 4 4 4c1.1 0 2.12-.43 2.84-1.16l-.72-.72c-.54.54-1.29.88-2.13.88-1.66 0-3-1.34-3-3s1.34-3 3-3c.83 0 1.55.36 2.09.91l-1.09 1.09h3v-3l-1.19 1.19c-.72-.72-1.71-1.19-2.81-1.19z" />
-        </svg>
+      <button class="navigation__students button--navigation" type="button" data-js-students-open>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="transparent" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m16.719 19.752l-.64-5.124A3 3 0 0 0 13.101 12h-2.204a3 3 0 0 0-2.976 2.628l-.641 5.124A2 2 0 0 0 9.266 22h5.468a2 2 0 0 0 1.985-2.248"/><circle cx="12" cy="5" r="3"/><circle cx="4" cy="9" r="2"/><circle cx="20" cy="9" r="2"/><path stroke-linecap="round" stroke-linejoin="round" d="M4 14h-.306a2 2 0 0 0-1.973 1.671l-.333 2A2 2 0 0 0 3.361 20H7m13-6h.306a2 2 0 0 1 1.973 1.671l.333 2A2 2 0 0 1 20.639 20H17"/></g></svg>
+      </button>
+
+      <button class="navigation__calendar button--navigation" type="button" data-js-date-open>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="20" height="18" x="2" y="4" rx="4"/><path d="M8 2v4m8-4v4M2 10h20"/></g></svg>
       </button>
     </div>
 
@@ -63,9 +67,9 @@
       <div class="absolute__content settings__content">
         <button class="absolute__close button--close" data-js-settings-close></button>
 
-        <p class="settings__title h3">Настройки</p>
+        <p class="settings__title h4">Настройки</p>
         <div class="settings__item">
-          <p class="settings__item-name h3">Тема:</p>
+          <p class="settings__item-name h4">Тема:</p>
           <div class="settings__change settings__theme" data-js-theme>
             <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
               <path d="M14.5739 1.11056L13.7826 2.69316C13.7632 2.73186 13.7319 2.76325 13.6932 2.7826L12.1106 3.5739C11.9631 3.64761 11.9631 3.85797 12.1106 3.93167L13.6932 4.72297C13.7319 4.74233 13.7632 4.77371 13.7826 4.81241L14.5739 6.39502C14.6476 6.54243 14.858 6.54243 14.9317 6.39502L15.723 4.81241C15.7423 4.77371 15.7737 4.74232 15.8124 4.72297L17.395 3.93167C17.5424 3.85797 17.5424 3.64761 17.395 3.5739L15.8124 2.7826C15.7737 2.76325 15.7423 2.73186 15.723 2.69316L14.9317 1.11056C14.858 0.963147 14.6476 0.963148 14.5739 1.11056Z" fill="#0F0F0F"/>
@@ -81,7 +85,7 @@
           </div>
         </div>
         <div class="settings__item">
-          <p class="settings__item-name h3">Анимации:</p>
+          <p class="settings__item-name h4">Анимации:</p>
           <div class="settings__change settings__animation" data-js-animation>
             <p>ON</p>
             <div class="settings__change-body" data-js-animation-body>
@@ -116,7 +120,7 @@
       </ul>
 
       <span class="loading loading--absolute" data-js-journal-loading>
-      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
 
         <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
 
@@ -127,7 +131,7 @@
         </g>
 
       </svg>
-    </span>
+      </span>
 
       <div class="journal__null-list" data-js-journal-null-list>
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -196,6 +200,426 @@
       <tfoot class="table__footer" data-js-journal-table-footer></tfoot>
 
     </table>
+
+    <div class="journal__students journal-students absolute" data-js-students>
+      <div class="absolute__content">
+        <button class="absolute__close button--close" data-js-students-close></button>
+
+        <ul class="journal-students__list list" data-js-students-list></ul>
+
+        <button class="journal-students__btn button" type="button" data-js-students-create-btn-open>Добавить студента</button>
+
+        <div class="journal-students__create absolute__second" data-js-students-create>
+          <div class="absolute__content">
+            <form class="form" novalidate data-js-form>
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Имя"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-create-name
+                >
+                <div class="form__counter">
+                  <span data-js-students-create-name-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Фамилия"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-create-second-name
+                >
+                <div class="form__counter">
+                  <span data-js-students-create-second-name-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Отчество"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-create-surname
+                >
+                <div class="form__counter">
+                  <span data-js-students-create-surname-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__btn-bar">
+                <button class="button form-btn is-active" type="button" data-js-students-create-btn data-js-redact-btn disabled>
+                  <span>Создать</span>
+                  <span class="loading loading--btn" data-js-students-create-loading>
+                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                </g>
+                            </svg>
+                        </span>
+                </button>
+                <button class="button form-btn" type="button" data-js-students-create-close>Отмена</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="journal-students__redact absolute__second" data-js-students-redact>
+          <div class="absolute__content">
+            <form class="form" novalidate data-js-form>
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Имя"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-redact-name
+                >
+                <div class="form__counter">
+                  <span data-js-students-redact-name-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Фамилия"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-redact-second-name
+                >
+                <div class="form__counter">
+                  <span data-js-students-redact-second-name-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__item">
+                <input class="input"
+                       maxlength="20"
+                       placeholder="Отчество"
+                       inputmode="text"
+                       pattern="^[A-Za-zА-Яа-я\s]*$"
+                       data-js-students-redact-surname
+                >
+                <div class="form__counter">
+                  <span data-js-students-redact-surname-counter></span>
+                  <span>/</span>
+                  <span>20</span>
+                </div>
+              </div>
+
+              <div class="form__btn-bar">
+                <button class="button form-btn is-active" type="button" data-js-students-redact-btn data-js-redact-btn disabled>
+                  <span>Изменить</span>
+                  <span class="loading loading--btn" data-js-students-redact-loading>
+                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                </g>
+                            </svg>
+                        </span>
+                </button>
+                <button class="button form-btn" type="button" data-js-students-redact-close>Отмена</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journal__person person absolute" data-js-person>
+      <div class="absolute__content">
+        <button class="absolute__close button--close" data-js-person-close></button>
+
+        <p class="person__name h4" data-js-person-name></p>
+
+        <div class="person__content">
+          <header class="person__line">
+            <p class="h5">Кол-во пропусков:</p>
+
+            <button class="person__btn" type="button" data-js-person-date-open>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="20" height="18" x="2" y="4" rx="4"/><path d="M8 2v4m8-4v4M2 10h20"/></g></svg>
+            </button>
+
+            <ul class="person__date" data-js-person-date>
+              <li class="person__date-item h5" data-js-person-date-btn>За неделю</li>
+              <li class="person__date-item h5" data-js-person-date-btn>За месяц</li>
+              <li class="person__date-item h5" data-js-person-date-btn>За семестр</li>
+              <li class="person__date-item h5" data-js-person-date-btn>За год</li>
+            </ul>
+          </header>
+
+          <main class="person__main">
+            <span class="person__loading loading loading--absolute" data-js-person-loading>
+              <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+
+              <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+
+              <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+
+              <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+
+              </g>
+
+              </svg>
+            </span>
+
+            <ul class="person__list">
+              <li class="person__item">
+                <p class="h4">Кол-во "н":</p>
+                <p class="person__number h3" data-js-person-info></p>
+              </li>
+              <li class="person__item">
+                <p class="h4">Кол-во "о":</p>
+                <p class="person__number h3" data-js-person-info></p>
+              </li>
+              <li class="person__item">
+                <p class="h4">Кол-во "б":</p>
+                <p class="person__number h3" data-js-person-info></p>
+              </li>
+            </ul>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <div class="journal__date date absolute" data-js-date>
+      <div class="date__content absolute__content">
+        <button class="absolute__close button--close" data-js-date-close></button>
+
+        <header class="date__header">
+          <form class="date__header-form" novalidate>
+            <input class="date__header-input" maxlength="2" placeholder="ДД" data-js-date-search-input>
+            <input class="date__header-input" maxlength="2" placeholder="ММ" data-js-date-search-input>
+            <input class="date__header-input" maxlength="4" placeholder="ГГГГ" data-js-date-search-input>
+
+            <button class="date__header-btn" type="submit" data-js-date-search>
+              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                   viewBox="0 0 612.08 612.08" style="enable-background:new 0 0 612.08 612.08;"
+                   xml:space="preserve">
+              <g>
+                  <path d="M237.927,0C106.555,0,0.035,106.52,0.035,237.893c0,131.373,106.52,237.893,237.893,237.893
+                      c50.518,0,97.368-15.757,135.879-42.597l0.028-0.028l176.432,176.433c3.274,3.274,8.48,3.358,11.839,0l47.551-47.551
+                      c3.274-3.274,3.106-8.703-0.028-11.838L433.223,373.8c26.84-38.539,42.597-85.39,42.597-135.907C475.82,106.52,369.3,0,237.927,0z
+                       M237.927,419.811c-100.475,0-181.918-81.443-181.918-181.918S137.453,55.975,237.927,55.975s181.918,81.443,181.918,181.918
+                      S338.402,419.811,237.927,419.811z"/>
+              </g>
+              </svg>
+            </button>
+          </form>
+        </header>
+
+        <main class="date__main">
+
+          <div class="date__no-data is-active" data-js-date-no-data>
+            <span class="date__loading loading loading--absolute" data-js-date-loading>
+            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+
+            <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+
+            <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+
+            <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+
+            </g>
+
+            </svg>
+          </span>
+
+            <div class="date__null-list" data-js-date-null-list>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3L21 21M5 5V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.07989 21 8.2 21H17C18.1046 21 19 20.1046 19 19M19 9L13 3M19 9H14.6C14.0399 9 13.7599 9 13.546 8.89101C13.3578 8.79513 13.2049 8.64215 13.109 8.45399C13 8.24008 13 7.96005 13 7.4V3M19 9V14M13 3H8.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <p class="h5">Список дней пуст..</p>
+            </div>
+          </div>
+
+          <ul class="date__list list list--padding" data-js-date-list></ul>
+
+          <button class="date__create-open-btn button" data-js-date-create-open>Добавить день</button>
+
+          <div class="date__create date-create absolute__second" data-js-date-create>
+            <div class="date-create__content absolute__content">
+              <button class="absolute__close button--close" data-js-date-create-close></button>
+
+              <header class="date-create__header">
+                <p class="h4">Новая дата:</p>
+                <div class="date-create__counter">
+                  <p class="date-create__counter-info h5" data-js-date-create-counter>3</p>
+                  <p class="h5">/ 2</p>
+                </div>
+                <p class="date-create__header-name h4" data-js-date-create-name>Формирование даты</p>
+              </header>
+
+              <div class="swiper date-create__swiper" data-js-date-create-swiper>
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <form class="date-create__form form" novalidate data-js-form>
+                      <div class="form__item">
+                        <input class="input"
+                               maxlength="2"
+                               placeholder="День"
+                               required
+                               data-js-date-create-day
+                        >
+                        <div class="form__counter">
+                          <span data-js-date-create-day-counter></span>
+                          <span>/</span>
+                          <span>2</span>
+                        </div>
+                      </div>
+                      <div class="form__item">
+                        <input class="input"
+                               maxlength="2"
+                               placeholder="Месяц"
+                               required
+                               data-js-date-create-month
+                        >
+                        <div class="form__counter">
+                          <span data-js-date-create-month-counter></span>
+                          <span>/</span>
+                          <span>2</span>
+                        </div>
+                      </div>
+                      <div class="form__item">
+                        <input class="input"
+                               maxlength="4"
+                               placeholder="Год"
+                               required
+                               data-js-date-create-year
+                        >
+                        <div class="form__counter">
+                          <span data-js-date-create-year-counter></span>
+                          <span>/</span>
+                          <span>4</span>
+                        </div>
+                      </div>
+                      <button class="date-create__form-today button" type="button" data-js-date-create-today>Сегодняшняя дата</button>
+                    </form>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
+                    </div>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
+                    </div>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
+                    </div>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
+                    </div>
+                    <div class="select__container">
+                      <select class="select" data-js-date-create-select></select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="date-create__btn-bar">
+                <button class="date-create__btn button" type="button" disabled data-js-date-create-prev>Назад</button>
+                <button class="date-create__btn form-btn button is-active" type="button" data-js-date-create-next>
+                  <span data-js-date-create-next-text>Далее</span>
+                  <span class="loading loading--btn" data-js-date-create-loading>
+                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                      <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                          <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                          <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                      </g>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="date__redact date-redact absolute__second" data-js-date-redact>
+            <div class="date-redact__content absolute__content">
+              <header class="date-redact__header">
+                <p class="h4">Редактирование даты</p>
+                <form class="date-redact__form">
+                  <input class="date-redact__input"
+                         maxlength="2"
+                         placeholder="ДД"
+                         data-js-date-redact-input
+                  >
+                  <div class="date-redact__dot"></div>
+                  <input class="date-redact__input"
+                         maxlength="2"
+                         placeholder="ММ"
+                         data-js-date-redact-input
+                  >
+                  <div class="date-redact__dot"></div>
+                  <input class="date-redact__input"
+                         maxlength="4"
+                         placeholder="ГГГГ"
+                         data-js-date-redact-input
+                  >
+                </form>
+              </header>
+              <main class="date-redact__main">
+                <div class="date-redact__main-content">
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+                  <div class="select__container">
+                    <div class="date-redact__select-loading is-active" data-js-date-redact-select-loading></div>
+                    <select class="select" data-js-date-redact-select></select>
+                  </div>
+
+                  <div class="date-redact__btn-bar">
+                    <button class="button" type="button" data-js-date-redact-close disabled>Отмена</button>
+                    <button class="form-btn button is-active" type="button" data-js-date-redact-btn disabled>
+                      <span>Изменить</span>
+                      <span class="loading loading--btn" data-js-date-redact-btn-loading>
+                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" class="hds-flight-icon--animation-loading">
+                                      <g fill="#6851b5" fill-rule="evenodd" clip-rule="evenodd">
+                                          <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
+                                          <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
+                                      </g>
+                    </svg>
+                  </span>
+                    </button>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
 
   </div>
 
