@@ -1,12 +1,20 @@
 @use '../../helpers' as *;
 
 .journal-students {
+
   &:not(.is-active) {
     display: none;
   }
 
+  &__title {
+    margin-bottom: fluid(20, 15);
+    text-align: center;
+  }
+
   &__list {
     margin-bottom: fluid(25, 15);
+    max-height: 50vh;
+    overflow-y: auto;
   }
 
   &__btn {
@@ -16,6 +24,7 @@
   &__item {
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
   }
 
   &__btn-bar {

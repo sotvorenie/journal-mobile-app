@@ -160,15 +160,23 @@ body {
       margin-bottom: rem(15);
     }
 
-    &::after {
+    &::before, &::after {
       @include square(#{rem(20)});
 
       content: '';
       position: absolute;
       translate: 0 -50%;
       top: 50%;
+    }
+
+    &::before {
+      right: rem(20);
+      background: var(--color-accent);
+    }
+
+    &::after {
       right: rem(10);
-      background: url("/src/assets/icons/accordion-arrow.svg") no-repeat;
+      background: url("/src/assets/icons/accordion-arrow.svg") no-repeat, var(--color-accent);
       rotate: -90deg;
     }
   }

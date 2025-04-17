@@ -76,6 +76,13 @@
 
     &-lesson {
       position: relative;
+
+      &:not(.is-active) {
+
+        & > .marks {
+          display: none;
+        }
+      }
     }
     
     &-student, &-lesson {

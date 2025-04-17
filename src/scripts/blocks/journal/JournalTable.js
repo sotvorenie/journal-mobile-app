@@ -103,9 +103,10 @@ export default class JournalTable{
         this.tableLessonElements.off('click');
         this.tableAbsoluteItemElement.off('click');
         this.lessonInfoCloseBtn.off('click');
+        $(window).off('resize');
 
         //при изменении ориентации устройства
-        window.addEventListener('resize', () => {
+        $(window).on('resize', () => {
             this.changeOrientation();
 
             //чтобы если у нас открыт блок информации о предмете - он закрывался
@@ -262,7 +263,7 @@ export default class JournalTable{
                     </div>
                     
                     <ul class="accordion__list" data-js-journal-accordion-list>
-                        <li class="accordion__item" data-js-journal-accordion-item>
+                        <li class="${Lessons.activeLessons[0] ? 'accordion__item is-active' : 'accordion__item'}" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].first_lesson}</span>
                             <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
@@ -270,7 +271,7 @@ export default class JournalTable{
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
                             </ul>
                         </li>
-                        <li class="accordion__item" data-js-journal-accordion-item>
+                        <li class="${Lessons.activeLessons[1] ? 'accordion__item is-active' : 'accordion__item'}" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].second_lesson}</span>
                             <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
@@ -278,7 +279,7 @@ export default class JournalTable{
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
                             </ul>
                         </li>
-                        <li class="accordion__item" data-js-journal-accordion-item>
+                        <li class="${Lessons.activeLessons[2] ? 'accordion__item is-active' : 'accordion__item'}" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].third_lesson}</span>
                             <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
@@ -286,7 +287,7 @@ export default class JournalTable{
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
                             </ul>
                         </li>
-                        <li class="accordion__item" data-js-journal-accordion-item>
+                        <li class="${Lessons.activeLessons[3] ? 'accordion__item is-active' : 'accordion__item'}" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].fourth_lesson}</span>
                             <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
@@ -294,7 +295,7 @@ export default class JournalTable{
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>б</li>
                             </ul>
                         </li>
-                        <li class="accordion__item" data-js-journal-accordion-item>
+                        <li class="${Lessons.activeLessons[4] ? 'accordion__item is-active' : 'accordion__item'}" data-js-journal-accordion-item>
                             <span class="accordion__item-span">${Classes.activeClasses[index].fifth_lesson}</span>
                             <ul class="accordion__item-marks marks" data-js-journal-accordion-marks-list>
                                 <li class="accordion__item-marks-item" data-js-journal-accordion-marks-item>н</li>
@@ -451,7 +452,7 @@ export default class JournalTable{
                 return `
                     <tr class="table__footer-row">
                       <th class="table__footer-student slice-string" data-js-person-open-horizontal>${student.second_name} ${student.name}</th>
-                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                      <th class="${Lessons.activeLessons[0] ? 'table__footer-lesson is-active' : 'table__footer-lesson'}" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].first_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>
                           <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
@@ -459,7 +460,7 @@ export default class JournalTable{
                           <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
                         </ul>
                       </th>
-                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                      <th class="${Lessons.activeLessons[1] ? 'table__footer-lesson is-active' : 'table__footer-lesson'}" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].second_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>
                           <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
@@ -467,7 +468,7 @@ export default class JournalTable{
                           <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
                         </ul>
                       </th>
-                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                      <th class="${Lessons.activeLessons[2] ? 'table__footer-lesson is-active' : 'table__footer-lesson'}" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].third_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>
                           <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
@@ -475,7 +476,7 @@ export default class JournalTable{
                           <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
                         </ul>
                       </th>
-                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                      <th class="${Lessons.activeLessons[3] ? 'table__footer-lesson is-active' : 'table__footer-lesson'}" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].fourth_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>
                           <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>
@@ -483,7 +484,7 @@ export default class JournalTable{
                           <li class="table__footer-item" data-js-journal-table-absolute-item>б</li>
                         </ul>
                       </th>
-                      <th class="table__footer-lesson" data-js-journal-table-mark>
+                      <th class="${Lessons.activeLessons[4] ? 'table__footer-lesson is-active' : 'table__footer-lesson'}" data-js-journal-table-mark>
                         <span>${Classes.activeClasses[index].fifth_lesson}</span>
                         <ul class="table__footer-list marks" data-js-journal-table-absolute>
                           <li class="table__footer-item" data-js-journal-table-absolute-item>н</li>

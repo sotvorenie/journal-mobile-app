@@ -170,6 +170,9 @@ export default class JournalDate {
 
             event.preventDefault();
         })
+
+        //при листании списка дней
+        this.listElement.on('scroll', this.debounce(this.scrollDays.bind(this), 500).bind(this))
     }
     //==============================================================//
 
@@ -386,6 +389,9 @@ export default class JournalDate {
 
     //клик-выбор дня
     clickToDay = async (day, index) => {
+        //задаем класс активного дня выбранному дню
+        this.setDayActiveClass(index);
+
         //проверка на существование этого дня на сервере
         let check = await this.days.getDate(0, 1, [day.day, day.month, day.year]);
 
@@ -394,9 +400,6 @@ export default class JournalDate {
             if (Days.activeDay?.date_info !== day.date_info) {
                 //задаем активный день
                 Days.activeDay = day;
-
-                //задаем класс активного дня выбранному дню
-                this.setDayActiveClass(index);
 
                 //создаем событие для обновления данных журнала
                 $(document).trigger('updateDate');
@@ -453,6 +456,36 @@ export default class JournalDate {
     //закрытие всех btn-bar в элементах списка дней
     closeAllBtnBars () {
         this.itemBtnBarElements?.each((index, element) => $(element).removeClass(this.classes.isActive));
+    }
+
+    //при прокрутке, если добрались до низа списка, то догружаем еще элементы дней
+    scrollDays = async () => {
+        let height = this.listElement.outerHeight(true);
+
+        if ((height - this.listElement.scrollTop()) < 50 && this.remainingNumber !== 0) {
+            //получаем еще 20 дней
+            let days = await this.days.getDate(Days.daysList.length, 20);
+
+            //добавляем эти дни в список дней
+            Days.daysList.push(...days.data);
+
+            //обновляем переменную количества дней, оставшихся на сервере
+            this.remainingNumber = days.remaining;
+
+            //обновляем список дней
+            this.createDaysList(Days.daysList);
+        }
+    }
+
+    //debounce функция
+    debounce (func, delay) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func()
+            }, delay);
+        };
     }
     //==============================================================//
 }

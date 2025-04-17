@@ -254,6 +254,9 @@ export default class JournalDateCreate {
     clearInfo () {
         this.counterElement.text(1);
 
+        this.lessonsCreateCounter = false;
+        this.dateCreateCounter = false;
+
         //очищаем поля ввода
         this.dayInputElement.val('');
         this.monthInputElement.val('');
@@ -270,6 +273,9 @@ export default class JournalDateCreate {
         //меняем надписи
         this.nameElement.text('Формирование даты');
         this.nextTextElement.text('Далее');
+
+        //делаем кнопку "Назад" disabled
+        this.prevBtn.attr('disabled', true);
     }
 
     //клик по кнопке "Далее"
@@ -301,7 +307,9 @@ export default class JournalDateCreate {
             let check = this.checkInputLength();
 
             if (check) {
-                let check2 = this.correctDate();
+                let check2 = await this.correctDate();
+
+                console.log(check2)
 
                 //если дата корректна, то переходим на следующий слайд, а если нет - выводим ошибку
                 if (check2) {
@@ -336,8 +344,6 @@ export default class JournalDateCreate {
                     } else {
                         await setAlert('Такая дата уже существует!!');
                     }
-                } else {
-                    await setAlert('Введенная дата некорректна!!');
                 }
             } else {
                 await setAlert('Заполните все поля ввода!!');
@@ -358,7 +364,7 @@ export default class JournalDateCreate {
     }
 
     //корректирование даты
-    correctDate () {
+    correctDate = async () => {
         //удаляем из введенных данных всё кроме цифр
         [this.day, this.month, this.year] =
             this.days.deleteUnnecessary(

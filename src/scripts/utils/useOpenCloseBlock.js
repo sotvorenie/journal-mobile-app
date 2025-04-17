@@ -2,7 +2,8 @@ import {pxToRem} from "./usePxToRem.js";
 import {getCoordinates} from "./useCoordinates.js";
 
 const classes = {
-    isActive: 'is-active'
+    isActive: 'is-active',
+    isLock: 'is-lock'
 }
 
 function openBlock (block, btn) {
@@ -20,6 +21,8 @@ function openBlock (block, btn) {
         transformOrigin: `${pxToRem(coordinates.left + (btnWidth / 2))}rem ${pxToRem(coordinates.top + (btnHeight / 2))}rem`
     })
 
+    $('body').addClass(classes.isLock);
+
     block.animate({
         scale: 1,
         opacity: 1
@@ -35,6 +38,7 @@ async function closeBlock (block) {
             opacity: 0
         }, 150, () => {
             block.removeClass(classes.isActive);
+            $('body').removeClass(classes.isLock);
             resolve();
         });
     })

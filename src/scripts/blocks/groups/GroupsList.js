@@ -67,6 +67,9 @@ export default class GroupsList {
     //==============================================================//
     //---обработчики событий--//
     bindEvents() {
+        this.deleteBtns.off('click');
+        this.groupItems.off('click');
+
         //клик по кнопке "Удалить группу"
         this.deleteBtns.each((index, btn) => {
             $(btn).on('click', (event) => {

@@ -66,5 +66,12 @@
     @include hover {
       border-color: var(--color-accent);
     }
+
+    &:not(.is-active) {
+
+      & > .marks {
+        display: none;
+      }
+    }
   }
 }
