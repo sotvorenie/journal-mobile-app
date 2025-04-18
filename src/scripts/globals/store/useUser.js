@@ -99,7 +99,7 @@ export default class User {
             let check = await this.logIn(User.activeUser.login, User.activeUser.password, page, false);
             //если такой пользователь не найден, то перезагружаем страницу
             if (!check) {
-                await setAlert('Пользователь был удален!! Страница будет перезагружена.');
+                //await setAlert('Пользователь был удален!! Страница будет перезагружена.');
                 await this.becomeToAuthorization();
             }
         } catch (err) {

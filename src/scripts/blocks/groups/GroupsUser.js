@@ -167,8 +167,8 @@ export default class GroupsUser{
                     //вносим изменения о пользователе в localStorage
                     this.user.setToLocalStorage();
 
-                    //меняем название организации в header
-                    new GroupsList().setUserOrganizationName();
+                    //создаем событие редактирования профиля
+                    $(document).trigger('updateUser');
 
                     setMessage('Пользователь изменен!!');
 

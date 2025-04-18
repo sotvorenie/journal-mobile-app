@@ -182,7 +182,7 @@ export default class Authorization extends User{
                     await setAlert('Что-то пошло не так..')
                 }
             } else {
-                await setAlert('Что-то пошло не так..')
+                await setAlert('Пользователь с таким логином уже существует!!');
                 //убираем анимацию загрузки внутри кнопки "Зарегистрироваться"
                 setLoading(this.regBtn, this.regBtnLoadingElement)
             }

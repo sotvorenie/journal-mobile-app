@@ -47,6 +47,9 @@ export default class GroupsList {
             this.bindEvents();
         })
 
+        //когда редактировали пользователя - обновляем название в header
+        $(document).on('updateUser', this.setUserOrganizationName.bind(this));
+
         this.loadFunctions();
     }
     //==============================================================//
