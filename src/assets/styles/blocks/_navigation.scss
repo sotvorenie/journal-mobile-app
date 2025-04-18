@@ -21,6 +21,7 @@
     border: var(--border);
     padding: fluid(15, 5) fluid(25, 10);
     border-radius: var(--radius-big);
+    color: var(--color-dark);
 
     @include hover {
       color: var(--color-accent);

@@ -16,12 +16,12 @@ body {
   }
 
   &.is-dark {
-    --color-light: #15143a;
-    --color-light-alt: #8692f3;
+    --color-light: #191919;
+    --color-light-alt: #565656;
     --color-dark: #f9f8fd;
-    --color-dark-alt: #c1c7f6;
-    --color-accent: #ad94fd;
-    --border: #{rem(2)} solid var(--color-light);
+    --color-dark-alt: #f6f7f9;
+    --color-accent: #fef62f;
+    --border: #{rem(2)} solid var(--color-dark);
   }
 }
 
@@ -99,10 +99,10 @@ button {
 }
 
 button:disabled {
-  color: var(--color-light-alt);
-  filter: brightness(.8);
+  color: var(--color-dark);
+  opacity: .5;
   cursor: default;
-  border-color: var(--color-light-alt);
+  border-color: var(--color-dark);
 
   @include hover {
     color: var(--color-light-alt);

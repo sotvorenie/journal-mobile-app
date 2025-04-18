@@ -27,6 +27,7 @@
 
     rotate: 90deg;
     transition-duration: var(--transition-duration);
+    color: var(--color-dark);
 
     &.is-active {
       color: var(--color-accent);

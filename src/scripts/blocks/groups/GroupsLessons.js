@@ -183,7 +183,7 @@ export default class GroupsLessons {
     //==============================================================//
     //---обращения к серверу--//
     //получаем список предметов
-    getLessons = async () => {
+    static getLessons = async () => {
         try {
             //показываем анимацию загрузки
             this.setLoading(false, false, true);

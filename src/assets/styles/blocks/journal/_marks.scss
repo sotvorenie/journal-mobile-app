@@ -12,7 +12,7 @@
   color: var(--color-light);
   z-index: 1;
   bottom: 100%;
-  box-shadow: 0 0 rem(10) rem(4) var(--color-dark);
+  box-shadow: 0 0 rem(10) rem(4) #15143a;
   transition-duration: var(--transition-duration);
 
   &:not(.is-active) {

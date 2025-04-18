@@ -5,8 +5,7 @@
   background: var(--color-accent);
   border-radius: var(--radius-regular);
   font-size: rem(18);
-  color: #f9f8fd;
-  border: rem(2) solid #6851b5;
+  color: var(--color-light);
 
   &--close {
     @include reset_button;
@@ -24,7 +23,7 @@
       @include abs-center;
 
       content: '';
-      background: #f9f8fd;
+      background: var(--color-light);
       width: 60%;
       height: rem(3);
       border-radius: var(--radius-regular);
