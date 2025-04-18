@@ -57,6 +57,7 @@
   &__btn {
     aspect-ratio: 1;
     width: fluid(55, 35);
+    color: var(--color-dark);
 
     @include hover {
       color: var(--color-accent);
@@ -84,6 +85,6 @@
   }
 
   &__number {
-    color: var(--color-error);
+    color: var(--color-accent);
   }
 }
