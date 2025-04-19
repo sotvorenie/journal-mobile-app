@@ -92,8 +92,8 @@ export default class Authorization extends User{
         this.clearInputs();
 
         //если в localStorage есть логин и пароль - заходим по ним
-        let login = JSON.parse(window.localStorage.getItem('user')).login ?? '';
-        let password = JSON.parse(window.localStorage.getItem('user')).password ?? '';
+        let login = JSON.parse(window.localStorage.getItem('user'))?.login ?? '';
+        let password = JSON.parse(window.localStorage.getItem('user'))?.password ?? '';
 
         if (login.length && password.length) {
             new User().logIn(login, password);
