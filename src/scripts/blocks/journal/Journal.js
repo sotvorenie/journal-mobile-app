@@ -76,7 +76,7 @@ export default class Journal {
         })
 
         //при редактировании активной даты
-        $(document).on('redactDay', this.setDate.bind(this));
+        $(document).on('createDay redactDay', this.setDate.bind(this));
 
         //при удалении дня
         $(document).on('removeClasses', () => {

@@ -441,6 +441,10 @@ export default class JournalDate {
             Days.activeDay = {};
             Lessons.activeLessons = [];
 
+            //показываем блок nullList
+            this.noDataElement.addClass(this.classes.isActive);
+            this.nullListElement.addClass(this.classes.isActive);
+
             //создаем событие для перерисовки журнала (чтобы сделать его пустым)
             $(document).trigger('removeClasses');
         } else {

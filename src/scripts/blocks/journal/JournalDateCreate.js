@@ -308,8 +308,6 @@ export default class JournalDateCreate {
             if (check) {
                 let check2 = await this.correctDate();
 
-                console.log(check2)
-
                 //если дата корректна, то переходим на следующий слайд, а если нет - выводим ошибку
                 if (check2) {
                     //проверяем, чтобы такой даты уже не существовало (проверку делаем, если на втором слайде мы не были и дату не меняли)
