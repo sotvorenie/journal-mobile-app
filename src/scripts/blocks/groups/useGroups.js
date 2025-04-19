@@ -9,6 +9,7 @@ export default class UseGroups {
         list: '[data-js-groups-list]',
         empty: '[data-js-groups-list-empty]',
         loading: '[data-js-groups-list-loading]',
+        ul: '[data-js-groups-list-ul]'
     }
 
     classes = {
@@ -32,6 +33,9 @@ export default class UseGroups {
 
         //DOM-элемент элемента анимации загрузки
         this.loadingElement = $(this.selectors.loading);
+
+        //ul-список групп
+        this.ulListElement = this.listElement.find(this.selectors.ul);
     }
 
     //получаем список групп пользователя
@@ -71,6 +75,9 @@ export default class UseGroups {
 
     //создаем список групп пользователя
     setUserGroups () {
+        //скрываем null-list блок
+        this.emptyElement.removeClass(this.classes.isActive);
+
         //создаем элементы li
         let groupsListNew = UseGroups.groupsList.map(group => {
             return `
@@ -104,14 +111,8 @@ export default class UseGroups {
             `
         }).join('');
 
-        //создаем ul для списка групп
-        let ul = $('<ul class="groups__list list list--padding"></ul>');
-
         //встраиваем li в ul
-        ul.html(groupsListNew);
-
-        //встраиваем ul в контейнер списка групп
-        this.listElement.html(ul);
+        this.ulListElement.html(groupsListNew);
 
         //создаем событие, когда список групп встраивается на страницу (для получения всех кнопок редактирования групп)
         $(document).trigger('groupsListRendered');
@@ -119,6 +120,9 @@ export default class UseGroups {
 
     //показываем блок, что список групп пуст
     setEmptyGroups () {
-        this.emptyElement.toggleClass(this.classes.isActive);
+        this.emptyElement.addClass(this.classes.isActive);
+
+        //очищаем список групп
+        this.ulListElement.html('');
     }
 }

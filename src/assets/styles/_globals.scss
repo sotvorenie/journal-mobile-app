@@ -99,7 +99,6 @@ button {
 }
 
 button:disabled {
-  color: var(--color-dark);
   opacity: .5;
   cursor: default;
   border-color: var(--color-dark);

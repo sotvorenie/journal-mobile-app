@@ -217,7 +217,6 @@ export default class JournalDateCreate {
                     fifth_lesson: ''
                 })
             })
-            console.log(data, Students.students)
 
             const response = await createNewClasses(data);
 

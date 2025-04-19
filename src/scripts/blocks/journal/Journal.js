@@ -74,6 +74,19 @@ export default class Journal {
             //задаем активный день в header
             this.setDate();
         })
+
+        //при редактировании активной даты
+        $(document).on('redactDay', this.setDate.bind(this));
+
+        //при удалении дня
+        $(document).on('removeClasses', () => {
+            this.setDate()
+
+            //если classes нет - показываем null-list
+            if (!Classes.activeClasses.length) {
+                this.nullListElement.addClass(this.classes.isActive);
+            }
+        })
     }
     //==============================================================//
 

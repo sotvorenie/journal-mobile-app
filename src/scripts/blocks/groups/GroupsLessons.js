@@ -9,6 +9,7 @@ import {setLoading} from "../../utils/useSetLoading.js";
 import {setMessage} from "../../utils/useMessage.js";
 import {setAlert, setConfirm} from "../../utils/useInfoMessage.js";
 import {openBlock, closeBlock} from "../../utils/useOpenCloseBlock.js";
+import Lessons from "../../globals/store/useLessons.js";
 
 export default class GroupsLessons {
     //---DOM-селекторы--//
@@ -82,46 +83,15 @@ export default class GroupsLessons {
         //переменная, хранящая id предмета, который мы редактируем
         this.redactLessonID = '';
 
+        //переменная, хранящая название предмета, который мы редактируем
+        this.redactLessonName = '';
+
         //событие, когда открываем блок редактирования группы
         $(document).on('groupsRedactOpen', async () => {
             await this.getLessons();
 
-            //получаем элементы списка предметов
-            this.lessonsElements = this.groupsLessonsElement.find(this.selectors.lesson);
-            //получаем кнопки для удаления предмета
-            this.deleteBtns = this.groupsLessonsElement.find(this.selectors.delete);
-            //получаем кнопки для редактирования предмета
-            this.redactOpenBtns = this.groupsLessonsElement.find(this.selectors.redactOpen);
-
-            //при клике по элементу списка предметов
-            this.lessonsElements.each((index, btn) => {
-                $(btn).on('click', () => {
-                    let name = this.lessons[index].name;
-
-                    this.openInfoBlock(btn, name);
-                });
-            })
-            //при клике по кнопке удаления предмета
-            this.deleteBtns.each((index, btn) => {
-                $(btn).on('click', (event) => {
-                    let id = this.lessons[index].id;
-
-                    this.clickToDelete(id);
-
-                    event.stopPropagation();
-                });
-            })
-            //при клике по кнопке редактирования предмета
-            this.redactOpenBtns.each((index, btn) => {
-                $(btn).on('click', (event) => {
-                    let name = this.lessons[index].name;
-
-                    this.openRedactBlock(name, index);
-
-                    event.stopPropagation();
-                });
-            })
-        })
+            this.getBtnElements();
+        });
 
         this.bindEvents();
 
@@ -133,7 +103,8 @@ export default class GroupsLessons {
     //==============================================================//
     //---функции, выполняющиеся сразу после загрузки страницы--//
     loadFunctions = () => {
-
+        //делаем кнопку "Изменить" disabled
+        this.redactBtn.attr('disabled', true);
     }
     //==============================================================//
 
@@ -172,6 +143,8 @@ export default class GroupsLessons {
         //при вводе в input редактирования предмета
         this.redactInputElement.on('input', (event) => {
             input(event, this.redactCounterElement);
+
+            redactValidation(event, [this.redactLessonName]);
         })
 
         //клик по кнопке "Редактировать предмет"
@@ -237,10 +210,13 @@ export default class GroupsLessons {
                     setMessage('Предмет добавлен!!');
 
                     //закрываем блок добавления предмета
-                    this.closeCreateBlock();
+                    closeBlock(this.createElement);
 
                     //получаем список предметов группы
                     await this.getLessons();
+
+                    //получаем кнопки для редактирования и удаления предметов
+                    this.getBtnElements();
                 } else {
                     await setAlert('Что-то пошло не так..');
                 }
@@ -289,8 +265,16 @@ export default class GroupsLessons {
                 //удаляем предмет из списка предметов
                 this.lessons = this.lessons.filter(lesson => lesson.id !== id);
 
-                //обновляем список предметов
-                this.setLessonsList();
+                //если предметы еще есть - перерисовываем список предметов, иначе выводим null-list блок
+                if (this.lessons.length) {
+                    //обновляем список предметов
+                    this.setLessonsList();
+
+                    //получаем кнопки для редактирования и удаления предметов
+                    this.getBtnElements();
+                } else {
+                    this.setLoading(true, false, false);
+                }
 
                 //выводим сообщение
                 setMessage('Предмет удален!!');
@@ -325,14 +309,28 @@ export default class GroupsLessons {
                 const response = await redactLessons(data);
 
                 if (response.status === 200) {
+                    //обновляем данные в списке предметов
+                    this.lessons = this.lessons.map(lesson => {
+                        if (lesson.id === this.redactLessonID) {
+                            return {
+                                ...lesson,
+                                name: data.name
+                            }
+                        }
+                        return lesson;
+                    })
+
                     //выводим сообщение
                     setMessage('Предмет изменен!!');
 
-                    //закрываем блок редактирования предмета
-                    this.closeRedactBlock();
+                    //обновляем список предметов
+                    this.setLessonsList();
 
-                    //обновляем данные о предметах
-                    await this.getLessons();
+                    //получаем кнопки для редактирования и удаления предметов
+                    this.getBtnElements();
+
+                    //закрываем блок редактирования предмета
+                    closeBlock(this.redactElement);
                 } else {
                     await setAlert('Что-то пошло не так..');
                 }
@@ -351,6 +349,52 @@ export default class GroupsLessons {
 
     //==============================================================//
     //---функции--//
+    //получаем кнопки для редактирования и удаления предметов
+    getBtnElements () {
+        //получаем элементы списка предметов
+        this.lessonsElements = this.groupsLessonsElement.find(this.selectors.lesson);
+        //получаем кнопки для удаления предмета
+        this.deleteBtns = this.groupsLessonsElement.find(this.selectors.delete);
+        //получаем кнопки для редактирования предмета
+        this.redactOpenBtns = this.groupsLessonsElement.find(this.selectors.redactOpen);
+
+        this.lessonsElements.off('click');
+        this.deleteBtns.off('click');
+        this.redactOpenBtns.off('click');
+
+        //при клике по элементу списка предметов
+        this.lessonsElements.each((index, btn) => {
+            $(btn).on('click', () => {
+                let name = this.lessons[index].name;
+
+                this.openInfoBlock(btn, name);
+            });
+        })
+        //при клике по кнопке удаления предмета
+        this.deleteBtns.each((index, btn) => {
+            $(btn).on('click', (event) => {
+                let id = this.lessons[index].id;
+
+                this.clickToDelete(id);
+
+                event.stopPropagation();
+            });
+        })
+        //при клике по кнопке редактирования предмета
+        this.redactOpenBtns.each((index, btn) => {
+            $(btn).on('click', (event) => {
+                this.redactLessonName = this.lessons[index].name;
+
+                //делаем кнопку "Изменить" disabled
+                this.redactBtn.attr('disabled', true);
+
+                this.openRedactBlock(this.redactLessonName, index);
+
+                event.stopPropagation();
+            });
+        })
+    }
+
     //скрываем блок пустого списка и блок списка и показываем анимацию загрузки
     setLoading (nullVal, listVal, loadVal) {
         if (nullVal) {

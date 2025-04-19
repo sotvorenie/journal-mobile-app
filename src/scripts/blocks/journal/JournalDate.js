@@ -9,6 +9,7 @@ import {setMessage} from "../../utils/useMessage.js";
 import {removeDay} from "../../../api/days.js";
 import {removeClasses} from "../../../api/classes.js";
 import Classes from "../../globals/store/useClasses.js";
+import Lessons from "../../globals/store/useLessons.js";
 
 export default class JournalDate {
     //==============================================================//
@@ -74,50 +75,21 @@ export default class JournalDate {
     loadFunctions = () => {
         //очищаем поля ввода поиска дней
         this.clearSearchInputs();
+    }
+    //==============================================================//
 
+
+    //==============================================================//
+    //---обработчики событий--//
+    bindEvents() {
         //событие, когда встроили список дней на страницу, а также когда удалили день
-        $(document).on('createDaysList deleteDay', () => {//получаем элементы списка дней
-            this.itemElements = this.dateElement.find(this.selectors.item);
-            //получаем кнопки info каждого элемента списка дней
-            this.itemInfoBtns = this.dateElement.find(this.selectors.itemInfoBtn);
-            //получаем btn-bar каждого элемента списка дней
-            this.itemBtnBarElements = this.dateElement.find(this.selectors.itemBtnBar);
-            //получаем кнопки delete каждого элемента списка дней
-            this.itemDeleteBtn = this.dateElement.find(this.selectors.itemDelete);
-
-            //удаляем старые обработчики событий
-            this.itemElements.off('click');
-            this.itemInfoBtns.off('click')
-            this.itemDeleteBtn.off('click');
-
-            //при клике по элементу списка дней
-            this.itemElements.each((index, element) => {
-                $(element).on('click', () => {
-                    this.clickToDay(Days.daysList[index], index);
-                })
-            })
-
-            //при клике по кнопке i для открытия btn-bar
-            this.itemInfoBtns.each((index, btn) => {
-                $(btn).on('click', (event) => {
-                    $(this.itemBtnBarElements[index]).addClass(this.classes.isActive);
-
-                    event.stopPropagation();
-                })
-            })
-
-            //при клике по кнопке удаления дня
-            this.itemDeleteBtn.each((index, btn) => {
-                $(btn).on('click', (event) => {
-                    this.clickToDelete(Days.daysList[index].date_info);
-
-                    event.stopPropagation();
-                })
-            })
-        })
+        $(document).on('createDaysList', this.getElements.bind(this));
 
         //событие, когда создали новый день, чтобы выбрать его как активный
         $(document).on('createDay', () => {
+            //удаляем null-list блок
+            this.noDataElement.removeClass(this.classes.isActive);
+
             //создаем список дней
             this.createDaysList(Days.daysList);
 
@@ -136,13 +108,7 @@ export default class JournalDate {
                 this.clickToDay(Days.daysList[index], index);
             }
         })
-    }
-    //==============================================================//
 
-
-    //==============================================================//
-    //---обработчики событий--//
-    bindEvents() {
         //открытие блока
         this.openBtn.on('click', () => {
             openBlock(this.dateElement, this.openBtn[0]);
@@ -254,8 +220,8 @@ export default class JournalDate {
             if (response.status === 200) {
                 await this.setNewDay(dateInfo);
 
-                //создаем событие удаления дня
-                $(document).trigger('deleteDay');
+                //получаем обновленные элементы дней и их кнопки
+                this.getElements();
 
                 setMessage('День удален!!');
             } else {
@@ -270,6 +236,48 @@ export default class JournalDate {
 
     //==============================================================//
     //---функции--//
+    //получаем элементы списка дней и кнопки
+    getElements () {
+        //получаем элементы списка дней
+        this.itemElements = this.dateElement.find(this.selectors.item);
+        //получаем кнопки info каждого элемента списка дней
+        this.itemInfoBtns = this.dateElement.find(this.selectors.itemInfoBtn);
+        //получаем btn-bar каждого элемента списка дней
+        this.itemBtnBarElements = this.dateElement.find(this.selectors.itemBtnBar);
+        //получаем кнопки delete каждого элемента списка дней
+        this.itemDeleteBtn = this.dateElement.find(this.selectors.itemDelete);
+
+        //удаляем старые обработчики событий
+        this.itemElements.off('click');
+        this.itemInfoBtns.off('click')
+        this.itemDeleteBtn.off('click');
+
+        //при клике по элементу списка дней
+        this.itemElements.each((index, element) => {
+            $(element).on('click', () => {
+                this.clickToDay(Days.daysList[index], index);
+            })
+        })
+
+        //при клике по кнопке i для открытия btn-bar
+        this.itemInfoBtns.each((index, btn) => {
+            $(btn).on('click', (event) => {
+                $(this.itemBtnBarElements[index]).addClass(this.classes.isActive);
+
+                event.stopPropagation();
+            })
+        })
+
+        //при клике по кнопке удаления дня
+        this.itemDeleteBtn.each((index, btn) => {
+            $(btn).on('click', (event) => {
+                this.clickToDelete(Days.daysList[index].date_info);
+
+                event.stopPropagation();
+            })
+        })
+    }
+
     //очистка полей ввода поиска дней
     clearSearchInputs () {
         this.searchInputElements.each((index, element) => $(element).val(''));
@@ -424,12 +432,14 @@ export default class JournalDate {
             return true;
         });
 
-        //удаляем элемент удаленного дня из списка дней
-        $(this.itemElements[index]).remove();
+        //перерисовываем список дней
+        this.createDaysList(Days.daysList);
 
-        //если мы удалили последний день - очищаем classes
+        //если мы удалили последний день - очищаем classes, days и lessons
         if (Days.daysList.length === 0) {
             Classes.activeClasses = [];
+            Days.activeDay = {};
+            Lessons.activeLessons = [];
 
             //создаем событие для перерисовки журнала (чтобы сделать его пустым)
             $(document).trigger('removeClasses');

@@ -82,8 +82,8 @@ export default class JournalTable{
     //==============================================================//
     //---функции, выполняющиеся сразу после загрузки страницы--//
     loadFunctions = () => {
-        //события: когда мы получили classes журнала, при удалении студента, при удалении classes, при обновлении активной даты
-        $(document).on('journalLoad updateStudent removeClasses updateDate', async () => {
+        //события: когда мы получили classes журнала, при удалении студента, при удалении classes, при обновлении активной даты, при редактировании даты
+        $(document).on('journalLoad updateStudent removeClasses updateDate redactDay', async () => {
             await this.reloadTables();
 
             this.bindEvents();
@@ -202,13 +202,16 @@ export default class JournalTable{
     //---функции--//
     //обновление данных журналов
     reloadTables = async () => {
+        //скрываем анимацию загрузки
+        this.tableLoadingElement.removeClass(this.classes.isActive);
+
         //показываем список предметов вертикального журнала, если журнал не пуст
         if (Classes.activeClasses.length) {
             this.lessonsContainerElement.addClass(this.classes.isActive);
+        } else {
+            this.lessonsContainerElement.removeClass(this.classes.isActive);
         }
 
-        //скрываем анимацию загрузки, и если нужно - показываем null-block в горизонтальном журнале
-        this.tableLoadingElement.removeClass(this.classes.isActive);
         this.tableLoadingContainerElement.removeClass(this.classes.isActive);
         this.setNullBlock();
 
@@ -420,9 +423,7 @@ export default class JournalTable{
 
     //получение информации о том, на какой предмет кликнули
     getLesson (col) {
-        let lessons = ['first_lesson', 'second_lesson', 'third_lesson', 'fourth_lesson', 'fifth_lesson'];
-
-        return lessons[col];
+        return ['first_lesson', 'second_lesson', 'third_lesson', 'fourth_lesson', 'fifth_lesson'][col];
     }
 
     //проверка: кликнули ли на тот же самый mark
@@ -528,6 +529,7 @@ export default class JournalTable{
     //скрываем анимацию загрузки, и если нужно - показываем null-block в горизонтальном журнале
     setNullBlock() {
         if (!Classes.activeClasses.length) {
+            this.tableMainElement.addClass(this.classes.isActive);
             this.tableNullElement.addClass(this.classes.isActive);
         } else {
             this.tableNullElement.removeClass(this.classes.isActive);

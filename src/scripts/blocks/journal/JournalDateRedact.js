@@ -49,7 +49,7 @@ export default class JournalDateRedact {
         this.redactBtn = this.redactElement.find(this.selectors.redact);
         this.btnLoadingElement = this.redactElement.find(this.selectors.btnLoading);
 
-        //переменная, хранящая группу, которую редактируем
+        //переменная, хранящая день, который редактируем
         this.redactDayInfo = {};
 
         //переменная, хранящая массив названия предметов
@@ -161,7 +161,7 @@ export default class JournalDateRedact {
                 let value = false;
 
                 //если мы обновляли activeDay, то обновляем его данные и данные в classes и данные lessons
-                if (Days.activeDay.date_info === this.redactDayInfo.date_info) {
+                if (Days.activeDay.date_info === this.oldDateInfo){
                     Days.activeDay = newDay;
 
                     let arr = ['first_lesson', 'second_lesson', 'third_lesson', 'fourth_lesson', 'fifth_lesson']
@@ -176,16 +176,18 @@ export default class JournalDateRedact {
 
                 //обновляем данные в списке дней
                 Days.daysList = Days.daysList.map((day, index) => {
-                    if (day.date_info === newDay.date_info) {
+                    if (day.date_info === this.redactDayInfo.date_info) {
                         if (value) {
                             indexDay = index;
                         }
 
                         return {
-                            ...newDay
-                        }
+                            ...newDay,
+                            date_info: `${newDay.day}${newDay.month}${newDay.year}`
+                        };
+                    } else {
+                        return day;
                     }
-                    return day;
                 })
 
                 //создаем событие редактирования дня
@@ -344,7 +346,7 @@ export default class JournalDateRedact {
                 let lessons = this.getRedactLessons();
 
                 //отправляем данные на сервер
-                this.redactDay(lessons);
+                await this.redactDay(lessons);
             } else {
                 await setAlert('Такая дата уже существует!!');
             }
