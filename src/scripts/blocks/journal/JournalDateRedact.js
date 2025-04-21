@@ -163,6 +163,7 @@ export default class JournalDateRedact {
                 //если мы обновляли activeDay, то обновляем его данные и данные в classes и данные lessons
                 if (Days.activeDay.date_info === this.redactDayInfo.date_info){
                     Days.activeDay = newDay;
+                    Days.activeDay.date_info = `${newDay.day}${newDay.month}${newDay.year}`;
 
                     let arr = ['first_lesson', 'second_lesson', 'third_lesson', 'fourth_lesson', 'fifth_lesson']
 
