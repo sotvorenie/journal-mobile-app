@@ -64,6 +64,11 @@ export default class JournalDate {
         //это нужно, чтобы если мы открывали блок впервые, то загружали данные дней, а если повторно, то загрузки дней уже не было
         this.openBlockCounter = false;
 
+        //переменные скорректированной информации о дате, которую ищем
+        this.day = '';
+        this.month = '';
+        this.year = '';
+
         this.loadFunctions();
         this.bindEvents();
     }
@@ -357,20 +362,20 @@ export default class JournalDate {
     //при клике по кнопке "Найти дату
     clickToFindDate = async () => {
         //удаляем из введенных данных всё кроме цифр
-        let [day, month, year] = this.days.deleteUnnecessary(
+        [this.day, this.month, this.year] = this.days.deleteUnnecessary(
             [$(this.searchInputElements[0]).val(),
             $(this.searchInputElements[1]).val(),
             $(this.searchInputElements[2]).val()]
         )
 
         //преобразуем дату к нужному виду
-        let correctDate = this.days.correctDate([day, month, year]);
-        day = correctDate[0];
-        month = correctDate[1];
-        year = correctDate[2];
+        let correctDate = this.days.correctDate([this.day, this.month, this.year]);
+        this.day = correctDate[0];
+        this.month = correctDate[1];
+        this.year = correctDate[2];
 
         //проверяем на правильность введенных данных
-        let check = await this.days.checkCorrectDate(day, month, year);
+        let check = await this.days.checkCorrectDate(this.day, this.month, this.year);
 
         //если данные корректны - получаем выбранные даты
         if (check) {
@@ -382,7 +387,7 @@ export default class JournalDate {
             this.listElement.empty();
 
             //получаем нужные дни
-            this.getDays([day, month, year]);
+            this.getDays([this.day, this.month, this.year]);
         }
     }
 
@@ -478,7 +483,7 @@ export default class JournalDate {
 
         if ((height - this.listElement.scrollTop()) < 50 && this.remainingNumber !== 0) {
             //получаем еще 20 дней
-            let days = await this.days.getDate(Days.daysList.length, 20);
+            let days = await this.days.getDate(Days.daysList.length, 20, [this.day, this.month, this.year]);
 
             //добавляем эти дни в список дней
             Days.daysList.push(...days.data);
